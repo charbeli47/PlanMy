@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanMy.Views.SettingsPage" WidthRequest="100">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="BlockingColor">
+                <x:Arguments>
+                    <x:Double>0</x:Double>
+                    <x:Double>0</x:Double>
+                    <x:Double>0</x:Double>
+                    <x:Double>0.75</x:Double>
+                </x:Arguments>
+            </Color>
+            <Style x:Key="BlockingPanel" TargetType="StackLayout">
+                <Setter Property="BackgroundColor" Value="{StaticResource BlockingColor}" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Style="{StaticResource BlockingPanel}"></StackLayout>
+    </ContentPage.Content>
+</ContentPage>

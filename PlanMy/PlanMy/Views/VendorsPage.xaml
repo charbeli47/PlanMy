@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanMy.Views.VendorsPage"
+              Title="{Binding Title}"
+             x:Name="BrowseItemsPage">
+    <TabbedPage.Children>
+        <NavigationPage Title="Profile" Icon="profile.png">
+            <x:Arguments>
+                <views:allVendors />
+            </x:Arguments>
+        </NavigationPage>
+
+        <NavigationPage Title="Vendors" Icon="vendors.png">
+            <x:Arguments>
+                <views:favourites />
+            </x:Arguments>
+        </NavigationPage>
+        <NavigationPage Title="Planning" Icon="planning.png">
+            <x:Arguments>
+                <views:messages />
+            </x:Arguments>
+        </NavigationPage>
+    </TabbedPage.Children>
+</TabbedPage>

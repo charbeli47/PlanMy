@@ -11,6 +11,7 @@ namespace PlanMy.Views
 		public MainPage ()
 		{
 			InitializeComponent ();
+            Navigation.PushModalAsync(new Login());
 		}
 	}
 }

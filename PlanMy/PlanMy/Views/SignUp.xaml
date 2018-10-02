@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanMy.Views.SignUp" BackgroundColor="#89b5da">
+    <ContentPage.Content>
+        <StackLayout>
+            <Image Source="header.png" HorizontalOptions="CenterAndExpand" Margin="20,10,20,0"/>
+            <Label Text="Name" FontSize="16" TextColor="White" x:Name="NameLabel" Margin="20,10,20,0"/>
+            <Entry TextColor="White" Placeholder="Type your full name here" x:Name="NameEntry" Margin="20,0,20,0"/>
+            <Label Text="Email" FontSize="16" TextColor="White" x:Name="EmailLabel" Margin="20,10,20,0"/>
+            <Entry TextColor="White" Placeholder="Type your email here" x:Name="EmailEntry" Keyboard="Email" Margin="20,0,20,0"/>
+            <Label Text="Password" Margin="20,20,20,0" TextColor="White" FontSize="16" x:Name="PasswordLabel" />
+            <Entry IsPassword="True" TextColor="White" Placeholder="Type your password"  WidthRequest="200" x:Name="PasswordEntry" Margin="20,0,20,0"/>
+            <StackLayout x:Name="BtnContainer" Margin="20,0,20,0"><Button HorizontalOptions="End" TextColor="white" BackgroundColor="Transparent" Text="forgot your password?" FontSize="10" HeightRequest="30" ></Button>
+            </StackLayout>
+            <StackLayout x:Name="Btn2Container" Margin="20,30,20,0">
+                <Button HorizontalOptions="FillAndExpand" BorderRadius="50" TextColor="#89b5da" BackgroundColor="White" Text="SIGN UP" FontSize="16" HeightRequest="50" ></Button>
+            </StackLayout>
+            
+            <StackLayout x:Name="SocialContainer" Margin="20,-10,20,0" HorizontalOptions="CenterAndExpand" Orientation="Horizontal" HeightRequest="50">
+            </StackLayout>
+            <StackLayout x:Name="Btn4Container" Margin="20,30,20,0">
+                <Label HorizontalOptions="Center" TextColor="white" BackgroundColor="Transparent" Text="already have an account?" FontSize="12" HeightRequest="50" ></Label>
+                <Button HorizontalOptions="Center" TextColor="white" BackgroundColor="Transparent" Text="SIGN IN" x:Name="SignInLink" Clicked="SignInLink_Clicked" FontSize="12" HeightRequest="50" ></Button>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

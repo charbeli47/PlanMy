@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanMy.Views.SettingsView" VerticalOptions="StartAndExpand">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Color x:Key="BlockingColor">
+                <x:Arguments>
+                    <x:Double>0</x:Double>
+                    <x:Double>0</x:Double>
+                    <x:Double>0</x:Double>
+                    <x:Double>0.75</x:Double>
+                </x:Arguments>
+            </Color>
+            <Style x:Key="BlockingPanel" TargetType="StackLayout">
+                <Setter Property="BackgroundColor" Value="{StaticResource BlockingColor}" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+            </Style>
+        </ResourceDictionary>
+    </ContentView.Resources>
+  <ContentView.Content>
+        <StackLayout Style="{StaticResource BlockingPanel}">
+            <StackLayout.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1" />
+            </StackLayout.GestureRecognizers>
+            <StackLayout HorizontalOptions="End" WidthRequest="200" VerticalOptions="FillAndExpand" BackgroundColor="White">
+                <Label x:Name="usernameLabel" HorizontalOptions="FillAndExpand" Margin="5,5,5,5" TextColor="Gray"></Label>
+                <Label TextColor="Black" x:Name="helpBtn" Margin="10,10,0,0" FontAttributes="Bold" Text="Help" BackgroundColor="Transparent"></Label>
+                <Label TextColor="Black" x:Name="rateBtn" Margin="10,10,0,0" FontAttributes="Bold"  Text="Rate our app" BackgroundColor="Transparent"></Label>
+                <Label TextColor="Black" x:Name="shareBtn" Margin="10,10,0,0" FontAttributes="Bold" Text="Share the app" BackgroundColor="Transparent"></Label>
+                <StackLayout Orientation="Horizontal">
+                    <Label TextColor="Black" Text="Private Event" FontAttributes="Bold" Margin="10,10,0,0"></Label>
+                    <Switch x:Name="privateEventSwith"></Switch>
+                </StackLayout>
+                <Label TextColor="Black" x:Name="logoutBtn" Text="Log Out" BackgroundColor="Transparent"></Label>
+                <StackLayout VerticalOptions="EndAndExpand" Orientation="Horizontal">
+                    <Image Source="configBlack.png" Margin="10,0,0,0"></Image>
+                    <Label Text="Settings" x:Name="settingsBtn"></Label>
+                </StackLayout>
+            </StackLayout>
+      </StackLayout>
+  </ContentView.Content>
+</ContentView>

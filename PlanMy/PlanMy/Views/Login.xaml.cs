@@ -15,6 +15,16 @@ namespace PlanMy.Views
 		public Login ()
 		{
 			InitializeComponent ();
-		}
-	}
+        }
+
+        private async void SignUpLink_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushModalAsync(new SignUp());
+        }
+
+        private async void SkipBtn_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PopModalAsync();
+        }
+    }
 }
