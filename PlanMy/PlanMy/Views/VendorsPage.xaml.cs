@@ -14,7 +14,7 @@ using PlanMy.ViewModels;
 namespace PlanMy.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class VendorsPage : ContentPage
+	public partial class VendorsPage : TabbedPage
 	{
         ItemsViewModel viewModel;
 
@@ -25,7 +25,7 @@ namespace PlanMy.Views
             BindingContext = viewModel = new ItemsViewModel();
         }
 
-        async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
+        /*async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
             var item = args.SelectedItem as Item;
             if (item == null)
@@ -40,7 +40,7 @@ namespace PlanMy.Views
         async void AddItem_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
-        }
+        }*/
 
         protected override void OnAppearing()
         {

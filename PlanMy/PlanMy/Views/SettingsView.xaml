@@ -33,7 +33,7 @@
                     <Label TextColor="Black" Text="Private Event" FontAttributes="Bold" Margin="10,10,0,0"></Label>
                     <Switch x:Name="privateEventSwith"></Switch>
                 </StackLayout>
-                <Label TextColor="Black" x:Name="logoutBtn" Text="Log Out" BackgroundColor="Transparent"></Label>
+                <Label TextColor="Black" x:Name="logoutBtn" Text="Log Out" Margin="10,10,0,0" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalOptions="StartAndExpand"></Label>
                 <StackLayout VerticalOptions="EndAndExpand" Orientation="Horizontal">
                     <Image Source="configBlack.png" Margin="10,0,0,0"></Image>
                     <Label Text="Settings" x:Name="settingsBtn"></Label>
