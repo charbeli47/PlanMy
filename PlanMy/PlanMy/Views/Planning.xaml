@@ -41,13 +41,13 @@
             </StackLayout>
                 <StackLayout Orientation="Horizontal" HeightRequest="1" BackgroundColor="gray"></StackLayout>
                 <StackLayout Orientation="Horizontal" x:Name="viewStack" HorizontalOptions="FillAndExpand">
-                <views:PlanningView x:Name="planningView" HorizontalOptions="FillAndExpand">
+                <views:PlanningView x:Name="planningView" HorizontalOptions="FillAndExpand" WidthRequest="500">
                     
                 </views:PlanningView>
-                    <views:guests x:Name="guestsView" HorizontalOptions="FillAndExpand">
+                    <views:guests x:Name="guestsView" HorizontalOptions="FillAndExpand" IsVisible="False">
 
                 </views:guests>
-                 <views:budget x:Name="budgetView" HorizontalOptions="FillAndExpand">
+                    <views:budget x:Name="budgetView" HorizontalOptions="FillAndExpand" IsVisible="False">
 
                 </views:budget>
                 </StackLayout>

@@ -18,36 +18,28 @@ namespace PlanMy.Views
 			InitializeComponent ();
             NavigationPage.SetHasNavigationBar(this, false);
             planningView.TranslationX = 0;
-            planningView.WidthRequest = Bounds.Width;
-            guestsView.WidthRequest = Bounds.Width;
-            budgetView.WidthRequest = Bounds.Width;
             guestsView.TranslationX = Bounds.Width;
-            budgetView.TranslationX = Bounds.Width;
+            budgetView.TranslationX = Bounds.Width * 2;
             checklistbut.Clicked += (object sender, EventArgs e) =>
 			{
-                /*planningView.IsVisible = true;
+                planningView.IsVisible = true;
                 guestsView.IsVisible = false;
-                budgetView.IsVisible = false;*/
+                budgetView.IsVisible = false;
             };
 
-			guestbut.Clicked += async(object sender, EventArgs e) =>
+			guestbut.Clicked += (object sender, EventArgs e) =>
 			{
-                List<Task> tranistion = new List<Task>();
-                tranistion.Add(planningView.TranslateTo(-Bounds.Width, planningView.TranslationY));
-                tranistion.Add(guestsView.TranslateTo(0, guestsView.TranslationY));
-                await Task.WhenAll(tranistion);
-                guestsView.TranslationX = 0;
-                planningView.TranslationX = Bounds.Width;
-                /* planningView.IsVisible = false;
-                 guestsView.IsVisible = true;
-                 budgetView.IsVisible = false;
-                 //await Navigation.PushAsync(new guests());*/
+                guestsView = new guests();
+                planningView.IsVisible = false;
+                guestsView.IsVisible = true;
+                budgetView.IsVisible = false;
+                //await Navigation.PushAsync(new guests());
             };
 			budgetbut.Clicked +=  (object sender, EventArgs e) =>
 			{
-                /*planningView.IsVisible = false;
+                planningView.IsVisible = false;
                 guestsView.IsVisible = false;
-                budgetView.IsVisible = true;*/
+                budgetView.IsVisible = true;
             };
             suppliersbut.Clicked += async (s, e) => {
                 await Navigation.PushAsync(new favourites());
