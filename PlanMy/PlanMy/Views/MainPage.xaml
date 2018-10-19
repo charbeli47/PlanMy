@@ -10,8 +10,11 @@
                 <views:ProfilePage />
             </x:Arguments>
         </NavigationPage>
-
-       
+        <NavigationPage Title="Vendors" Icon="vendors.png">
+            <x:Arguments>
+                <views:Vendors />
+            </x:Arguments>
+        </NavigationPage>
         <NavigationPage Title="Planning" Icon="planning.png">
             <x:Arguments>
                 <views:Planning />
