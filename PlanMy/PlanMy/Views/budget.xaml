@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanMy.Views.budget">
+    <ContentPage.Content>
+        <ScrollView>
+        <StackLayout BackgroundColor="White">
+            <StackLayout x:Name="Header">
+                <Frame OutlineColor="Black">
+                    <StackLayout x:Name="Title"
+                             Orientation="Vertical"
+                             HeightRequest="20"
+                             >
+                        <Label TextColor="Black" FontSize = "22" Text="THE PLANNER" HorizontalOptions="Center" VerticalOptions="Center" />
+
+                    </StackLayout>
+                </Frame>
+                <StackLayout x:Name="Menu">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="checklistbut" BackgroundColor="Transparent" Image="checklist.png" Grid.Row="0" Grid.Column="0"  />
+                        <Button x:Name="guestbut" BackgroundColor="Transparent"  Image="guestlist.png" Grid.Row="0" Grid.Column="1"   />
+                        <Button x:Name="budgetbut" Image="bbudget.png" BackgroundColor="Transparent"  Grid.Row="0" Grid.Column="2"   />
+                        <Button x:Name="supplierbut" Image="suppliers.png" BackgroundColor="Transparent"  Grid.Row="0" Grid.Column="3"   />
+                        <Button Image="orders.png" BackgroundColor="Transparent"  Grid.Row="0" Grid.Column="4"   />
+                    </Grid>
+                </StackLayout>
+
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" HeightRequest="5" BackgroundColor="LightGray"></StackLayout>
+            <Grid ColumnSpacing="1" RowSpacing="1" BackgroundColor="LightGray">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                       
+
+                    </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="0" BackgroundColor="White">
+                    <Image Source="estimateda.png" HorizontalOptions="Center"></Image>
+                    <Label HorizontalOptions="Center">ESTIMATED</Label>
+                    <Label HorizontalOptions="Center" Margin="0,-5,0,0">AMOUNT</Label>
+                    <Label HorizontalOptions="Center" Margin="0,5,0,0">$ 250 000</Label>
+                    <Label HorizontalOptions="Center" TextColor="Red" Margin="0,5,0,0">edit</Label>
+
+                </StackLayout>
+                <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="1" BackgroundColor="White">
+                    <Image Source="actuala.png" HorizontalOptions="Center"></Image>
+                    <Label HorizontalOptions="Center">ACTUAL</Label>
+                    <Label HorizontalOptions="Center" Margin="0,-5,0,0">AMOUNT</Label>
+                    <Label HorizontalOptions="Center" Margin="0,5,0,0">$ 80 000</Label>
+
+                </StackLayout>
+                <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="2" BackgroundColor="White">
+                    <Image Source="finalcost.png" HorizontalOptions="Center"></Image>
+                    <Label HorizontalOptions="Center">FINAL</Label>
+                    <Label HorizontalOptions="Center" Margin="0,-5,0,0">COST</Label>
+                    <Label HorizontalOptions="Center" Margin="0,5,0,0">$ 300 000</Label>
+                    <Label HorizontalOptions="Center" TextColor="black" FontSize="10" Margin="0,5,0,0">Paid: $ 200 000</Label>
+                    <Label HorizontalOptions="Center" TextColor="black" FontSize="10" Margin="0,-5,0,0">Remaining: $ 100 000</Label>
+
+                </StackLayout>
+               
+                
+            </Grid>
+                <StackLayout Orientation="Horizontal" HeightRequest="1" BackgroundColor="LightGray"></StackLayout>
+
+                <StackLayout Orientation="Vertical">
+                <Button BackgroundColor="Transparent" Image="plus.png" HorizontalOptions="End"></Button>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" HeightRequest="5" BackgroundColor="LightGray"></StackLayout>
+            <StackLayout Orientation="Vertical" x:Name="content">
+                
+            </StackLayout>
+        </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

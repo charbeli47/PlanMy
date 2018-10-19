@@ -3,10 +3,42 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PlanMy.Views.allVendors">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <ScrollView>
+        <StackLayout BackgroundColor="White">
+            <StackLayout x:Name="Header">
+                <Frame OutlineColor="Black" x:Name="Headerframe">
+                    <StackLayout x:Name="Menu">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Source="arrow.png" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"  />
+                            <Label x:Name="Pagetitle" TextColor="Black" FontSize = "16" Text="VENDORS" Grid.Row="0" Grid.Column="1" />
+                            <Image Source="custmenuicon.png"  Grid.Row="0" Grid.Column="2" HorizontalOptions="End"   />
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+
+            <StackLayout x:Name="Content">
+                <StackLayout Orientation="Horizontal">
+                <Label x:Name="NumberOfSupplieres" TextColor="Gray" FontSize = "16" Text="" FontAttributes="Italic" Margin="10,0,0,0" />
+                    <Label  TextColor="Gray" FontSize = "16" Text="supliers" FontAttributes="Italic"  />
+
+                </StackLayout>
+                <ScrollView>
+                    <StackLayout x:Name="list" HorizontalOptions="FillAndExpand"></StackLayout>
+                </ScrollView>
+
+            </StackLayout>
+
         </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

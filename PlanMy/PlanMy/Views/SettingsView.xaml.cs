@@ -1,6 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using PlanMy.Library;
+using PlanMy.Models;
+using PlanMy.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,11 +19,62 @@ namespace PlanMy.Views
 	public partial class SettingsView : ContentView
 	{
         ProfilePage _profile;
-		public SettingsView (ProfilePage profile)
-		{
+        public SettingsView(ProfilePage profile)
+        {
             _profile = profile;
-			InitializeComponent ();
-		}
+            LoadPage();
+            App.PostSuccessFacebookAction = async token =>
+            {
+                var vm = BindingContext as FacebookViewModel;
+
+                var requestUrl =
+                "https://graph.facebook.com/v3.1/me/?fields=name,picture,work,website,religion,location,locale,link,cover,age_range,birthday,devices,email,first_name,last_name,gender,hometown,is_verified,languages,photos&access_token="
+                + token;
+
+                var httpClient = new HttpClient();
+
+                var userJson = await httpClient.GetStringAsync(requestUrl);
+                Connect con = new Connect();                
+                var facebookProfile = JsonConvert.DeserializeObject<FacebookProfile>(userJson);
+                requestUrl = "https://graph.facebook.com/me/picture?type=large&access_token=" + token;
+                facebookProfile.Picture.Data.Url = requestUrl;
+                await con.SaveData("FaceBookProfile", userJson);
+                string password = CreatePassword(8);
+                string link = "https://planmy.me/maizonpub-api/users.php?action=fbregister&username=" + facebookProfile.FirstName + "&email=" + facebookProfile.Email + "&password=" + password + "&fb_id=" + facebookProfile.Id;
+                WebClient client = new WebClient();
+                string resp = client.DownloadString(link);
+                FBRegisterResponse regResp = Newtonsoft.Json.JsonConvert.DeserializeObject<FBRegisterResponse>(resp);
+                if (regResp.success == true)
+                {
+                    var uresp = Newtonsoft.Json.JsonConvert.SerializeObject(regResp.User);
+                    await con.SaveData("User", uresp);
+
+                    await Navigation.PopModalAsync();
+                }
+            };
+            InitializeComponent();
+        }
+        public string CreatePassword(int length)
+        {
+            const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+            StringBuilder res = new StringBuilder();
+            Random rnd = new Random();
+            while (0 < length--)
+            {
+                res.Append(valid[rnd.Next(valid.Length)]);
+            }
+            return res.ToString();
+        }
+        private async void LoadPage()
+        {
+            Connect con = new Connect();
+
+            var fbp = await con.GetData("FaceBookProfile");
+            if (string.IsNullOrEmpty(fbp))
+                logoutBtn.IsVisible = true;
+            else
+                logoutBtn.IsVisible = false;
+        }
 
         private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
         {

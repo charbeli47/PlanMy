@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:planMy="clr-namespace:PlanMy.Library;assembly=PlanMy"
              x:Class="PlanMy.Views.SettingsView" VerticalOptions="StartAndExpand">
     <ContentView.Resources>
         <ResourceDictionary>
@@ -34,6 +35,7 @@
                     <Switch x:Name="privateEventSwith"></Switch>
                 </StackLayout>
                 <Label TextColor="Black" x:Name="logoutBtn" Text="Log Out" Margin="10,10,0,0" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalOptions="StartAndExpand"></Label>
+                <planMy:FacebookLoginButton Margin="0,0,0,0" BackgroundColor="Transparent" x:Name="fbBtn"  />
                 <StackLayout VerticalOptions="EndAndExpand" Orientation="Horizontal">
                     <Image Source="configBlack.png" Margin="10,0,0,0"></Image>
                     <Label Text="Settings" x:Name="settingsBtn"></Label>

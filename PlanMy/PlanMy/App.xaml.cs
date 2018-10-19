@@ -16,8 +16,8 @@ namespace PlanMy
 
 			MainPage = new MainPage();
 		}
-
-		protected override void OnStart ()
+        public static Action<string> PostSuccessFacebookAction { get; set; }
+        protected override void OnStart ()
 		{
 			// Handle when your app starts
 		}

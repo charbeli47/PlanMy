@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanMy.Views.AddEvent"
+             BackgroundColor="#89B5DA">
+    <ContentPage.Content>
+        <StackLayout Margin="15,0,15,0">
+            <Image Source="logoplanmy.png" />
+            
+            <Label TextColor="White" FontSize = "20" Text="Name of event" />
+            <Entry Text=" This is how others will find your event" TextColor="White" FontSize="14" FontAttributes="Italic" />
+
+            <Label TextColor="White" FontSize = "20" Text="Date of event" />
+            <Entry Text=" Choose your date" TextColor="White" FontSize="14" FontAttributes="Italic"  />
+
+            <Label TextColor="White" FontSize = "20" Text="Type of event" />
+            <Picker x:Name="EventTypePicker" 
+                TextColor="White"
+                FontSize="14" FontAttributes="Italic"
+                >
+                <Picker.Items>
+                    <x:String> What are you planning</x:String>
+                    <x:String>Wedding</x:String>
+                    <x:String>Formal Dinner</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <Label TextColor="White" FontSize = "20" Text="Add hosts" />
+            <Entry Text=" Type email to invite" TextColor="White" FontSize="14" FontAttributes="Italic" />
+
+            <Image Source="createevent.png" Margin="0,35,0,0" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

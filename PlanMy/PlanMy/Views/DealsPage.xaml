@@ -1,12 +1,73 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:flv="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
              x:Class="PlanMy.Views.DealsPage">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <ScrollView>
+        <StackLayout BackgroundColor="White">
+            <StackLayout x:Name="Header">
+                <Frame OutlineColor="Black">
+                    <StackLayout x:Name="Title"
+                             Orientation="Vertical"
+                                   HeightRequest="20"
+                           >
+                        <Label TextColor="Black" FontSize = "22" Text="THE DEALS" HorizontalOptions="Center" VerticalOptions="Center" />
+
+                    </StackLayout>
+                </Frame>
+                <StackLayout x:Name="Menu">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                      
+                            <Button x:Name="dealsbut" Image="hotdeals.png" BackgroundColor="Transparent" Grid.Row="0" Grid.Column="0" ></Button>
+                            <Button x:Name="bundlesbut" Image="bundles.png" BackgroundColor="Transparent" Grid.Row="0" Grid.Column="1" ></Button>
+                        </Grid>
+                </StackLayout>
+
+            </StackLayout>
+            
+            <Frame OutlineColor="Black" Margin="15,10,15,0" CornerRadius="15">
+                <Picker x:Name="CategoriePicker" 
+                TextColor="White"
+                FontSize="14" FontAttributes="Italic"
+                 HeightRequest="15">
+
+                    <Picker.Items>
+                        <x:String>Select a category</x:String>
+                        <x:String>Cat1</x:String>
+                        <x:String>Cat2</x:String>
+                        <x:String>Cat3</x:String>
+                    </Picker.Items>
+                </Picker>
+            </Frame>
+            <flv:FlowListView FlowColumnCount="2" SeparatorVisibility="None" HasUnevenRows="false"
+	x:Name="dealsList" RowHeight="270" Margin="15,20,15,0">
+
+                <flv:FlowListView.FlowColumnTemplate>
+                    <DataTemplate>
+                        <ContentView>
+                            <StackLayout Orientation="Vertical">
+                                <Image Source="champagne.png" HorizontalOptions="Fill" HeightRequest="150"/>
+                                <Label  Text="ROGER ZARZOUR" TextColor="black" FontAttributes="Bold" Font="14" Margin="15,-10,0,0"/>
+                                <Label  Text="20% off on amazing performance"  TextColor="Black" FontSize="10" Margin="15,-5,0,0"/>
+                                <Image Source="getoffer.png" HorizontalOptions="Fill"/>
+
+                            </StackLayout>
+                        </ContentView>
+
+                    </DataTemplate>
+                </flv:FlowListView.FlowColumnTemplate>
+
+            </flv:FlowListView>
         </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

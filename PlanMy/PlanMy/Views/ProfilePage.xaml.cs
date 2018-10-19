@@ -1,4 +1,6 @@
-﻿using PlanMy.Library;
+﻿using Newtonsoft.Json;
+using PlanMy.Library;
+using PlanMy.Models;
 using PlanMy.ViewModels;
 using System;
 
@@ -20,6 +22,14 @@ namespace PlanMy.Views
         }
         async void LoadFavVendors()
         {
+            Connect con = new Connect();
+            var fbp = await con.GetData("FaceBookProfile");
+            if (!string.IsNullOrEmpty(fbp))
+            {
+                var facebookProfile = JsonConvert.DeserializeObject<FacebookProfile>(fbp);
+                ProfileImg.Source = facebookProfile.Picture.Data.Url;
+                ProfileImg.WidthRequest = Bounds.Width;
+            }
             WordpressService service = new WordpressService();
             var featuredItems = await service.GetFeaturedItemsAsync();
             //WooCommerceNET.RestAPI rest = new WooCommerceNET.RestAPI(Statics.WooApi, Statics.ConsumerKey, Statics.ConsumerSecret);
@@ -33,6 +43,7 @@ namespace PlanMy.Views
                 img.Margin = new Thickness(10, 0, 0, 0);
                 favVendors.Children.Add(img);
             }
+            
         }
 
         private void configBtn_Clicked(object sender, EventArgs e)
@@ -44,6 +55,18 @@ namespace PlanMy.Views
             settingsView.HeightRequest = Bounds.Height;
             ContentStack.Children.Add(settingsView);
 
+        }
+        protected async override void OnAppearing()
+        {
+            Connect con = new Connect();
+            var fbp = await con.GetData("FaceBookProfile");
+            if (!string.IsNullOrEmpty(fbp))
+            {
+                var facebookProfile = JsonConvert.DeserializeObject<FacebookProfile>(fbp);
+                ProfileImg.Source = facebookProfile.Picture.Data.Url;
+                ProfileImg.WidthRequest = Bounds.Width;
+            }
+            base.OnAppearing();
         }
         protected override bool OnBackButtonPressed()
         {

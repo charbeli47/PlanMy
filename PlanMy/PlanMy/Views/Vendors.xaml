@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:PlanMy.Models"
+             x:Class="PlanMy.Views.Vendors">
+    <ContentPage.Content>
+       
+        <StackLayout BackgroundColor="White">
+            <StackLayout x:Name="Header" >
+                <Frame OutlineColor="Black">
+                <StackLayout x:Name="Title"
+                             Orientation="Vertical"
+                            
+                             >
+                    <Label TextColor="Black" FontSize = "22" Text="VENDORS" HorizontalOptions="Center" VerticalOptions="Center" />
+
+                </StackLayout>
+                </Frame>
+                <StackLayout x:Name="Menu">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="search" Image="searchblue.png" BackgroundColor="Transparent" Grid.Row="0" Grid.Column="0"  />
+                        <Button x:Name="favorites" Image="favorites.png" BackgroundColor="Transparent" Grid.Row="0" Grid.Column="1"   />
+                        <Button x:Name="message" Image="messages.png" BackgroundColor="Transparent"  Grid.Row="0" Grid.Column="2"   />
+                    </Grid>
+                </StackLayout>
+
+            </StackLayout>
+
+            <StackLayout x:Name="Content" Margin="0,5,0,0">
+               
+                    <models:nolineentry Text="" HorizontalOptions="Fill" TextColor="Gray" FontSize="18" FontAttributes="Italic" Margin="15,20,15,0" TextChanged="Entry_TextChanged" Placeholder="What are you looking for?" />
+             
+                <ListView x:Name="VendorsListView">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                
+                                    <StackLayout Orientation="Horizontal">
+                                        <Image Source="{Binding icon}" HeightRequest="50" WidthRequest="50" VerticalOptions="Center"/>
+                                    <Label Text="{Binding Name}" TextColor="Gray" VerticalOptions="Center" FontSize="16"  />
+                                </StackLayout>
+                             
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+
+        </StackLayout>
+
+       
+    </ContentPage.Content>
+</ContentPage>

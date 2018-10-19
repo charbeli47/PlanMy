@@ -15,8 +15,8 @@
     <ContentPage.Content>
         <ScrollView HorizontalOptions="FillAndExpand">
             <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" x:Name="ContentStack">
-                <StackLayout x:Name="Header" HorizontalOptions="FillAndExpand">
-                    <Image Source="profileheader.png" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"></Image>
+                <StackLayout x:Name="Header" HorizontalOptions="FillAndExpand" >
+                    <Image Source="profileheader.png" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" x:Name="ProfileImg" HeightRequest="230" BackgroundColor="Gray" Scale="1.5"></Image>
                     <Image Source="timerback.png" Margin="0,-30,0,0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"></Image>
                     <StackLayout Margin="0,-270,0,0" >
                         <StackLayout Margin="30,0,30,0"  Orientation="Horizontal" HorizontalOptions="FillAndExpand">

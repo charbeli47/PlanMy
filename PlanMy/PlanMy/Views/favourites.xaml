@@ -1,12 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:flv="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
              x:Class="PlanMy.Views.favourites">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+        <StackLayout BackgroundColor="White">
+            <StackLayout x:Name="Header">
+                <Frame OutlineColor="Black">
+                    <StackLayout x:Name="Title"
+                             Orientation="Vertical"
+                             HeightRequest="20"
+                             >
+                        <Label TextColor="Black" FontSize = "22" Text="VENDORS" HorizontalOptions="Center" VerticalOptions="Center" />
+
+                    </StackLayout>
+                </Frame>
+                <StackLayout x:Name="Menu">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="search" Image="search.png" BackgroundColor="Transparent" Grid.Row="0" Grid.Column="0"  />
+                        <Button x:Name="favorites" Image="favoritesblue.png" BackgroundColor="Transparent" Grid.Row="0" Grid.Column="1"   />
+                        <Button x:Name="message" Image="messages.png" BackgroundColor="Transparent"  Grid.Row="0" Grid.Column="2"   />
+                    </Grid>
+                </StackLayout>
+
+            </StackLayout>
+
+            <flv:FlowListView FlowColumnCount="2" SeparatorVisibility="None" HasUnevenRows="false"
+	x:Name="FavoritesList" RowHeight="200">
+
+                <flv:FlowListView.FlowColumnTemplate>
+                    <DataTemplate>
+                        <ContentView>
+                            <StackLayout Orientation="Vertical">
+                                <Image Source="champagne.png" HeightRequest="100"/>
+                                <Label HorizontalOptions="Center" Text="name" TextColor="Gray" FontAttributes="Bold" Font="16" Margin="0,-5,0,0"/>
+                                <Label HorizontalOptions="Center" Text="categorie" Margin="0,-5,0,0" TextColor="Gray" FontSize="14"/>
+
+                            </StackLayout>
+                        </ContentView>
+                            
+                    </DataTemplate>
+                </flv:FlowListView.FlowColumnTemplate>
+
+            </flv:FlowListView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

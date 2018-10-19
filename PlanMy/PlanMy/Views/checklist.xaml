@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanMy.checklist">
+    <ContentPage.Content>
+        <ScrollView>
+        <StackLayout BackgroundColor="White">
+            <StackLayout x:Name="Header">
+                <Frame OutlineColor="Black">
+                    <StackLayout x:Name="Menutitle">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+                              
+                            </Grid.ColumnDefinitions>
+                            <Image Source="blackarrow.png" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"  />
+                            <Label x:Name="Pagetitle" TextColor="Black" FontSize = "22" Text="CHECKLIST" Grid.Row="0" Grid.Column="1" />
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+                <StackLayout x:Name="Menu">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Image Source="pending.png" Grid.Row="0" Grid.Column="0"  />
+                        <Image Source="edit.png" Grid.Row="0" Grid.Column="1"   />
+                        <Image Source="delete.png"  Grid.Row="0" Grid.Column="2"   />
+                    </Grid>
+                    <StackLayout Orientation="Horizontal" HeightRequest="1" BackgroundColor="Gray"></StackLayout>
+                </StackLayout>
+
+            </StackLayout>
+                <Label x:Name="title" FontAttributes="Bold" FontSize="20" TextColor="Black" Margin="15,0,15,0">Schedule an engagement photoshoot</Label>
+                <Label x:Name="description" FontAttributes="Italic" FontSize="18" TextColor="DarkGray" Margin="15,0,15,0">Photography and Videography</Label>
+                <Label x:Name="month" FontAttributes="Italic" FontSize="22" TextColor="LightGray" Margin="15,0,15,0">By December 2018</Label>
+                <Label x:Name="text" Margin="15,30,15,0" FontSize="18" TextColor="Gray">Contact different suppliers to get the best offer and shooting should be done before mid september so we can use the pictures for the invitations</Label>
+                <StackLayout Orientation="Horizontal" BackgroundColor="LightGray" HeightRequest="5"></StackLayout>
+                <Label FontAttributes="Bold" FontSize="18" TextColor="Black" Margin="0,30,0,0" HorizontalOptions="Center">Suppliers</Label>
+                <Label FontAttributes="Bold" FontSize="16" TextColor="Gray" HorizontalOptions="Center" Margin="0,-5,0,0">you haven't save any supplier yet</Label>
+                <Label x:Name="searchsuppliers"  FontSize="16" TextColor="DarkBlue" HorizontalOptions="Center" Margin="0,-5,0,15">Search for suppliers</Label>
+                <StackLayout Orientation="Horizontal" BackgroundColor="LightGray" HeightRequest="1"></StackLayout>
+                <Label FontAttributes="Bold" FontSize="16" TextColor="Gray" Margin="15,10,0,0">Recommended suppliers</Label>
+                <ScrollView Orientation="Horizontal">  
+            <StackLayout Orientation="Horizontal" x:Name="Suppliersstack" >
+                  
+                </StackLayout>
+                </ScrollView>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

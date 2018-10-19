@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanMy.bundels">
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout BackgroundColor="White">
+                <StackLayout x:Name="Header">
+                    <Frame OutlineColor="Black">
+                        <StackLayout x:Name="Title"
+                             Orientation="Vertical"
+                                       HeightRequest="20"
+                             >
+                            <Label TextColor="Black" FontSize = "22" Text="THE DEALS" HorizontalOptions="Center" VerticalOptions="Center" />
+
+                        </StackLayout>
+                    </Frame>
+                    <StackLayout x:Name="Menu">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="dealsbut" Image="hotdeals2.png" BackgroundColor="Transparent" Grid.Row="0" Grid.Column="0" ></Button>
+                            <Button x:Name="bundlesbut" Image="bundles2.png" BackgroundColor="Transparent" Grid.Row="0" Grid.Column="1" ></Button>
+                        </Grid>
+                    </StackLayout>
+
+                </StackLayout>
+                <StackLayout Orientation="Vertical" x:Name="bundleslist">
+
+                </StackLayout>
+
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

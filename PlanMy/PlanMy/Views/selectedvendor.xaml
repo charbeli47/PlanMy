@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:abstractions="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             x:Class="PlanMy.selectedvendor">
+    <ContentPage.Content>
+        <ScrollView>
+        <StackLayout BackgroundColor="white" Spacing="-6">
+            <StackLayout x:Name="Header">
+                <Frame OutlineColor="Black"  x:Name="Headerframe">
+                    <StackLayout x:Name="Menu">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Image Source="arrow.png" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"  />
+                            <Label x:Name="Pagetitle" TextColor="Black" FontSize = "16" Text="VENDORS" Grid.Row="0" Grid.Column="1" />
+                            <Image Source="custmenuicon.png"  Grid.Row="0" Grid.Column="2" HorizontalOptions="End"   />
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+            <StackLayout x:Name="Content" Orientation="Vertical" Margin="0,3,0,0">
+                <Image x:Name="postimage" Source="vendor.png" HorizontalOptions="FillAndExpand"></Image>
+                <Grid HeightRequest="20" RowSpacing="0" ColumnSpacing="0" Margin="0,-6,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+
+                    </Grid.ColumnDefinitions>
+                    <StackLayout Orientation="Vertical" BackgroundColor="#F59678" Grid.Row="0" Grid.Column="0">
+                        <Label TextColor="White" FontSize="10" HorizontalOptions="Center">10% PlanMy discount</Label>
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" Grid.Row="0" BackgroundColor="#F50000" Grid.Column="1">
+                        <Label TextColor="White" FontSize="10" HorizontalOptions="Center">PlanMy Combo</Label>
+                    </StackLayout>
+                </Grid>
+                <StackLayout Orientation="Vertical" Margin="15,0,15,0">
+                    <StackLayout Orientation="Horizontal">
+                        <Label x:Name="Title" FontSize="18" FontAttributes="Bold" TextColor="Black">Four Seasons Hotel Beriut</Label>
+                        <Image Source="bluestar.png"></Image>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label x:Name="Address" FontSize="14" TextColor="Black">MINET EL HOSN, BEIRUT</Label>
+                        <Label x:Name="seemap" FontSize="12" FontAttributes="Bold" TextColor="Black" Margin="35,0,0,0">See map</Label>
+
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Image Source="moreinformation2.png"></Image>
+                        <Image Source="phone.png"></Image>
+                    </StackLayout>
+                   
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" BackgroundColor="#EBEBEB" HeightRequest="1">
+
+                </StackLayout>
+                <!--<ScrollView>-->
+                    <StackLayout x:Name="Content2" Orientation="Vertical">
+                        <Grid  RowSpacing="0" ColumnSpacing="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+
+                            </Grid.ColumnDefinitions>
+                            <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="0">
+                                <Image Source="photos.png"></Image>
+                                <Label x:Name="photoslabel" HorizontalOptions="Center" FontSize="12" FontAttributes="Bold" TextColor="Black">20 photos</Label>
+                               
+              </StackLayout>
+                            
+                            <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="1">
+                                <Image Source="videos.png"></Image>
+                                <Label x:Name="videoslabel" FontSize="12" HorizontalOptions="Center" FontAttributes="Bold" TextColor="Black">2 videos</Label>
+
+                            </StackLayout>
+                            <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="2">
+                                <Image Source="promotions.png"></Image>
+                                <Label x:Name="promotionslabel" HorizontalOptions="Center" FontSize="12" FontAttributes="Bold" TextColor="Black">1 promotion</Label>
+
+                            </StackLayout>
+
+                        </Grid>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" HeightRequest="5" BackgroundColor="#EBEBEB">
+                            
+                        </StackLayout>
+                        <Label TextColor="black" FontSize="18" FontAttributes="Bold" Margin="15,10,15,0">Description</Label>
+                        <Label TextColor="black" FontSize="12"  Margin="15,25,15,0">four seasons hotel beirut provides both address for both buisness and leisure individuals, and it is the best place to go to,four seasons hotel beirut provides both address for both buisness and leisure individuals, and it is the best place to go to,four seasons hotel beirut provides both address for both buisness and leisure individuals, and it is the best place to go to </Label>
+                        <Label TextColor="black" FontSize="14" FontAttributes="Bold" Margin="15,15,15,0">Services offered</Label>
+                        <Label TextColor="black" FontSize="12"  Margin="15,-5,15,0">four seasons hotel beirut provides both address for both buisness and leisure individuals, and it is the best place to go to,four seasons hotel beirut provides both address for both buisness and leisure individuals, and it is the best place to go to,four seasons hotel beirut provides both address for both buisness and leisure individuals, and it is the best place to go to</Label>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" HeightRequest="5" BackgroundColor="#EBEBEB">
+
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill">
+                            <Label TextColor="black" FontSize="16" FontAttributes="Bold" Margin="15,0,25,0">Reviews</Label>
+                            <Label x:Name="numberofreviews" TextColor="black" FontSize="16" Margin="15,0,25,0">2</Label>
+                            <Label x:Name="writereview" TextColor="#1BA2A8" FontSize="12" HorizontalOptions="End" Margin="80,0,15,0">Write a Review</Label>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" HeightRequest="150" BackgroundColor="#EBEBEB">
+
+                        </StackLayout>
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" Margin="15,0,15,0">
+                            <abstractions:CircleImage Source="champagne.png"
+    HeightRequest="30"
+    WidthRequest="30"
+    HorizontalOptions="Start"
+   />
+                            <StackLayout Orientation="Vertical">
+                                <Label x:Name="nameofreviewer" TextColor="black" FontSize="16" FontAttributes="Bold">Anthony Assaad</Label>
+                                <Label x:Name="dateofuse" TextColor="black" FontSize="12" Margin="0,-5,0,0">Married on 26/05/2018</Label>
+
+                            </StackLayout>
+                        </StackLayout>
+                        <Label x:Name="review" TextColor="Black" FontAttributes="Bold" FontSize="12" Margin="15,0,15,0">the four season hotel was a good choice tou our wedding the service was so good people had a lot of fun everything was amazing sound,light,food everythin is so amazing,choice tou our wedding the service was so good people had a lot of fun everything was amazing sound,light,food everythin is so amazing</Label>
+                        <Image Source="allreviews.png" Margin="15,0,15,0"></Image>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" HeightRequest="5" BackgroundColor="#EBEBEB">
+
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill">
+                            <Label TextColor="black" FontSize="16" FontAttributes="Bold" Margin="15,0,25,0">Promotions</Label>
+                            <Label x:Name="numberofpromotions" TextColor="black" FontSize="16" Margin="15,0,25,0">2</Label>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" HeightRequest="1" BackgroundColor="#EBEBEB">
+
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" Margin="15,0,15,0">
+                            <Image Source="promotions.png"></Image>
+                            <StackLayout Orientation="Vertical">
+                                <Label x:Name="titlep" TextColor="black" FontSize="12" FontAttributes="Bold">Winter Wedding Package</Label>
+                                <Label x:Name="sitep" TextColor="black" FontSize="12" Margin="0,-5,0,0">Discount</Label>
+
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" HeightRequest="1" BackgroundColor="#EBEBEB">
+
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" Margin="15,0,15,0">
+                            <Image Source="promotions.png"></Image>
+                            <StackLayout Orientation="Vertical">
+                                <Label  TextColor="black" FontSize="12" FontAttributes="Bold">20% discount for birthday at PlanMy</Label>
+                                <Label  TextColor="black" FontSize="12" Margin="0,-5,0,0">Discount PlanMy.net</Label>
+
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" HeightRequest="5" BackgroundColor="#EBEBEB">
+
+                        </StackLayout>
+                        <StackLayout Orientation="Vertical" HorizontalOptions="Fill">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Fill">
+                                <Label TextColor="black" FontSize="16" FontAttributes="Bold" Margin="15,0,25,0">Videos</Label>
+                                <Label x:Name="numberofvids" TextColor="black" FontSize="16" Margin="15,0,25,0">3</Label>
+                            </StackLayout>
+                            <ScrollView>
+                                <Image Source="videothumb.png"/>
+                                <Image Source="videothumb.png"/>
+                                <Image Source="videothumb.png"/>
+                                <Image Source="videothumb.png"/>
+                            </ScrollView>
+                            <Image Source="allvideos" Margin="15,0,15,20"></Image>
+                        </StackLayout>
+                       
+                    </StackLayout>
+                <!--</ScrollView>-->
+            </StackLayout>
+        </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

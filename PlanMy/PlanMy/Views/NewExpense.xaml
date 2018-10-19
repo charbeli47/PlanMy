@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:PlanMy.Models"
+             x:Class="PlanMy.Views.NewExpense">
+    <ContentPage.Content>
+        <StackLayout>
+            <ScrollView>
+                <StackLayout BackgroundColor="White">
+                    <StackLayout x:Name="Header">
+                        <Frame OutlineColor="Black">
+                            <StackLayout x:Name="Menutitle">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="*" />
+
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="2*" />
+
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="blackarrow.png" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"  />
+                                    <Label x:Name="Pagetitle" TextColor="Black" FontSize = "22" Text="NEW EXPENSE" Grid.Row="0" Grid.Column="1" />
+                                </Grid>
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
+                    <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">CATEGORY</Label>
+                    <models:Pickerarrow x:Name="catPicker" 
+              HeightRequest="40" 
+              Image="arrowdown"
+              
+                Margin="15,0,15,0"
+                Title="Category"
+                HorizontalOptions="Fill">
+                        <models:Pickerarrow.Items>
+                            <x:String>cat1
+                            </x:String>
+                            <x:String>cat2</x:String>
+                            <x:String>cat3</x:String>
+                        </models:Pickerarrow.Items>
+                    </models:Pickerarrow>
+
+                    <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">DESCRIPTION</Label>
+                    <models:nolineentry Placeholder="Name your expense" Margin="15,0,15,0" ></models:nolineentry>
+
+                    <StackLayout Orientation="Horizontal">
+                       
+                            <StackLayout Orientation="Vertical" HorizontalOptions="StartAndExpand" >
+                                <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">PAID COST</Label>
+                                <models:nolineentry WidthRequest="150" Placeholder="0" Margin="15,0,15,0" ></models:nolineentry>
+
+                            </StackLayout>
+                            <StackLayout Orientation="Vertical">
+                                <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="0,25,15,0">FINAL COST</Label>
+                            <models:nolineentry WidthRequest="150" Placeholder="0" Margin="0,0,15,0" ></models:nolineentry>
+
+                            </StackLayout>
+                       
+
+                       
+                    </StackLayout>
+
+                    <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">NOTES</Label>
+                    <models:nolineentry Placeholder="Description of the task" Margin="15,0,15,0" HeightRequest="120"></models:nolineentry>
+
+                    <Button x:Name="Savechanges" BackgroundColor="Transparent" Image="savechanges.png" Margin="15,0,15,0"></Button>
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

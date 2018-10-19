@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PlanMy.Library;
+using System;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -11,7 +12,14 @@ namespace PlanMy.Views
 		public MainPage ()
 		{
 			InitializeComponent ();
-            Navigation.PushModalAsync(new Login());
+            LoadPage();
 		}
+        public async void LoadPage()
+        {
+            Connect con = new Connect();
+            var user = await con.GetData("User");
+            if(string.IsNullOrEmpty(user))
+                await Navigation.PushModalAsync(new Login());
+        }
 	}
 }

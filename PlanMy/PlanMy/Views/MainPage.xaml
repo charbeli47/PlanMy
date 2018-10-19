@@ -12,14 +12,10 @@
             </x:Arguments>
         </NavigationPage>
 
-        <NavigationPage Title="Vendors" Icon="vendors.png">
-            <x:Arguments>
-                <views:VendorsPage />
-            </x:Arguments>
-        </NavigationPage>
+       
         <NavigationPage Title="Planning" Icon="planning.png">
             <x:Arguments>
-                <views:PlanningPage />
+                <views:Planning />
             </x:Arguments>
         </NavigationPage>
         <NavigationPage Title="Deals" Icon="deals.png">
