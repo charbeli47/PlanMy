@@ -10,13 +10,12 @@ using Xamarin.Forms.Xaml;
 namespace PlanMy.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class guests : ContentPage
+	public partial class guests : ContentView
 	{
 		public guests ()
 		{
 			InitializeComponent ();
-
-			addtablebut.Clicked += (object sender, EventArgs e) =>
+            addtablebut.Clicked += (object sender, EventArgs e) =>
 			{
 				popupaddtable.IsVisible = true;
 			};
@@ -34,19 +33,7 @@ namespace PlanMy.Views
 				popupguest.IsVisible = false;
 			};
 
-			checklistbut.Clicked += (object sender, EventArgs e) =>
-			{
-				Navigation.PushModalAsync(new Planning());
-			};
-
-			guestbut.Clicked += (object sender, EventArgs e) =>
-			{
-				Navigation.PushModalAsync(new guests());
-			};
-			budgetbut.Clicked += (object sender, EventArgs e) =>
-			{
-				Navigation.PushModalAsync(new budget());
-			};
+			
 
 
 

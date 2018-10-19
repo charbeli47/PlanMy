@@ -3,6 +3,10 @@ using System;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.AndroidSpecific;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
+using TabbedPage = Xamarin.Forms.TabbedPage;
 
 namespace PlanMy.Views
 {
@@ -12,6 +16,7 @@ namespace PlanMy.Views
 		public MainPage ()
 		{
 			InitializeComponent ();
+            On<Android>().SetToolbarPlacement(ToolbarPlacement.Bottom);
             LoadPage();
 		}
         public async void LoadPage()

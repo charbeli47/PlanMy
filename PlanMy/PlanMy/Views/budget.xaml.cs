@@ -10,33 +10,12 @@ using Xamarin.Forms.Xaml;
 namespace PlanMy.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class budget : ContentPage
+	public partial class budget : ContentView
 	{
 		public budget()
 		{
 			InitializeComponent();
-
-			budgetbut.Clicked += (object sender, EventArgs e) =>
-			{
-				Navigation.PushModalAsync(new budget());
-			};
-
-			checklistbut.Clicked += (object sender, EventArgs e) =>
-			{
-				Navigation.PushModalAsync(new Planning());
-			};
-
-			guestbut.Clicked += (object sender, EventArgs e) =>
-			{
-				Navigation.PushModalAsync(new guests());
-			};
-			supplierbut.Clicked += (object sender, EventArgs e) =>
-			{
-				Navigation.PushModalAsync(new favourites());
-			};
-
-
-
+            
 			StackLayout table1 = createtablerow("Venues", "location.png");
 			StackLayout table2 = createtablerow("Lighting & sound", "location.png");
 			table1.Children.Add(createsupplierrowintable("Domaine de Zekrit", "25 000","10 000"));

@@ -19,17 +19,17 @@ namespace PlanMy.Views
 			InitializeComponent();
 			search.Clicked += (object sender, EventArgs e) =>
 			{
-				Navigation.PushModalAsync(new Vendors());
+				Navigation.PushAsync(new Vendors());
 			};
 
 			favorites.Clicked += (object sender, EventArgs e) =>
 			{
-				Navigation.PushModalAsync(new favourites());
+				Navigation.PushAsync(new favourites());
 			};
 
 			message.Clicked += (object sender, EventArgs e) =>
 			{
-				Navigation.PushModalAsync(new messages());
+				Navigation.PushAsync(new messages());
 			};
 
 			listmsgs = new List<message>();

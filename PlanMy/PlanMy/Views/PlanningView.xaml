@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanMy.Views.PlanningView">
+  <ContentView.Content>
+      <StackLayout HorizontalOptions="FillAndExpand">
+            
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                <Label Margin="25,0,0,0" TextColor="black">You have completed</Label>
+                <Label x:Name="numbercompletedtasks" TextColor="Green">0</Label>
+                <Label TextColor="black">out of</Label>
+                <Label x:Name="numbertotaltasks" TextColor="black">20</Label>
+                <Label Margin="0,0,25,0" TextColor="black">tasks</Label>
+            </StackLayout>
+            <ProgressBar x:Name="progress" Progress="0" Margin="15,0,15,0" HeightRequest="30"/>
+            <StackLayout Orientation="Horizontal" HeightRequest="1" BackgroundColor="gray"></StackLayout>
+            <StackLayout x:Name="Menu2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image Source="all.png" Grid.Row="0" Grid.Column="0"  />
+                    <Image Source="todo.png" Grid.Row="0" Grid.Column="1"   />
+                    <Image Source="done.png"  Grid.Row="0" Grid.Column="2"   />
+
+                </Grid>
+            </StackLayout>
+            <Button HorizontalOptions="End" x:Name="newtask"  Image="plus.png" BackgroundColor="Transparent"></Button>
+            <StackLayout Orientation="Vertical" x:Name="checkList">
+
+            </StackLayout>
+        </StackLayout>
+  </ContentView.Content>
+</ContentView>

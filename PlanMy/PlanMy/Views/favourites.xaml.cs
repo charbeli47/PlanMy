@@ -17,20 +17,20 @@ namespace PlanMy.Views
 		public favourites()
 		{
 			InitializeComponent();
-
-			search.Clicked += (object sender, EventArgs e) =>
+            NavigationPage.SetHasNavigationBar(this, false);
+            search.Clicked += (object sender, EventArgs e) =>
 			{
-				Navigation.PushModalAsync(new Vendors());
+				Navigation.PushAsync(new Vendors());
 			};
 
 			favorites.Clicked += (object sender, EventArgs e) =>
 			{
-				Navigation.PushModalAsync(new favourites());
+				Navigation.PushAsync(new favourites());
 			};
 
 			message.Clicked += (object sender, EventArgs e) =>
 			{
-				Navigation.PushModalAsync(new messages());
+				Navigation.PushAsync(new messages());
 			};
 			this.BindingContext = this;
 			// just for testing purposes////
