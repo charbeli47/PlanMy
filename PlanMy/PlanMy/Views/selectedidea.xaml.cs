@@ -17,8 +17,14 @@ namespace PlanMy.Views
 			InitializeComponent ();
 			NavigationPage.SetHasNavigationBar(this, false);
 
+			backarrow.Clicked += (object sender, EventArgs e) =>
+			{
+				Navigation.PushAsync(new IdeasPage());
 
-		
+			};
+
+
+
 			var htmlSource = new HtmlWebViewSource();
 			htmlSource.Html = @html; 
 			webv.Source = htmlSource;

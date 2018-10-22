@@ -34,7 +34,7 @@
                             <ViewCell>
                                 <StackLayout Orientation="Vertical">
                                     <Image Source="{Binding imgurl}"/>
-                                    <Label HorizontalOptions="Center" Text="{Binding title}" TextColor="Black" FontAttributes="Bold" Font="16" Margin="0,-2,0,25"/>
+                                    <Label HorizontalOptions="Center" Text="{Binding title}" TextColor="Black" FontAttributes="Bold" Font="12" Margin="0,-2,0,25"/>
 
                                 </StackLayout>
                                 </ViewCell>
