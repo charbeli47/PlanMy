@@ -17,12 +17,24 @@ namespace PlanMy.Views
         public ProfilePage()
 		{
 			InitializeComponent ();
+            
             NavigationPage.SetHasNavigationBar(this, false);
-            //LoadFavVendors();
+            LoadFavVendors();
         }
         async void LoadFavVendors()
         {
             Connect con = new Connect();
+            var usr = await con.GetData("User");
+            if(usr!=null)
+            {
+                UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                string guestsnbr = await con.DownloadData("https://www.planmy.me/maizonpub-api/guestlist.php", "userid=" + cookie.user.id + "&action=getcount");
+                guestsLabel.Text = guestsnbr.Replace("\"","");
+                string todorecord = await con.DownloadData("https://www.planmy.me/maizonpub-api/todolist.php", "todo_user=" + cookie.user.id + "&action=getcount");
+                tasksLabel.Text = todorecord.Replace("\"", "");
+                string wishlistnbr = await con.DownloadData("https://www.planmy.me/maizonpub-api/wishlist.php?userid=userId&action=getcount", "userid=" + cookie.user.id + "&action=getcount");
+                favouriteLabel.Text = wishlistnbr.Replace("\"", "");
+            }
             /*var fbp = await con.GetData("FaceBookProfile");
             if (!string.IsNullOrEmpty(fbp))
             {

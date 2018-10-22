@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,7 +43,7 @@ namespace PlanMy.Views
 					i.post = post;
 					i.html = html;
 					i.imgurl = imgurl.ToString();
-					i.title = itemData.Title.Rendered;
+					i.title = WebUtility.HtmlDecode(itemData.Title.Rendered);
 					//i.description = itemData.Excerpt.Rendered;
 					listposts.Add(i);
 				}
