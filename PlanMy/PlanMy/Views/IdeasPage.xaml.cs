@@ -22,8 +22,10 @@ namespace PlanMy.Views
 		public IdeasPage ()
 		{
 			InitializeComponent ();
-	
-		//TappedCommand = new Command(() => gotosingleidea());
+			NavigationPage.SetHasNavigationBar(this, false);
+
+
+			//TappedCommand = new Command(() => gotosingleidea());
 			//BindingContext = this;
 			WordpressService service = new WordpressService();
 			Task.Run(async () =>
@@ -40,11 +42,13 @@ namespace PlanMy.Views
 					i.post = post;
 					i.html = html;
 					i.imgurl = imgurl.ToString();
+					i.title = itemData.Title.Rendered;
+					//i.description = itemData.Excerpt.Rendered;
 					listposts.Add(i);
 				}
 
 
-				BlogList.FlowItemsSource = listposts;
+				BlogList.ItemsSource = listposts;
 			});
 
 
@@ -65,6 +69,7 @@ namespace PlanMy.Views
 
 				if (selectedpost == null)
 					return;
+				((ListView)sender).SelectedItem = null;
 				//var newpage = new allVendors(selectedvendor.Id,selectedvendor.Name);
 				Navigation.PushModalAsync(new selectedidea(selectedpost.html));
 			};

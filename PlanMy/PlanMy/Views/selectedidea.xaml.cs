@@ -15,11 +15,14 @@ namespace PlanMy.Views
 		public selectedidea (string html)
 		{
 			InitializeComponent ();
+			NavigationPage.SetHasNavigationBar(this, false);
 
-			var browser = new WebView();
+
+		
 			var htmlSource = new HtmlWebViewSource();
-			htmlSource.Html = html; 
-			browser.Source = htmlSource;
+			htmlSource.Html = @html; 
+			webv.Source = htmlSource;
+		
 		}
 	}
 }

@@ -27,24 +27,21 @@
                  </StackLayout>
             
             <StackLayout x:Name="Content" Margin="0,35,0,0">
-                <flv:FlowListView FlowColumnCount="2" SeparatorVisibility="None" HasUnevenRows="True"
-	x:Name="BlogList" FlowLastTappedItem = "{Binding lasttappeditem}" FlowItemTappedCommand="{Binding TappedCommand}">
-
-                    <flv:FlowListView.FlowColumnTemplate>
+                <ListView x:Name="BlogList" HasUnevenRows="True">
+                    <ListView.ItemTemplate>
                         <DataTemplate>
-                            <ContentView>
+
+                            <ViewCell>
                                 <StackLayout Orientation="Vertical">
-                                    <Image Source="{Binding imgurl}" HeightRequest="100"/>
-                                    <Label HorizontalOptions="Center" Text="test" TextColor="Gray" FontAttributes="Bold" Font="16" Margin="0,-5,0,0"/>
-                                    <Label HorizontalOptions="Center" Text="categorie" Margin="0,-5,0,0" TextColor="Gray" FontSize="14"/>
+                                    <Image Source="{Binding imgurl}"/>
+                                    <Label HorizontalOptions="Center" Text="{Binding title}" TextColor="Black" FontAttributes="Bold" Font="16" Margin="0,-2,0,25"/>
 
                                 </StackLayout>
-                            </ContentView>
+                                </ViewCell>
 
                         </DataTemplate>
-                    </flv:FlowListView.FlowColumnTemplate>
-
-                </flv:FlowListView>
+                        </ListView.ItemTemplate>
+                    </ListView>
             </StackLayout>
             
         </StackLayout>

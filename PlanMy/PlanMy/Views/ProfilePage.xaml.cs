@@ -18,7 +18,7 @@ namespace PlanMy.Views
 		{
 			InitializeComponent ();
             NavigationPage.SetHasNavigationBar(this, false);
-            LoadFavVendors();
+            //LoadFavVendors();
         }
         async void LoadFavVendors()
         {

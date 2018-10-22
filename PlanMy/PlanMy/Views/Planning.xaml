@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:PlanMy.Views"
              xmlns:models="clr-namespace:PlanMy.Models"
+             xmlns:flv="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
              x:Class="PlanMy.Views.Planning">
     <ContentPage.Content>
         <ScrollView HorizontalOptions="FillAndExpand" HorizontalScrollBarVisibility="Never">
@@ -65,14 +66,20 @@
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
-                                    <Image Source="all.png" Grid.Row="0" Grid.Column="0"  />
-                                    <Image Source="todo.png" Grid.Row="0" Grid.Column="1"   />
-                                    <Image Source="done.png"  Grid.Row="0" Grid.Column="2"   />
+                                    <Button x:Name="allbut" BackgroundColor="Transparent" Image="all.png" Grid.Row="0" Grid.Column="0"  />
+                                    <Button x:Name="todobut" BackgroundColor="Transparent" Image="todo.png" Grid.Row="0" Grid.Column="1"   />
+                                    <Button x:Name="donebut" BackgroundColor="Transparent" Image="done.png"  Grid.Row="0" Grid.Column="2"   />
 
                                 </Grid>
                             </StackLayout>
                             <Button HorizontalOptions="End" x:Name="newtask"  Image="plus.png" BackgroundColor="Transparent"></Button>
                             <StackLayout Orientation="Vertical" x:Name="checkList">
+
+                            </StackLayout>
+                            <StackLayout Orientation="Vertical" x:Name="todostack" IsVisible="False">
+
+                            </StackLayout>
+                            <StackLayout Orientation="Vertical" x:Name="donestack" IsVisible="False">
 
                             </StackLayout>
                         </StackLayout>
@@ -131,36 +138,7 @@
 
                                 </StackLayout>
                                 <!--Popup Area-->
-                                <ContentView x:Name="popupaddtable" HeightRequest="100" BackgroundColor="#50000000" IsVisible="false" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
-                                    <StackLayout Orientation="Vertical" HorizontalOptions="Center" BackgroundColor="White">
-                                        <Button Image="x.png" BackgroundColor="Transparent" x:Name="closepopuptable" HorizontalOptions="End" Margin="0,0,0,0"></Button>
-                                        <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">TABLE NAME</Label>
-                                        <models:nolineentry Placeholder="Table Name" Margin="15,0,15,0"></models:nolineentry>
-                                        <Button x:Name="savetable" BackgroundColor="Transparent" Image="savechanges.png" Margin="15,0,15,25"></Button>
-                                    </StackLayout>
-                                </ContentView>
-                                <ContentView x:Name="popupguest" HeightRequest="100" BackgroundColor="White" IsVisible="false" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
-                                    <StackLayout Orientation="Vertical">
-                                        <Button Image="x.png" BackgroundColor="Transparent" x:Name="closepopupguest" HorizontalOptions="End" Margin="0,0,0,0"></Button>
-                                        <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">Choose guest</Label>
-
-                                        <models:Pickerarrow x:Name="guestPicker" 
-              HeightRequest="40" 
-              Image="arrowdown"
-              
-                Margin="15,0,15,0"
-                Title="Attending guests"
-                HorizontalOptions="Fill">
-                                            <models:Pickerarrow.Items>
-                                                <x:String>cat1
-                                                </x:String>
-                                                <x:String>cat2</x:String>
-                                                <x:String>cat3</x:String>
-                                            </models:Pickerarrow.Items>
-                                        </models:Pickerarrow>
-                                        <Button x:Name="Saveguest" BackgroundColor="Transparent" Image="addguestb.png" Margin="15,0,15,25"></Button>
-                                    </StackLayout>
-                                </ContentView>
+                               
 
                             </AbsoluteLayout>
                         </StackLayout>
@@ -218,6 +196,28 @@
                                 </StackLayout>
                             </StackLayout>
                         </ScrollView>
+                    </ContentView>
+
+                    <ContentView x:Name="favoriteView" HorizontalOptions="FillAndExpand" IsVisible="False">
+                        <flv:FlowListView FlowColumnCount="2" SeparatorVisibility="None" HasUnevenRows="false"
+	x:Name="FavoritesList" RowHeight="200">
+
+                            <flv:FlowListView.FlowColumnTemplate>
+                                <DataTemplate>
+                                    <ContentView>
+                                        <StackLayout Orientation="Vertical">
+                                            <Image Source="champagne.png" HeightRequest="100"/>
+                                            <Label HorizontalOptions="Center" Text="name" TextColor="Gray" FontAttributes="Bold" Font="16" Margin="0,-5,0,0"/>
+                                            <Label HorizontalOptions="Center" Text="categorie" Margin="0,-5,0,0" TextColor="Gray" FontSize="14"/>
+
+                                        </StackLayout>
+                                    </ContentView>
+
+                                </DataTemplate>
+                            </flv:FlowListView.FlowColumnTemplate>
+
+
+                        </flv:FlowListView>
                     </ContentView>
                 </StackLayout>
             </StackLayout>

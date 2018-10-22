@@ -9,5 +9,7 @@ namespace PlanMy.Models
         public string imgurl { get; set; }
         public string post { get; set; }
         public string html { get; set; }
-    }
+		public string title { get; set; }
+		
+	}
 }

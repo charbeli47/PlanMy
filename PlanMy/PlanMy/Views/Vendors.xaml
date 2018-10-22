@@ -2,9 +2,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:PlanMy.Models"
+             xmlns:abstractions="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             xmlns:flv="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
              x:Class="PlanMy.Views.Vendors">
     <ContentPage.Content>
-       
+        <ScrollView>
         <StackLayout BackgroundColor="White">
             <StackLayout x:Name="Header" >
                 <Frame OutlineColor="Black">
@@ -34,10 +36,11 @@
                 </StackLayout>
 
             </StackLayout>
-
-            <StackLayout x:Name="Content" Margin="0,5,0,0">
+            <StackLayout>
+            <StackLayout x:Name="vendorview" IsVisible="True">
+            <StackLayout x:Name="gContent" Margin="0,0,0,0">
                
-                    <models:nolineentry Text="" HorizontalOptions="Fill" TextColor="Gray" FontSize="18" FontAttributes="Italic" Margin="15,20,15,0" TextChanged="Entry_TextChanged" Placeholder="What are you looking for?" />
+                    <models:nolineentry  HorizontalOptions="Fill" TextColor="Black" FontSize="18" FontAttributes="Italic" Margin="15,10,15,0" TextChanged="Entry_TextChanged" Placeholder="What are you looking for?" />
              
                 <ListView x:Name="VendorsListView">
                     <ListView.ItemTemplate>
@@ -54,9 +57,65 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </StackLayout>
+            </StackLayout>
+            <StackLayout x:Name="favoriteview" HorizontalOptions="FillAndExpand" IsVisible="False" Margin="0,10,0,0">
+                <flv:FlowListView FlowColumnCount="2" SeparatorVisibility="None" HasUnevenRows="false"
+	x:Name="FavoritesList" RowHeight="200">
 
+                    <flv:FlowListView.FlowColumnTemplate>
+                        <DataTemplate>
+                            <ContentView>
+                                <StackLayout Orientation="Vertical">
+                                    <Image Source="champagne.png" HeightRequest="100"/>
+                                    <Label HorizontalOptions="Center" Text="name" TextColor="Gray" FontAttributes="Bold" Font="16" Margin="0,-5,0,0"/>
+                                    <Label HorizontalOptions="Center" Text="categorie" Margin="0,-5,0,0" TextColor="Gray" FontSize="14"/>
+
+                                </StackLayout>
+                            </ContentView>
+
+                        </DataTemplate>
+                    </flv:FlowListView.FlowColumnTemplate>
+
+
+                </flv:FlowListView>
+            </StackLayout>
+
+            <StackLayout x:Name="messageview" IsVisible="False">
+                <StackLayout x:Name="Content" Margin="0,10,0,0">
+
+                    <ListView x:Name="MessagesListView" RowHeight="120" HasUnevenRows="false">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout Orientation="Horizontal">
+                                        <abstractions:CircleImage Source="champagne.png"
+    HeightRequest="60"
+    WidthRequest="60"
+    HorizontalOptions="Start"
+    Margin="25,0,15,0"/>
+                                        <StackLayout>
+
+                                            <StackLayout Orientation="Vertical" Margin="0,35,0,0">
+                                                <Label Text="Candid Image" TextColor="black" VerticalOptions="Center" FontSize="16" FontAttributes="Bold"  />
+                                                <StackLayout Orientation="Horizontal">
+                                                    <Label Text="Hello and thanks for ...." TextColor="Gray"  FontSize="16" FontAttributes="Italic"    />
+                                                    <Label Text="-23h" TextColor="Gray"  FontSize="16" Margin="30,0,0,0" FontAttributes="Italic"    />
+
+                                                </StackLayout>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </StackLayout>
+
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+            </StackLayout>
+
+            </StackLayout>
         </StackLayout>
 
-       
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

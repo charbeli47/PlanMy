@@ -23,6 +23,11 @@
                     </StackLayout>
                 </Frame>
             </StackLayout>
+            <StackLayout x:Name="Content" Orientation="Vertical" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <WebView x:Name="webv" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                    
+                </WebView>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

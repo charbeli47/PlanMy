@@ -1,7 +1,10 @@
-﻿using PlanMy.Views;
+﻿using Newtonsoft.Json;
+using PlanMy.ViewModels;
+using PlanMy.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,34 +19,143 @@ namespace PlanMy.Views
 		public Planning ()
 		{
 			InitializeComponent ();
-            NavigationPage.SetHasNavigationBar(this, false);
+		allbut.Clicked += (object sender, EventArgs e) =>
+			{
+				//guestsView = new guests();
+				checkList.IsVisible = true;
+				todostack.IsVisible = false;
+				donestack.IsVisible = false;
+			
+				//await Navigation.PushAsync(new guests());
+			};
+		
+			todobut.Clicked += async (s, e) => {
+			
+				checkList.IsVisible = false;
+				todostack.IsVisible = true;
+				donestack.IsVisible =false;
+			};
+			donebut.Clicked += (object sender, EventArgs e) =>
+			{
+				checkList.IsVisible = false;
+				todostack.IsVisible = false;
+				donestack.IsVisible = true;
+			
+			};
+
+			/// done tasks//
+			using (WebClient wc = new WebClient())
+			{
+				var json = wc.DownloadString("http://www.planmy.me/maizonpub-api/todolist.php?action=get&todo_user=169");
+				List<todoobj> listoftodo = JsonConvert.DeserializeObject<List<todoobj>>(json);
+
+				StackLayout month=createmonthstack("December", "2018");
+				todostack.Children.Add(month);
+				foreach (todoobj obj in listoftodo)
+				{
+					//StackLayout row = notdonerow(obj.todo_details, obj.todo_category.ToString());
+					//todostack.Children.Add(row);
+				}
+				todostack.Children.Add(seperatorbetweenmonths());
+
+			}
+
+
+
+
+
+
+			/// actions for favorites//
+			List<favoritesobject> fo = new List<favoritesobject>();
+			favoritesobject object1 = new favoritesobject();
+			object1.icon = "";
+			object1.name = "CHAMPAGNE";
+			object1.categorie = "Clothing & Accessories";
+
+			favoritesobject object2 = new favoritesobject();
+			object1.icon = "";
+			object1.name = "FOUR SEASONS";
+			object1.categorie = "VENUES";
+
+			favoritesobject object3 = new favoritesobject();
+			object1.icon = "";
+			object1.name = "NAJI OSTA";
+			object1.categorie = "ENTERTAINMENT";
+
+			favoritesobject object4 = new favoritesobject();
+			object1.icon = "";
+			object1.name = "CHAMPAGNE";
+			object1.categorie = "Clothing & Accessories";
+
+			favoritesobject object5 = new favoritesobject();
+			object1.icon = "";
+			object1.name = "CHAMPAGNE";
+			object1.categorie = "Clothing & Accessories";
+
+			fo.Add(object1);
+			fo.Add(object2);
+			fo.Add(object3);
+			fo.Add(object4);
+			fo.Add(object5);
+			FavoritesList.FlowItemsSource = fo;
+
+
+
+			NavigationPage.SetHasNavigationBar(this, false);
             planningView.TranslationX = 0;
             guestsView.TranslationX = Bounds.Width;
             budgetView.TranslationX = Bounds.Width * 2;
             checklistbut.Clicked += (object sender, EventArgs e) =>
 			{
-                planningView.IsVisible = true;
+				checklistbut.Image = "bchecklist.png";
+				guestbut.Image = "guestlist.png";
+				budgetbut.Image = "budget.png";
+				suppliersbut.Image = "suppliers.png";
+				ordersbut.Image = "orders.png";
+				planningView.IsVisible = true;
                 guestsView.IsVisible = false;
                 budgetView.IsVisible = false;
-            };
+				favoriteView.IsVisible = false;
+			};
 
 			guestbut.Clicked += (object sender, EventArgs e) =>
 			{
-                guestsView = new guests();
-                planningView.IsVisible = false;
+				checklistbut.Image = "checklist.png";
+				guestbut.Image = "bguestslist.png";
+				budgetbut.Image = "budget.png";
+				suppliersbut.Image = "suppliers.png";
+				ordersbut.Image = "orders.png";
+
+				//guestsView = new guests();
+				planningView.IsVisible = false;
                 guestsView.IsVisible = true;
                 budgetView.IsVisible = false;
-                //await Navigation.PushAsync(new guests());
-            };
+				favoriteView.IsVisible = false;
+				//await Navigation.PushAsync(new guests());
+			};
 			budgetbut.Clicked +=  (object sender, EventArgs e) =>
 			{
-                planningView.IsVisible = false;
+				checklistbut.Image = "checklist.png";
+				guestbut.Image = "guestlist.png";
+				budgetbut.Image = "bbudget.png";
+				suppliersbut.Image = "suppliers.png";
+				ordersbut.Image = "orders.png";
+				planningView.IsVisible = false;
                 guestsView.IsVisible = false;
                 budgetView.IsVisible = true;
-            };
+				favoriteView.IsVisible = false;
+			};
             suppliersbut.Clicked += async (s, e) => {
-                await Navigation.PushAsync(new favourites());
-            };
+				checklistbut.Image = "checklist.png";
+				guestbut.Image = "guestlist.png";
+				budgetbut.Image = "budget.png";
+				suppliersbut.Image = "bluesuppliers.png";
+				ordersbut.Image = "orders.png";
+				planningView.IsVisible = false;
+				guestsView.IsVisible = false;
+				budgetView.IsVisible = false;
+				favoriteView.IsVisible = true;
+			};
             StackLayout table1 = createtablerow("Venues", "location.png");
             StackLayout table2 = createtablerow("Lighting & sound", "location.png");
             table1.Children.Add(createsupplierrowintable("Domaine de Zekrit", "25 000", "10 000"));
@@ -56,23 +168,23 @@ namespace PlanMy.Views
             content.Children.Add(table2);
             content.Children.Add(createseperatorbetweentables());
 
-            addtablebut.Clicked += (object sender, EventArgs e) =>
-            {
-                popupaddtable.IsVisible = true;
-            };
+           // addtablebut.Clicked += (object sender, EventArgs e) =>
+            //{
+              //  popupaddtable.IsVisible = true;
+            //};
 
-            addguestbut.Clicked += (object sender, EventArgs e) =>
-            {
-                popupguest.IsVisible = true;
-            };
-            closepopuptable.Clicked += (object sender, EventArgs e) =>
-            {
-                popupaddtable.IsVisible = false;
-            };
-            closepopupguest.Clicked += (object sender, EventArgs e) =>
-            {
-                popupguest.IsVisible = false;
-            };
+            //addguestbut.Clicked += (object sender, EventArgs e) =>
+            //{
+              //  popupguest.IsVisible = true;
+            //};
+            //closepopuptable.Clicked += (object sender, EventArgs e) =>
+            //{
+              //  popupaddtable.IsVisible = false;
+            //};
+            //closepopupguest.Clicked += (object sender, EventArgs e) =>
+            //{
+              //  popupguest.IsVisible = false;
+            //};
 
 
 
@@ -678,4 +790,6 @@ namespace PlanMy.Views
 
         }
     }
+	
+
 }

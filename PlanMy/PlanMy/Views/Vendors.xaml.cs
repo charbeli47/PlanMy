@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using PlanMy.Library;
 using System.Collections.ObjectModel;
+using PlanMy.ViewModels;
 
 namespace PlanMy.Views
 {
@@ -15,23 +16,93 @@ namespace PlanMy.Views
 	public partial class Vendors : ContentPage
 	{
 		public IEnumerable<WordPressPCL.Models.ItemCategory> vendors;
+		public List<message> listmsgs;
+
 		public Vendors ()
 		{
 			InitializeComponent ();
+			NavigationPage.SetHasNavigationBar(this, false);
+			// for messages//
+			listmsgs = new List<message>();
+			message msg = new message();
+			msg.title = "Candid Image";
+			msg.msg = "Hello thanks for ....";
+			msg.time = "-23h";
+			message msg2 = new message();
+			msg2.title = "Candid Image";
+			msg2.msg = "Hello thanks for ....";
+			msg2.time = "-23h";
+			listmsgs.Add(msg);
+			listmsgs.Add(msg2);
+			MessagesListView.ItemsSource = listmsgs;
+
+
+			//for favorites//
+			List<favoritesobject> fo = new List<favoritesobject>();
+			favoritesobject object1 = new favoritesobject();
+			object1.icon = "";
+			object1.name = "CHAMPAGNE";
+			object1.categorie = "Clothing & Accessories";
+
+			favoritesobject object2 = new favoritesobject();
+			object1.icon = "";
+			object1.name = "FOUR SEASONS";
+			object1.categorie = "VENUES";
+
+			favoritesobject object3 = new favoritesobject();
+			object1.icon = "";
+			object1.name = "NAJI OSTA";
+			object1.categorie = "ENTERTAINMENT";
+
+			favoritesobject object4 = new favoritesobject();
+			object1.icon = "";
+			object1.name = "CHAMPAGNE";
+			object1.categorie = "Clothing & Accessories";
+
+			favoritesobject object5 = new favoritesobject();
+			object1.icon = "";
+			object1.name = "CHAMPAGNE";
+			object1.categorie = "Clothing & Accessories";
+
+			fo.Add(object1);
+			fo.Add(object2);
+			fo.Add(object3);
+			fo.Add(object4);
+			fo.Add(object5);
+			FavoritesList.FlowItemsSource = fo;
+			//////
+
+
+		
 
 			search.Clicked += (object sender, EventArgs e) =>
 			{
-				Navigation.PushModalAsync(new Vendors());
+				search.Image = "searchblue.png";
+				favorites.Image = "favorites.png";
+				message.Image = "messages.png";
+				messageview.IsVisible = false;
+				favoriteview.IsVisible = false;
+				vendorview.IsVisible = true;
 			};
 
 			favorites.Clicked += (object sender, EventArgs e) =>
 			{
-				Navigation.PushModalAsync(new favourites());
+				search.Image = "search.png";
+				favorites.Image = "favoritesblue.png";
+				message.Image = "messages.png";
+				messageview.IsVisible = false;
+				favoriteview.IsVisible = true;
+				vendorview.IsVisible = false;
 			};
 
 			message.Clicked += (object sender, EventArgs e) =>
 			{
-				Navigation.PushModalAsync(new messages());
+				search.Image = "search.png";
+				favorites.Image = "favorites.png";
+				message.Image = "messagesblue.png";
+				messageview.IsVisible = true;
+				favoriteview.IsVisible = false;
+				vendorview.IsVisible = false;
 			};
 
 			WordpressService service = new WordpressService();
@@ -54,6 +125,7 @@ namespace PlanMy.Views
 
 				if (selectedvendor == null)
 					return;
+				((ListView)sender).SelectedItem = null;
 				//var newpage = new allVendors(selectedvendor.Id,selectedvendor.Name);
 				Navigation.PushModalAsync(new allVendors(selectedvendor.Id, selectedvendor.Name));
 			};
@@ -74,4 +146,6 @@ namespace PlanMy.Views
 			VendorsListView.EndRefresh();
 		}
 	}
+
+	
 }
