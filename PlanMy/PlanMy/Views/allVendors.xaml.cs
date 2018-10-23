@@ -42,7 +42,6 @@ namespace PlanMy.Views
 			{
 				Image img = new Image();
 				img.Source = post.Embedded.WpFeaturedmedia.ToList()[0].SourceUrl.Replace("https://","http://");
-				img.HeightRequest = 400;
 				img.HorizontalOptions = LayoutOptions.FillAndExpand;
 				list.Margin = new Thickness(0, 15, 0, 0);
 				list.Children.Add(img);
@@ -74,14 +73,11 @@ namespace PlanMy.Views
 				list.Children.Add(but);
 				Headerframe.HeightRequest = 40;
 				//selectedpost = (IEnumerable<WordPressPCL.Models.Post>)post;
-				but.Clicked += btn_Clicked;
+				but.Clicked += (s, e) => { Navigation.PushModalAsync(new selectedvendor(selectedcatname, post)); };
 
 			}
 		}
-		public void btn_Clicked(object sender, EventArgs e)
-		{
-			Navigation.PushModalAsync(new selectedvendor(selectedcatname,selectedpost));
-		}
+		
 
 	}
 

@@ -47,7 +47,7 @@
                 </Grid>
                 <StackLayout Orientation="Vertical" Margin="15,0,15,0">
                     <StackLayout Orientation="Horizontal">
-                        <Label x:Name="Title" FontSize="18" FontAttributes="Bold" TextColor="Black">Four Seasons Hotel Beriut</Label>
+                        <Label x:Name="Titlepost" FontSize="18" FontAttributes="Bold" TextColor="Black">Four Seasons Hotel Beriut</Label>
                         <Image Source="bluestar.png"></Image>
                     </StackLayout>
                     <StackLayout Orientation="Horizontal">

@@ -12,7 +12,7 @@ namespace PlanMy
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class selectedvendor : ContentPage
 	{
-		public selectedvendor(string catname, IEnumerable<WordPressPCL.Models.Post> selectedpost)
+		public selectedvendor(string catname, WordPressPCL.Models.Post selectedpost)
 		{
 			InitializeComponent();
 			Pagetitle.Text = catname;
@@ -20,8 +20,14 @@ namespace PlanMy
 			{
 				Navigation.PopModalAsync();
 			};
+
+
+			Titlepost.Text=selectedpost.Title.Rendered;
 		}
-		
+	
+	
+
+
 		}
 	
 }
