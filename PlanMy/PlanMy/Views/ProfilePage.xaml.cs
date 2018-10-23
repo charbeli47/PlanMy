@@ -25,7 +25,7 @@ namespace PlanMy.Views
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            if(usr!=null)
+            if(!string.IsNullOrEmpty(usr))
             {
                 UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
                 string guestsnbr = await con.DownloadData("https://www.planmy.me/maizonpub-api/guestlist.php", "userid=" + cookie.user.id + "&action=getcount");
@@ -78,6 +78,20 @@ namespace PlanMy.Views
             }
             else
                 return false;
+        }
+
+        private async void eventEditBtn_Clicked(object sender, EventArgs e)
+        {
+            Connect con = new Connect();
+            var usr = await con.GetData("User");
+            if (!string.IsNullOrEmpty(usr))
+            {
+                Navigation.PushModalAsync(new AddEvent());
+            }
+            else
+            {
+                await Navigation.PushModalAsync(new Login());
+            }
         }
     }
 }

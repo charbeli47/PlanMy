@@ -9,7 +9,7 @@ namespace WordPressPCL.Client
     /// <summary>
     /// Client class for interaction with Posts endpoint WP REST API
     /// </summary>
-    public class Items : CRUDOperation<Post, PostsQueryBuilder>
+    public class Items : CRUDOperation<Item, PostsQueryBuilder>
     {
         #region Init
 
