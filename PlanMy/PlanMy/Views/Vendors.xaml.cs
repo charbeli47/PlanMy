@@ -105,13 +105,8 @@ namespace PlanMy.Views
 				vendorview.IsVisible = false;
 			};
 
-			WordpressService service = new WordpressService();
-			//var vendors = service.GetItemCategoriesAsync();
-			Task.Run(async () =>
-			{
-				 vendors=await service.GetItemCategoriesAsync();
-				VendorsListView.ItemsSource = vendors;
-			});
+
+			LoadVendors();
 
 			VendorsListView.ItemSelected += (object sender, SelectedItemChangedEventArgs e) =>
 			{
@@ -141,10 +136,21 @@ namespace PlanMy.Views
 			if (string.IsNullOrWhiteSpace(e.NewTextValue))
 				VendorsListView.ItemsSource = vendors;
 			else
-				VendorsListView.ItemsSource = vendors.Where(i => i.Name.Contains(e.NewTextValue));
+				VendorsListView.ItemsSource = vendors.Where(i => i.Name.ToLower().Contains(e.NewTextValue.ToString().ToLower()));
 
 			VendorsListView.EndRefresh();
 		}
+
+		async void LoadVendors()
+		{
+
+			WordpressService service = new WordpressService();
+			//var vendors = service.GetItemCategoriesAsync();
+			vendors = await service.GetItemCategoriesAsync();
+			VendorsListView.ItemsSource = vendors;
+		}
+
+
 	}
 
 	

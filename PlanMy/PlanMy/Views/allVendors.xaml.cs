@@ -23,6 +23,12 @@ namespace PlanMy.Views
 		public allVendors (int catid,string catname)
 		{
 			InitializeComponent ();
+			backarrow.Clicked += (object sender, EventArgs e) =>
+			{
+				Navigation.PopModalAsync();
+			};
+
+
 			Pagetitle.Text = catname;
 			selectedcatname = catname;
 			LoadPage(catid);	
@@ -36,7 +42,7 @@ namespace PlanMy.Views
 			{
 				Image img = new Image();
 				img.Source = post.Embedded.WpFeaturedmedia.ToList()[0].SourceUrl.Replace("https://","http://");
-				//img.HeightRequest = 400;
+				img.HeightRequest = 400;
 				img.HorizontalOptions = LayoutOptions.FillAndExpand;
 				list.Margin = new Thickness(0, 15, 0, 0);
 				list.Children.Add(img);

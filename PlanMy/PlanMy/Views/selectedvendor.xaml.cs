@@ -16,10 +16,10 @@ namespace PlanMy
 		{
 			InitializeComponent();
 			Pagetitle.Text = catname;
-			//foreach (var itemm in selectedpost)
-			//{
-				//postimage.Source = itemm.Embedded.WpFeaturedmedia.ToList()[0].SourceUrl.Replace("https://", "http://");
-			//}
+			backarrow.Clicked += (object sender, EventArgs e) =>
+			{
+				Navigation.PopModalAsync();
+			};
 		}
 		
 		}
