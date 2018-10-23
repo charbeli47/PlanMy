@@ -19,8 +19,7 @@ namespace PlanMy.Views
 
 			backarrow.Clicked += (object sender, EventArgs e) =>
 			{
-				Navigation.PushAsync(new IdeasPage());
-
+				Navigation.PopModalAsync();
 			};
 
 
