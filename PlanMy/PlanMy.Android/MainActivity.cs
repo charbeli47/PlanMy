@@ -9,6 +9,8 @@ using Android.OS;
 using Xamarin.Facebook;
 using PlanMy.Library;
 using Android.Content;
+using System.Threading.Tasks;
+using System.IO;
 
 namespace PlanMy.Droid
 {
@@ -17,6 +19,8 @@ namespace PlanMy.Droid
     {
         public static ICallbackManager CallbackManager = CallbackManagerFactory.Create();
         public static readonly string[] PERMISSIONS = new[] { "publish_actions" };
+        public static readonly int PickImageId = 1000;
+        public TaskCompletionSource<Stream> PickImageTaskCompletionSource { set; get; }
         protected override void OnCreate(Bundle bundle)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -31,6 +35,21 @@ namespace PlanMy.Droid
         {
             base.OnActivityResult(requestCode, resultCode, data);
             CallbackManager.OnActivityResult(requestCode, (int)resultCode, data);
+            if (requestCode == PickImageId)
+            {
+                if ((resultCode == Result.Ok) && (data != null))
+                {
+                    Android.Net.Uri uri = data.Data;
+                    Stream stream = ContentResolver.OpenInputStream(uri);
+
+                    // Set the Stream as the completion of the Task
+                    PickImageTaskCompletionSource.SetResult(stream);
+                }
+                else
+                {
+                    PickImageTaskCompletionSource.SetResult(null);
+                }
+            }
         }
     }
 }

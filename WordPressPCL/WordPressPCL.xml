@@ -1852,6 +1852,217 @@
             Image keywords
             </summary>
         </member>
+        <member name="T:WordPressPCL.Models.Item">
+            <summary>
+            Type respresents Entity Post of WP REST API
+            </summary>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Date">
+            <summary>
+            The date the object was published, in the site's timezone.
+            </summary>
+            <remarks>Context: view, edit, embed</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.DateGmt">
+            <summary>
+            The date the object was published, as GMT.
+            </summary>
+            <remarks>Context: view, edit</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Guid">
+            <summary>
+            The globally unique identifier for the object.
+            </summary>
+            <remarks>
+            Read only
+            Context: view, edit
+            </remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Modified">
+            <summary>
+            The date the object was last modified, in the site's timezone.
+            </summary>
+            <remarks>
+            Read only
+            Context: view, edit
+            </remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.ModifiedGmt">
+            <summary>
+            The date the object was last modified, as GMT.
+            </summary>
+            <remarks>
+            Read only
+            Context: view, edit
+            </remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Password">
+            <summary>
+            A password to protect access to the content and excerpt.
+            </summary>
+            <remarks>Context: edit</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Slug">
+            <summary>
+            An alphanumeric identifier for the object unique to its type.
+            </summary>
+            <remarks>Context: view, edit, embed</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.AvgRating">
+            <summary>
+            the rating average of this item
+            </summary>
+            <remarks>Context: view</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Status">
+            <summary>
+            A named status for the object.
+            </summary>
+            <remarks>
+            Context: edit
+            One of: publish, future, draft, pending, private
+            </remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Type">
+            <summary>
+            Type of Post for the object.
+            </summary>
+            <remarks>
+            Read only
+            Context: view, edit, embed
+            </remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Title">
+            <summary>
+            The title for the object.
+            </summary>
+            <remarks>Context: view, edit, embed</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Link">
+            <summary>
+            URL to the object.
+            </summary>
+            <remarks>
+            Read only
+            Context: view, edit, embed
+            </remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Content">
+            <summary>
+            The content for the object.
+            </summary>
+            <remarks>Context: view, edit</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Excerpt">
+            <summary>
+            The excerpt for the object.
+            </summary>
+            <remarks>Context: view, edit, embed</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Author">
+            <summary>
+            The ID for the author of the object.
+            </summary>
+            <remarks>Context: view, edit, embed</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.FeaturedMedia">
+            <summary>
+            The ID of the featured media for the object.
+            </summary>
+            <remarks>Context: view, edit</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.featured_img">
+            <summary>
+            The link of the featured media for the object.
+            </summary>
+            <remarks>Context: view</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.CommentStatus">
+            <summary>
+            Whether or not comments are open on the object.
+            </summary>
+            <remarks>
+            Context: view, edit
+            One of: open, closed
+            </remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.PingStatus">
+            <summary>
+            Whether or not the object can be pinged.
+            </summary>
+            <remarks>
+            Context: view, edit
+            One of: open, closed
+            </remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Sticky">
+            <summary>
+            Whether or not the object should be treated as sticky.
+            </summary>
+            <remarks>Context: view, edit</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Format">
+            <summary>
+            The format for the object.
+            </summary>
+            <remarks>
+            Context: view, edit
+            One of: standard
+            </remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Categories">
+            <summary>
+            The terms assigned to the object in the category taxonomy.
+            </summary>
+            <remarks>Context: view, edit</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Tags">
+            <summary>
+            The terms assigned to the object in the post_tag taxonomy.
+            </summary>
+            <remarks>Context: view, edit</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Template">
+            <summary>
+            The theme file to use to display the object.
+            </summary>
+            <remarks>
+            Context: view, edit
+            One of:
+            </remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.LiveblogLikes">
+            <summary>
+            The number of Liveblog Likes the post has.
+            </summary>
+            <remarks>Context: view, edit, embed</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Meta">
+            <summary>
+            Meta fields.
+            </summary>
+            <remarks>Context: view, edit</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Links">
+            <summary>
+            Links to related resources
+            </summary>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.Embedded">
+            <summary>
+            Embedded information like featured images
+            </summary>
+        </member>
+        <member name="P:WordPressPCL.Models.Item.ItemMeta">
+            <summary>
+            ItemMeta information
+            </summary>
+        </member>
+        <member name="M:WordPressPCL.Models.Item.#ctor">
+            <summary>
+            Parameterless constructor
+            </summary>
+        </member>
         <member name="T:WordPressPCL.Models.ItemCategory">
             <summary>
             Terms of the type category
@@ -3367,6 +3578,18 @@
             </summary>
             <remarks>Context: edit</remarks>
         </member>
+        <member name="Pte">
+            <summary>
+            Registration date for the user.
+            </summary>
+            <remarks>Context: edit</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.User.Roles">
+            <summary>
+            Roles assigned to the user.
+            </summary>
+            <remarks>Context: edit</remarks>
+        </member>
         <member name="P:WordPressPCL.Models.User.Password">
             <summary>
             Password for the user (never included).
@@ -4134,16 +4357,7 @@
             </summary>
         </member>
         <member name="P:WordPressPCL.Utility.UsersQueryBuilder.Roles">
-            <summary>
-            Limit result set to users matching at least one specific role provided. Accepts csv list or single role.
-            </summary>
-        </member>
-        <member name="T:WordPressPCL.WordPressClient">
-            <summary>
-                Main class containing the wrapper client with all public API endpoints.
-            </summary>
-        </member>
-        <member name="P:WordPressPCL.WordPressClient.WordPressUri">
+            <summary>WordPressPCL.WordPressClient.WordPressUri">
             <summary>
             WordPressUri holds the WordPress API endpoint, e.g. "http://demo.wp-api.org/wp-json/wp/v2/"
             </summary>
@@ -4247,6 +4461,16 @@
         </member>
         <member name="F:WordPressPCL.WordPressClient.ItemTypeOfMusicians">
             <summary>
+            ItemTypeOfMusicians client interactiobject
+            </summary>
+        </member>
+        <member name="F:WordPressPCL.WordPressClient.ItemBeautyServices">
+            <summary>
+            ItemBeautyServices client interaction object
+            </summary>
+        </member>
+        <member name="F:WordPressPCL.WordPressClient.ItemTypeOfMusicians">
+            <summary>
             ItemTypeOfMusicians client interaction object
             </summary>
         </member>
@@ -4334,20 +4558,6 @@
             <returns>Result of checking</returns>
         </member>
         <member name="M:WordPressPCL.WordPressClient.SetJWToken(System.String)">
-            <summary>
-            Sets an exisitng JWToken
-            </summary>
-            <param name="token"></param>
-        </member>
-        <member name="M:WordPressPCL.WordPressClient.GetToken">
-            <summary>
-            Gets the JWToken from the client
-            </summary>
-            <returns></returns>
-        </member>
-    </members>
-</doc>
-ystem.String)">
             <summary>
             Sets an exisitng JWToken
             </summary>

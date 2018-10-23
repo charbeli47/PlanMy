@@ -16,7 +16,7 @@ namespace PlanMy.Views
 	public partial class allVendors : ContentPage
 	{
 		
-		public IEnumerable<WordPressPCL.Models.Post> specificvendors;
+		public IEnumerable<WordPressPCL.Models.Item> specificvendors;
 		public string selectedcatname;
 		public IEnumerable<WordPressPCL.Models.Post> selectedpost;
 
