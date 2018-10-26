@@ -47,7 +47,7 @@ namespace PlanMy
 			{
 				if (isedit == true && task != null)
 				{
-					edittask();	
+					edittask(task);	
 
 
 				}
@@ -59,51 +59,56 @@ namespace PlanMy
 
 			};
 
-			async void Loadcats()
+		}
+
+
+
+		public async void Loadcats()
+		{
+
+			WordpressService service = new WordpressService();
+			//var vendors = service.GetItemCategoriesAsync();
+			cats = await service.GetItemCategoriesAsync();
+			//VendorsListView.ItemsSource = vendors;
+
+
+			catPicker.ItemsSource = cats.ToList();
+
+		}
+
+		//function to add task//
+		public async void addtask()
+		{
+			WordPressPCL.Models.ItemCategory catt = (WordPressPCL.Models.ItemCategory)catPicker.SelectedItem;
+			using (var cl = new HttpClient())
 			{
-
-				WordpressService service = new WordpressService();
-				//var vendors = service.GetItemCategoriesAsync();
-				cats = await service.GetItemCategoriesAsync();
-				//VendorsListView.ItemsSource = vendors;
-
-
-				catPicker.ItemsSource = cats.ToList();
-
-			}
-
-			//function to add task//
-			 async void addtask()
-			{
-				WordPressPCL.Models.ItemCategory catt = (WordPressPCL.Models.ItemCategory)catPicker.SelectedItem;
-				using (var cl = new HttpClient())
+				var formcontent = new FormUrlEncodedContent(new[]
 				{
-					var formcontent = new FormUrlEncodedContent(new[]
-					{
 			new KeyValuePair<string,string>("todo_user","169"),
 			new KeyValuePair<string, string>("todo_title",titleoftask.Text),
 				new KeyValuePair<string,string>("todo_details",detailstask.Text),
 			new KeyValuePair<string, string>("todo_date",Datepickertask.Date.ToString("yyyy-MM-dd")),
 			new KeyValuePair<string,string>("todo_read","0"),
-			new KeyValuePair<string, string>("todo_category",catt.Id.ToString())
+			new KeyValuePair<string, string>("todo_category",catt.Id.ToString()),
+			new KeyValuePair<string, string>("is_priority","no")
 		});
 
-					var request = await cl.PostAsync("https://www.planmy.me/maizonpub-api/todolist.php?action=insert", formcontent);
-					request.EnsureSuccessStatusCode();
-					var response = await request.Content.ReadAsStringAsync();
-					Navigation.PushModalAsync(new Planning());
+				var request = await cl.PostAsync("https://www.planmy.me/maizonpub-api/todolist.php?action=insert", formcontent);
+				request.EnsureSuccessStatusCode();
+				var response = await request.Content.ReadAsStringAsync();
+				Navigation.PushModalAsync(new Planning());
 
-				}
 			}
+		}
 
-			//function to edit task//
-			 async void edittask()
+		//function to edit task//
+		public async void edittask(todoobj task)
+		{
+			WordPressPCL.Models.ItemCategory catt = (WordPressPCL.Models.ItemCategory)catPicker.SelectedItem;
+			using (var cl = new HttpClient())
 			{
-				WordPressPCL.Models.ItemCategory catt = (WordPressPCL.Models.ItemCategory)catPicker.SelectedItem;
-				using (var cl = new HttpClient())
+				var formcontent = new FormUrlEncodedContent(new[]
 				{
-					var formcontent = new FormUrlEncodedContent(new[]
-					{
 			new KeyValuePair<string,string>("todo_id",task.todo_id),
 			new KeyValuePair<string, string>("todo_title",task.todo_title),
 				new KeyValuePair<string,string>("todo_details",task.todo_details),
@@ -114,19 +119,15 @@ namespace PlanMy
 		});
 
 
-					var request = await cl.PostAsync("https://www.planmy.me/maizonpub-api/todolist.php?action=update", formcontent);
+				var request = await cl.PostAsync("https://www.planmy.me/maizonpub-api/todolist.php?action=update", formcontent);
 
-					request.EnsureSuccessStatusCode();
+				request.EnsureSuccessStatusCode();
 
-					var response = await request.Content.ReadAsStringAsync();
+				var response = await request.Content.ReadAsStringAsync();
 
-					Navigation.PushModalAsync(new Planning());
+				Navigation.PushModalAsync(new Planning());
 
-				}
 			}
 		}
-		
-
-		
 	}
 }
