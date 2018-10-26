@@ -55,9 +55,6 @@ namespace PlanMy.Views
 			
 			};
 
-<<<<<<< HEAD
-		
-=======
 			///tasks get for all done and todo//
 			using (WebClient wc = new WebClient())
 			{
@@ -70,17 +67,17 @@ namespace PlanMy.Views
 					DateTime dateTodo = DateTime.Parse(obj.todo_date);
 					string monthName = dateTodo.ToString("MMM", CultureInfo.InvariantCulture);
 					string year = dateTodo.Year.ToString();
-					dictmonthtodo.Add(obj, monthName+" "+year);
-			
+					dictmonthtodo.Add(obj, monthName + " " + year);
+
 				}
 
 				foreach (var valuee in dictmonthtodo.Values.Distinct())
 				{
 					StackLayout month = createmonthstack(valuee);
 					///todostack.Children.Add(month);
-					List<todoobj> specifiedobj = dictmonthtodo.Where(item => item.Value==valuee).Select(item => item.Key).ToList();
+					List<todoobj> specifiedobj = dictmonthtodo.Where(item => item.Value == valuee).Select(item => item.Key).ToList();
 
-					foreach(todoobj o in specifiedobj)
+					foreach (todoobj o in specifiedobj)
 					{
 						StackLayout row;
 						//if (o.todo_category.ToString() != null)
@@ -113,16 +110,13 @@ namespace PlanMy.Views
 							month.Children.Add(row);
 						}
 
-						
+
 					}
 					todostack.Children.Add(month);
 					todostack.Children.Add(seperatorbetweenmonths());
 
 				}
-
-
-
->>>>>>> 4f678ca32030fd2d2fa38703d2dbe62ecf7433ec
+			}
 
 
 
