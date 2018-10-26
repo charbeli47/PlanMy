@@ -17,15 +17,25 @@ namespace PlanMy.Library
             if (postData != "")
                 url += "?" + postData;
             HttpClient client = new HttpClient();
-            //StringContent queryString = new StringContent(postData);
+			//StringContent queryString = new StringContent(postData);
+			try
+			{
+				string response = await client.GetStringAsync(new System.Uri(url));
 
-            string response = await client.GetStringAsync(new System.Uri(url));
+				//response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+				//response.EnsureSuccessStatusCode();
+				string responseBody = response;
 
-            //response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            //response.EnsureSuccessStatusCode();
-            string responseBody = response;
+				return responseBody;
+			}
+			catch(Exception ex)
+			{
+				string response = await client.GetStringAsync(new System.Uri(url));
+				string responseBody = response;
 
-            return responseBody;
+				return responseBody;
+			}
+			
         }
         public async Task SaveData(string key, string value)
         {
