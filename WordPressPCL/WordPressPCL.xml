@@ -439,6 +439,14 @@
             <param name="filename">Name of file in WP Media Library</param>
             <returns>Created media object</returns>
         </member>
+        <member name="M:WordPressPCL.Client.Media.Create(System.String,System.String)">
+            <summary>
+            Create Media entity with attachment
+            </summary>
+            <param name="filePath">Local Path to file</param>
+            <param name="filename">Name of file in WP Media Library</param>
+            <returns>Created media object</returns>
+        </member>
         <member name="M:WordPressPCL.Client.Media.Delete(System.Int32)">
             <summary>
             Delete Entity
@@ -1640,19 +1648,7 @@
             Video
             </summary>
         </member>
-        <member name="F:WordPressPCL.Models.MediaQueryType.Audio">
-            <summary>
-            Audio
-            </summary>
-        </member>
-        <member name="F:WordPressPCL.Models.MediaQueryType.Application">
-            <summary>
-            Application
-            </summary>
-        </member>
-        <member name="T:WordPressPCL.Models.TermTaxonomy">
-            <summary>
-            Type attribution for the term.
+                Type attribution for the term.
             </summary>
         </member>
         <member name="F:WordPressPCL.Models.TermTaxonomy.Category">
@@ -2238,6 +2234,14 @@
             <summary>
             The date the object was last modified, as GMT.
             </summary>
+            <remarks>Context: view, edit</remarks>          The date the object was last modified, in the site’s timezone.
+            </summary>
+            <remarks>Context: view, edit</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.MediaItem.ModifiedGmt">
+            <summary>
+            The date the object was last modified, as GMT.
+            </summary>
             <remarks>Context: view, edit</remarks>
         </member>
         <member name="P:WordPressPCL.Models.MediaItem.Slug">
@@ -2331,15 +2335,7 @@
         </member>
         <member name="P:WordPressPCL.Models.MediaItem.MediaDetails">
             <summary>
-            Details about the resource file, specific to its type.
-            <see cref="T:WordPressPCL.Models.MediaDetails"/>
-            </summary>
-            <remarks>Context: view, edit, embed</remarks>
-        </member>
-        <member name="P:WordPressPCL.Models.MediaItem.Post">
-            <summary>
-            The id for the associated post of the resource.
-            </summary>
+  >
             <remarks>Context: view, edit</remarks>
         </member>
         <member name="P:WordPressPCL.Models.MediaItem.SourceUrl">
@@ -3578,18 +3574,6 @@
             </summary>
             <remarks>Context: edit</remarks>
         </member>
-        <member name="Pte">
-            <summary>
-            Registration date for the user.
-            </summary>
-            <remarks>Context: edit</remarks>
-        </member>
-        <member name="P:WordPressPCL.Models.User.Roles">
-            <summary>
-            Roles assigned to the user.
-            </summary>
-            <remarks>Context: edit</remarks>
-        </member>
         <member name="P:WordPressPCL.Models.User.Password">
             <summary>
             Password for the user (never included).
@@ -4357,7 +4341,16 @@
             </summary>
         </member>
         <member name="P:WordPressPCL.Utility.UsersQueryBuilder.Roles">
-            <summary>WordPressPCL.WordPressClient.WordPressUri">
+            <summary>
+            Limit result set to users matching at least one specific role provided. Accepts csv list or single role.
+            </summary>
+        </member>
+        <member name="T:WordPressPCL.WordPressClient">
+            <summary>
+                Main class containing the wrapper client with all public API endpoints.
+            </summary>
+        </member>
+        <member name="P:WordPressPCL.WordPressClient.WordPressUri">
             <summary>
             WordPressUri holds the WordPress API endpoint, e.g. "http://demo.wp-api.org/wp-json/wp/v2/"
             </summary>
@@ -4461,16 +4454,6 @@
         </member>
         <member name="F:WordPressPCL.WordPressClient.ItemTypeOfMusicians">
             <summary>
-            ItemTypeOfMusicians client interactiobject
-            </summary>
-        </member>
-        <member name="F:WordPressPCL.WordPressClient.ItemBeautyServices">
-            <summary>
-            ItemBeautyServices client interaction object
-            </summary>
-        </member>
-        <member name="F:WordPressPCL.WordPressClient.ItemTypeOfMusicians">
-            <summary>
             ItemTypeOfMusicians client interaction object
             </summary>
         </member>
@@ -4558,6 +4541,20 @@
             <returns>Result of checking</returns>
         </member>
         <member name="M:WordPressPCL.WordPressClient.SetJWToken(System.String)">
+            <summary>
+            Sets an exisitng JWToken
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="M:WordPressPCL.WordPressClient.GetToken">
+            <summary>
+            Gets the JWToken from the client
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
+ystem.String)">
             <summary>
             Sets an exisitng JWToken
             </summary>

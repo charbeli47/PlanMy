@@ -18,7 +18,7 @@ namespace PlanMy.Views
 		
 		public IEnumerable<WordPressPCL.Models.Item> specificvendors;
 		public string selectedcatname;
-		public IEnumerable<WordPressPCL.Models.Post> selectedpost;
+		public IEnumerable<WordPressPCL.Models.Item> selectedpost;
 
 		public allVendors (int catid,string catname)
 		{

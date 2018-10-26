@@ -19,49 +19,46 @@
                                     <ColumnDefinition Width="2*" />
 
                                 </Grid.ColumnDefinitions>
-                                <Image Source="blackarrow.png" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"  />
+                                <Button Image="blackarrow.png" x:Name="backarrow" BackgroundColor="Transparent" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start" WidthRequest="35" HeightRequest="35"  />
                                 <Label x:Name="Pagetitle" TextColor="Black" FontSize = "22" Text="NEW TASK" Grid.Row="0" Grid.Column="1" />
                             </Grid>
                         </StackLayout>
                     </Frame>
                 </StackLayout>
                 <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">TASK</Label>
-                <models:nolineentry Placeholder="Name of the task" Margin="15,0,15,0"></models:nolineentry>
+                <models:nolineentry x:Name="titleoftask" Placeholder="Name of the task" Margin="15,0,15,0"></models:nolineentry>
 
                 <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">TIMING</Label>
-                <models:Pickerarrow x:Name="TimingPicker" 
-              HeightRequest="40" 
-              Image="arrowdown"
-              
-                Margin="15,0,15,0"
-                Title="Dead line of the task"
-                HorizontalOptions="Fill">
-                    <models:Pickerarrow.Items>
-                        <x:String>September
-                        </x:String>
-                        <x:String>February</x:String>
-                        <x:String>March</x:String>
-                        </models:Pickerarrow.Items>
-                    </models:Pickerarrow>
+                <DatePicker x:Name="Datepickertask"  Margin="15,0,15,0" />
 
                 <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">CATEGORIE</Label>
                 <models:Pickerarrow x:Name="catPicker" 
               HeightRequest="40" 
               Image="arrowdown"
-              
+              ItemDisplayBinding="{Binding Name}"
                 Margin="15,0,15,0"
-                Title="Unclassified"
+                Title="Categorie"
                 HorizontalOptions="Fill">
-                    <models:Pickerarrow.Items>
-                        <x:String>cat1
-                        </x:String>
-                        <x:String>cat2</x:String>
-                        <x:String>cat3</x:String>
-                    </models:Pickerarrow.Items>
+                  
                 </models:Pickerarrow>
 
                 <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">DESCRIPTION</Label>
-                <models:nolineentry Placeholder="Description of the task" Margin="15,0,15,0" HeightRequest="120"></models:nolineentry>
+                <models:nolineentry x:Name="detailstask" Placeholder="Description of the task" Margin="15,0,15,0" HeightRequest="120"></models:nolineentry>
+
+                <Label FontSize="20" x:Name="prioritylabel" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0" IsVisible="False">Priority</Label>
+                <models:Pickerarrow x:Name="priorityPicker" 
+              HeightRequest="40" 
+              Image="arrowdown"
+              IsVisible="False"
+                Margin="15,0,15,0"
+                Title="Priority"
+                HorizontalOptions="Fill">
+                    <models:Pickerarrow.Items>
+                        <x:String>yes</x:String>
+                        <x:String>no</x:String>
+                    </models:Pickerarrow.Items>
+
+                </models:Pickerarrow>
 
                 <Button x:Name="Savechanges" BackgroundColor="Transparent" Image="savechanges.png" Margin="15,0,15,0"></Button>
             </StackLayout>

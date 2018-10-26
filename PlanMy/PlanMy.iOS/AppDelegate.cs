@@ -4,6 +4,7 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using Xamd.ImageCarousel.Forms.Plugin.iOS;
 
 namespace PlanMy.iOS
 {
@@ -23,9 +24,13 @@ namespace PlanMy.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
 
-            return base.FinishedLaunching(app, options);
+			Xamarin.FormsMaps.Init();
+
+			LoadApplication(new App());
+			ImageCarouselRenderer.Init();
+
+			return base.FinishedLaunching(app, options);
         }
     }
 }
