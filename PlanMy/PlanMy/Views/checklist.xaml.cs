@@ -68,7 +68,7 @@ namespace PlanMy
 			pendingbut.Clicked += async (object sender, EventArgs e) =>
 			{
 
-				edittaskstatus("1");
+				edittaskstatus(task,"1");
 			};
 
 
@@ -89,34 +89,7 @@ namespace PlanMy
 					Suppliersstack.Children.Add(createsupplierverticalstack("Elie Saab", "champagne.png"));
 				}
 			}
-			// function for edit task status///
-			async void edittaskstatus(string statusval)
-			{
-
-				using (var cl = new HttpClient())
-				{
-					var formcontent = new FormUrlEncodedContent(new[]
-					{
-			new KeyValuePair<string,string>("todo_id",task.todo_id),
-			new KeyValuePair<string, string>("todo_title",task.todo_title),
-				new KeyValuePair<string,string>("todo_details",task.todo_details),
-			new KeyValuePair<string, string>("todo_date",task.todo_date),
-			new KeyValuePair<string,string>("todo_read",statusval),
-			new KeyValuePair<string, string>("todo_category",task.todo_category.ToString()),
-			new KeyValuePair<string, string>("is_priority",task.is_priority.ToString())
-		});
-
-
-					var request = await cl.PostAsync("https://www.planmy.me/maizonpub-api/todolist.php?action=update", formcontent);
-
-					request.EnsureSuccessStatusCode();
-
-					var response = await request.Content.ReadAsStringAsync();
-
-					Navigation.PushModalAsync(new Planning());
-
-				}
-			}
+			
 
 		}
 		public StackLayout createsupplierverticalstack(string nametxt,string imgurl)
@@ -132,7 +105,36 @@ namespace PlanMy
 			return stack;
 		}
 
-		
+		// function for edit task status///
+		public async void edittaskstatus(todoobj task, string statusval)
+		{
+
+			using (var cl = new HttpClient())
+			{
+				var formcontent = new FormUrlEncodedContent(new[]
+				{
+			new KeyValuePair<string,string>("todo_id",task.todo_id),
+			new KeyValuePair<string, string>("todo_title",task.todo_title),
+				new KeyValuePair<string,string>("todo_details",task.todo_details),
+			new KeyValuePair<string, string>("todo_date",task.todo_date),
+			new KeyValuePair<string,string>("todo_read",statusval),
+			new KeyValuePair<string, string>("todo_category",task.todo_category.ToString()),
+			new KeyValuePair<string, string>("is_priority",task.is_priority.ToString())
+		});
+
+
+				var request = await cl.PostAsync("https://www.planmy.me/maizonpub-api/todolist.php?action=update", formcontent);
+
+				request.EnsureSuccessStatusCode();
+
+				var response = await request.Content.ReadAsStringAsync();
+
+				Navigation.PushModalAsync(new Planning());
+
+			}
+		}
 
 	}
+
+
 }
