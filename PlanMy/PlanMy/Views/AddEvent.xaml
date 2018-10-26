@@ -4,20 +4,29 @@
              x:Class="PlanMy.Views.AddEvent"
              BackgroundColor="#89B5DA">
     <ContentPage.Content>
-        <StackLayout Margin="15,0,15,0" x:Name="stack">
-            <Image Source="logoplanmy.png" />
-            
-            <Label TextColor="White" FontSize = "20" Text="Name of event" />
-            <Entry Placeholder=" This is how others will find your event" x:Name="eventname" TextColor="White" FontSize="14" FontAttributes="Italic" />
+        <ScrollView>
+            <StackLayout Margin="15,0,15,0" x:Name="stack">
+                <Image Source="logoplanmy.png" />
 
-            <Label TextColor="White" FontSize = "20" Text="Date of event" />
-            <DatePicker x:Name="eventDate" />
+                <Label TextColor="White" FontSize = "20" Text="Name of event" />
+                <Entry Placeholder=" This is how others will find your event" x:Name="eventname" TextColor="White" FontSize="14" FontAttributes="Italic" />
+                <Label TextColor="White" FontSize = "20" Text="Location of event" />
+                <Entry Placeholder=" Enter your event location" x:Name="eventlocation" TextColor="White" FontSize="14" FontAttributes="Italic" />
+                <Label TextColor="White" FontSize = "20" Text="Date of event" />
+                <DatePicker x:Name="eventDate" />
 
-            <Label TextColor="White" FontSize = "20" Text="Event Image" />
-            <Button Text="Pick Photo" BorderRadius="30" WidthRequest="300"  BackgroundColor="#6a98bf" TextColor="White" Clicked="Button_Clicked" x:Name="pickPictureButton" HorizontalOptions="CenterAndExpand"/>
-            <Image x:Name="pickImg" WidthRequest="200" HeightRequest="200" Margin="0,35,0,0" IsVisible="false" HorizontalOptions="CenterAndExpand"></Image>
-            <Button BorderRadius="30" TextColor="#89B5DA"  WidthRequest="300" BackgroundColor="White" Text="CREATE EVENT" x:Name="createEventBtn" Clicked="createEventBtn_Clicked" HorizontalOptions="CenterAndExpand"></Button>
-            <Button BorderRadius="30" TextColor="White" WidthRequest="300" BackgroundColor="DarkRed" Text="CLOSE" x:Name="closeBtn" Clicked="closeBtn_Clicked" HorizontalOptions="CenterAndExpand"></Button>
-        </StackLayout>
+                <Label TextColor="White" FontSize = "20" Text="Event Image" x:Name="ImgLabel" />
+                <ActivityIndicator x:Name="actInd"
+ AbsoluteLayout.LayoutFlags="PositionProportional"
+ AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+ IsRunning="{Binding IsLoading}"
+ IsVisible="{Binding IsLoading}" />
+                <Button Text="Pick Photo" BorderRadius="30" WidthRequest="300"  BackgroundColor="#6a98bf" TextColor="White" Clicked="Button_Clicked" x:Name="pickPictureButton" HorizontalOptions="CenterAndExpand"/>
+                <Image x:Name="pickImg" WidthRequest="200" HeightRequest="200" Margin="0,35,0,0" IsVisible="false" HorizontalOptions="CenterAndExpand"></Image>
+                <Button BorderRadius="30" TextColor="#89B5DA"  WidthRequest="300" BackgroundColor="White" Text="CREATE EVENT" x:Name="createEventBtn" Clicked="createEventBtn_Clicked" HorizontalOptions="CenterAndExpand"></Button>
+                <Button BorderRadius="30" TextColor="White" WidthRequest="300" BackgroundColor="DarkRed" Text="CLOSE" x:Name="closeBtn" Clicked="closeBtn_Clicked" HorizontalOptions="CenterAndExpand"></Button>
+                
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

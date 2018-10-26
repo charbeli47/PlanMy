@@ -55,7 +55,74 @@ namespace PlanMy.Views
 			
 			};
 
+<<<<<<< HEAD
 		
+=======
+			///tasks get for all done and todo//
+			using (WebClient wc = new WebClient())
+			{
+				var json = wc.DownloadString("https://www.planmy.me/maizonpub-api/todolist.php?action=get&todo_user=169");
+				List<todoobj> listoftodo = JsonConvert.DeserializeObject<List<todoobj>>(json);
+				IDictionary<todoobj, string> dictmonthtodo = new Dictionary<todoobj, string>();
+				foreach (todoobj obj in listoftodo)
+				{
+					//int toid = Int32.Parse(obj.todo_id);
+					DateTime dateTodo = DateTime.Parse(obj.todo_date);
+					string monthName = dateTodo.ToString("MMM", CultureInfo.InvariantCulture);
+					string year = dateTodo.Year.ToString();
+					dictmonthtodo.Add(obj, monthName+" "+year);
+			
+				}
+
+				foreach (var valuee in dictmonthtodo.Values.Distinct())
+				{
+					StackLayout month = createmonthstack(valuee);
+					///todostack.Children.Add(month);
+					List<todoobj> specifiedobj = dictmonthtodo.Where(item => item.Value==valuee).Select(item => item.Key).ToList();
+
+					foreach(todoobj o in specifiedobj)
+					{
+						StackLayout row;
+						//if (o.todo_category.ToString() != null)
+						//{
+						//row = notdonerow(o.todo_details, o.todo_category.ToString());
+						//}
+						//else
+						//{
+						//row = notdonerow(o.todo_details, "no category");
+
+						//}
+						string categoryo;
+						foreach (WordPressPCL.Models.ItemCategory c in cats)
+						{
+
+							if (o.todo_category.ToString() == c.Id.ToString())
+							{
+								categoryo = c.Name;
+							}
+							else
+							{
+								categoryo = "no category";
+							}
+							row = notdonerow(o.todo_title, categoryo);
+
+							row.GestureRecognizers.Add(new TapGestureRecognizer
+							{
+								Command = new Command(() => Navigation.PushAsync(new checklist(o))),
+							});
+							month.Children.Add(row);
+						}
+
+						
+					}
+					todostack.Children.Add(month);
+					todostack.Children.Add(seperatorbetweenmonths());
+
+				}
+
+
+
+>>>>>>> 4f678ca32030fd2d2fa38703d2dbe62ecf7433ec
 
 
 

@@ -34,11 +34,11 @@ namespace WordPressPCL.Client
         /// <param name="embed">includ embed info</param>
         /// <param name="useAuth">Send request with authenication header</param>
         /// <returns>List of posts</returns>
-        public Task<IEnumerable<Post>> GetStickyPosts(bool embed = false, bool useAuth = false)
+        public Task<IEnumerable<Item>> GetStickyPosts(bool embed = false, bool useAuth = false)
         {
             // default values
             // int page = 1, int per_page = 10, int offset = 0, Post.OrderBy orderby = Post.OrderBy.date
-            return _httpHelper.GetRequest<IEnumerable<Post>>($"{_defaultPath}{_methodPath}?sticky=true", embed, useAuth);
+            return _httpHelper.GetRequest<IEnumerable<Item>>($"{_defaultPath}{_methodPath}?sticky=true", embed, useAuth);
         }
 
         /// <summary>
@@ -48,11 +48,11 @@ namespace WordPressPCL.Client
         /// <param name="embed">includ embed info</param>
         /// <param name="useAuth">Send request with authenication header</param>
         /// <returns>List of posts</returns>
-        public Task<IEnumerable<Post>> GetPostsByCategory(int categoryId, bool embed = false, bool useAuth = false)
+        public Task<IEnumerable<Item>> GetPostsByCategory(int categoryId, bool embed = false, bool useAuth = false)
         {
             // default values
             // int page = 1, int per_page = 10, int offset = 0, Post.OrderBy orderby = Post.OrderBy.date
-            return _httpHelper.GetRequest<IEnumerable<Post>>($"{_defaultPath}{_methodPath}?categories={categoryId}", embed, useAuth);
+            return _httpHelper.GetRequest<IEnumerable<Item>>($"{_defaultPath}{_methodPath}?categories={categoryId}", embed, useAuth);
         }
        
         
@@ -63,11 +63,11 @@ namespace WordPressPCL.Client
         /// <param name="embed">includ embed info</param>
         /// <param name="useAuth">Send request with authenication header</param>
         /// <returns>List of posts</returns>
-        public Task<IEnumerable<Post>> GetPostsByTag(int tagId, bool embed = false, bool useAuth = false)
+        public Task<IEnumerable<Item>> GetPostsByTag(int tagId, bool embed = false, bool useAuth = false)
         {
             // default values
             // int page = 1, int per_page = 10, int offset = 0, Post.OrderBy orderby = Post.OrderBy.date
-            return _httpHelper.GetRequest<IEnumerable<Post>>($"{_defaultPath}{_methodPath}?tags={tagId}", embed, useAuth);
+            return _httpHelper.GetRequest<IEnumerable<Item>>($"{_defaultPath}{_methodPath}?tags={tagId}", embed, useAuth);
         }
 
         /// <summary>
@@ -77,11 +77,11 @@ namespace WordPressPCL.Client
         /// <param name="embed">includ embed info</param>
         /// <param name="useAuth">Send request with authenication header</param>
         /// <returns>List of posts</returns>
-        public Task<IEnumerable<Post>> GetPostsByAuthor(int authorId, bool embed = false, bool useAuth = false)
+        public Task<IEnumerable<Item>> GetPostsByAuthor(int authorId, bool embed = false, bool useAuth = false)
         {
             // default values
             // int page = 1, int per_page = 10, int offset = 0, Post.OrderBy orderby = Post.OrderBy.date
-            return _httpHelper.GetRequest<IEnumerable<Post>>($"{_defaultPath}{_methodPath}?author={authorId}", embed, useAuth);
+            return _httpHelper.GetRequest<IEnumerable<Item>>($"{_defaultPath}{_methodPath}?author={authorId}", embed, useAuth);
         }
 
         /// <summary>
@@ -91,11 +91,11 @@ namespace WordPressPCL.Client
         /// <param name="embed">include embed info</param>
         /// <param name="useAuth">Send request with authenication header</param>
         /// <returns>List of posts</returns>
-        public Task<IEnumerable<Post>> GetPostsBySearch(string searchTerm, bool embed = false, bool useAuth = false)
+        public Task<IEnumerable<Item>> GetPostsBySearch(string searchTerm, bool embed = false, bool useAuth = false)
         {
             // default values
             // int page = 1, int per_page = 10, int offset = 0, Post.OrderBy orderby = Post.OrderBy.date
-            return _httpHelper.GetRequest<IEnumerable<Post>>($"{_defaultPath}{_methodPath}?search={searchTerm}", embed, useAuth);
+            return _httpHelper.GetRequest<IEnumerable<Item>>($"{_defaultPath}{_methodPath}?search={searchTerm}", embed, useAuth);
         }
 
         /// <summary>
