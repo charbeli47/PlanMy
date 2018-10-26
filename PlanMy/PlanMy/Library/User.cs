@@ -51,5 +51,9 @@ namespace PlanMy.Library
         public string email { get; set; }
         public string user_weddingdate { get; set; }
         public string user_weddingcity { get; set; }
+        public string event_name { get; set; }
+        public string event_date { get; set; }
+        public string event_location { get; set; }
+        public string event_img { get; set; }
     }
 }

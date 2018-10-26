@@ -46,7 +46,7 @@ namespace PlanMy.Views
 			/// done tasks//
 			using (WebClient wc = new WebClient())
 			{
-				var json = wc.DownloadString("http://www.planmy.me/maizonpub-api/todolist.php?action=get&todo_user=169");
+				var json = wc.DownloadString("https://www.planmy.me/maizonpub-api/todolist.php?action=get&todo_user=169");
 				List<todoobj> listoftodo = JsonConvert.DeserializeObject<List<todoobj>>(json);
 
 				StackLayout month=createmonthstack("December", "2018");

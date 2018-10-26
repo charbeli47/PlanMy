@@ -3578,18 +3578,6 @@
             </summary>
             <remarks>Context: edit</remarks>
         </member>
-        <member name="Pte">
-            <summary>
-            Registration date for the user.
-            </summary>
-            <remarks>Context: edit</remarks>
-        </member>
-        <member name="P:WordPressPCL.Models.User.Roles">
-            <summary>
-            Roles assigned to the user.
-            </summary>
-            <remarks>Context: edit</remarks>
-        </member>
         <member name="P:WordPressPCL.Models.User.Password">
             <summary>
             Password for the user (never included).
@@ -4357,7 +4345,16 @@
             </summary>
         </member>
         <member name="P:WordPressPCL.Utility.UsersQueryBuilder.Roles">
-            <summary>WordPressPCL.WordPressClient.WordPressUri">
+            <summary>
+            Limit result set to users matching at least one specific role provided. Accepts csv list or single role.
+            </summary>
+        </member>
+        <member name="T:WordPressPCL.WordPressClient">
+            <summary>
+                Main class containing the wrapper client with all public API endpoints.
+            </summary>
+        </member>
+        <member name="P:WordPressPCL.WordPressClient.WordPressUri">
             <summary>
             WordPressUri holds the WordPress API endpoint, e.g. "http://demo.wp-api.org/wp-json/wp/v2/"
             </summary>
@@ -4452,16 +4449,6 @@
         <member name="F:WordPressPCL.WordPressClient.ItemClothings">
             <summary>
             ItemClothings client interaction object
-            </summary>
-        </member>
-        <member name="F:WordPressPCL.WordPressClient.ItemBeautyServices">
-            <summary>
-            ItemBeautyServices client interaction object
-            </summary>
-        </member>
-        <member name="F:WordPressPCL.WordPressClient.ItemTypeOfMusicians">
-            <summary>
-            ItemTypeOfMusicians client interactiobject
             </summary>
         </member>
         <member name="F:WordPressPCL.WordPressClient.ItemBeautyServices">

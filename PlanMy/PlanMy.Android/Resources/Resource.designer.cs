@@ -2527,26 +2527,26 @@ namespace PlanMy.Droid
 			// aapt resource value: 0x7f02005f
 			public const int avd_hide_password = 2130837599;
 			
-			// aapt resource value: 0x7f0201b3
-			public const int avd_hide_password_1 = 2130837939;
-			
 			// aapt resource value: 0x7f0201b4
-			public const int avd_hide_password_2 = 2130837940;
+			public const int avd_hide_password_1 = 2130837940;
 			
 			// aapt resource value: 0x7f0201b5
-			public const int avd_hide_password_3 = 2130837941;
+			public const int avd_hide_password_2 = 2130837941;
+			
+			// aapt resource value: 0x7f0201b6
+			public const int avd_hide_password_3 = 2130837942;
 			
 			// aapt resource value: 0x7f020060
 			public const int avd_show_password = 2130837600;
 			
-			// aapt resource value: 0x7f0201b6
-			public const int avd_show_password_1 = 2130837942;
-			
 			// aapt resource value: 0x7f0201b7
-			public const int avd_show_password_2 = 2130837943;
+			public const int avd_show_password_1 = 2130837943;
 			
 			// aapt resource value: 0x7f0201b8
-			public const int avd_show_password_3 = 2130837944;
+			public const int avd_show_password_2 = 2130837944;
+			
+			// aapt resource value: 0x7f0201b9
+			public const int avd_show_password_3 = 2130837945;
 			
 			// aapt resource value: 0x7f020061
 			public const int ballguest = 2130837601;
@@ -3454,11 +3454,11 @@ namespace PlanMy.Droid
 			// aapt resource value: 0x7f02018e
 			public const int notification_icon_background = 2130837902;
 			
-			// aapt resource value: 0x7f0201b1
-			public const int notification_template_icon_bg = 2130837937;
-			
 			// aapt resource value: 0x7f0201b2
-			public const int notification_template_icon_low_bg = 2130837938;
+			public const int notification_template_icon_bg = 2130837938;
+			
+			// aapt resource value: 0x7f0201b3
+			public const int notification_template_icon_low_bg = 2130837939;
 			
 			// aapt resource value: 0x7f02018f
 			public const int notification_tile_bg = 2130837903;
@@ -3518,49 +3518,52 @@ namespace PlanMy.Droid
 			public const int searchblue = 2130837921;
 			
 			// aapt resource value: 0x7f0201a2
-			public const int seatingchart = 2130837922;
+			public const int SearchEventEntry = 2130837922;
 			
 			// aapt resource value: 0x7f0201a3
-			public const int suppliers = 2130837923;
+			public const int seatingchart = 2130837923;
 			
 			// aapt resource value: 0x7f0201a4
-			public const int tasks = 2130837924;
+			public const int suppliers = 2130837924;
 			
 			// aapt resource value: 0x7f0201a5
-			public const int timerback = 2130837925;
+			public const int tasks = 2130837925;
 			
 			// aapt resource value: 0x7f0201a6
-			public const int todo = 2130837926;
+			public const int timerback = 2130837926;
 			
 			// aapt resource value: 0x7f0201a7
-			public const int tooltip_frame_dark = 2130837927;
+			public const int todo = 2130837927;
 			
 			// aapt resource value: 0x7f0201a8
-			public const int tooltip_frame_light = 2130837928;
+			public const int tooltip_frame_dark = 2130837928;
 			
 			// aapt resource value: 0x7f0201a9
-			public const int twitter = 2130837929;
+			public const int tooltip_frame_light = 2130837929;
 			
 			// aapt resource value: 0x7f0201aa
-			public const int uparrow = 2130837930;
+			public const int twitter = 2130837930;
 			
 			// aapt resource value: 0x7f0201ab
-			public const int vendor = 2130837931;
+			public const int uparrow = 2130837931;
 			
 			// aapt resource value: 0x7f0201ac
-			public const int vendors = 2130837932;
+			public const int vendor = 2130837932;
 			
 			// aapt resource value: 0x7f0201ad
-			public const int videos = 2130837933;
+			public const int vendors = 2130837933;
 			
 			// aapt resource value: 0x7f0201ae
-			public const int videothumb = 2130837934;
+			public const int videos = 2130837934;
 			
 			// aapt resource value: 0x7f0201af
-			public const int x = 2130837935;
+			public const int videothumb = 2130837935;
 			
 			// aapt resource value: 0x7f0201b0
-			public const int xamarin_logo = 2130837936;
+			public const int x = 2130837936;
+			
+			// aapt resource value: 0x7f0201b1
+			public const int xamarin_logo = 2130837937;
 			
 			static Drawable()
 			{
