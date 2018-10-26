@@ -49,8 +49,8 @@
                             <ViewCell>
                                 
                                     <StackLayout Orientation="Horizontal">
-                                        <Image Source="{Binding icon}" HeightRequest="35" WidthRequest="35" VerticalOptions="Center"/>
-                                    <Label Text="{Binding Name}" TextColor="Gray" VerticalOptions="Center" FontSize="16"  />
+                                                <Image Source="{Binding icon}" Margin="10,0,0,0" HeightRequest="35" WidthRequest="35" VerticalOptions="Center"/>
+                                    <Label Text="{Binding Name}" Margin="10,0,0,0" TextColor="Gray" VerticalOptions="Center" FontSize="16"  />
                                 </StackLayout>
                              
                             </ViewCell>

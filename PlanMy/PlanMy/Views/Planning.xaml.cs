@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
+using PlanMy.Library;
 using PlanMy.ViewModels;
 using PlanMy.Views;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -16,10 +18,24 @@ namespace PlanMy.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Planning : ContentPage
 	{
+		public IEnumerable<WordPressPCL.Models.ItemCategory> cats;
+
 		public Planning ()
 		{
 			InitializeComponent ();
-		allbut.Clicked += (object sender, EventArgs e) =>
+			/// load cats///
+			
+
+			Loadcats();
+			// finish loadcats///
+
+			async void Loadcats()
+			{
+				WordpressService service = new WordpressService();
+				cats = await service.GetItemCategoriesAsync();
+			}
+
+			allbut.Clicked += (object sender, EventArgs e) =>
 			{
 				//guestsView = new guests();
 				checkList.IsVisible = true;
@@ -43,20 +59,81 @@ namespace PlanMy.Views
 			
 			};
 
-			/// done tasks//
+			///tasks get for all done and todo//
 			using (WebClient wc = new WebClient())
 			{
 				var json = wc.DownloadString("https://www.planmy.me/maizonpub-api/todolist.php?action=get&todo_user=169");
 				List<todoobj> listoftodo = JsonConvert.DeserializeObject<List<todoobj>>(json);
-
-				StackLayout month=createmonthstack("December", "2018");
-				todostack.Children.Add(month);
+				IDictionary<todoobj, string> dictmonthtodo = new Dictionary<todoobj, string>();
 				foreach (todoobj obj in listoftodo)
 				{
-					//StackLayout row = notdonerow(obj.todo_details, obj.todo_category.ToString());
-					//todostack.Children.Add(row);
+					//int toid = Int32.Parse(obj.todo_id);
+					DateTime dateTodo = DateTime.Parse(obj.todo_date);
+					string monthName = dateTodo.ToString("MMM", CultureInfo.InvariantCulture);
+					string year = dateTodo.Year.ToString();
+					dictmonthtodo.Add(obj, monthName+" "+year);
+			
 				}
-				todostack.Children.Add(seperatorbetweenmonths());
+
+				foreach (var valuee in dictmonthtodo.Values.Distinct())
+				{
+					StackLayout month = createmonthstack(valuee);
+					///todostack.Children.Add(month);
+					List<todoobj> specifiedobj = dictmonthtodo.Where(item => item.Value==valuee).Select(item => item.Key).ToList();
+
+					foreach(todoobj o in specifiedobj)
+					{
+						StackLayout row;
+						//if (o.todo_category.ToString() != null)
+						//{
+						//row = notdonerow(o.todo_details, o.todo_category.ToString());
+						//}
+						//else
+						//{
+						//row = notdonerow(o.todo_details, "no category");
+
+						//}
+						string categoryo;
+						foreach (WordPressPCL.Models.ItemCategory c in cats)
+						{
+
+							if (o.todo_category.ToString() == c.Id.ToString())
+							{
+								categoryo = c.Name;
+							}
+							else
+							{
+								categoryo = "no category";
+							}
+							row = notdonerow(o.todo_title, categoryo);
+
+							row.GestureRecognizers.Add(new TapGestureRecognizer
+							{
+								Command = new Command(() => Navigation.PushAsync(new checklist(o))),
+							});
+							month.Children.Add(row);
+						}
+
+						
+					}
+					todostack.Children.Add(month);
+					todostack.Children.Add(seperatorbetweenmonths());
+
+				}
+
+
+
+
+
+
+		
+			
+				//foreach (todoobj obj in listoftodo)
+				//{
+				//StackLayout row = notdonerow(obj.todo_details, obj.todo_category.ToString());
+				//todostack.Children.Add(row);
+				//}
+				//todostack.Children.Add(seperatorbetweenmonths());
 
 			}
 
@@ -241,28 +318,34 @@ namespace PlanMy.Views
             seatcharc.Children.Add(createseperatorbetweentables());
             newtask.Clicked += async (object sender, EventArgs e) =>
             {
-                await Navigation.PushAsync(new newtask());
+                await Navigation.PushModalAsync(new newtask(false,null));
             };
-            StackLayout december = createmonthstack("DECEMBER", "2018");
-            december.Children.Add(donerow());
-            december.Children.Add(donerow());
-            december.Children.Add(seperatorbetweenmonths());
+           // StackLayout december = createmonthstack("DECEMBER", "2018");
+            //december.Children.Add(donerow());
+            //december.Children.Add(donerow());
+            //december.Children.Add(seperatorbetweenmonths());
 
-            StackLayout Feb = createmonthstack("February", "2019");
-            Feb.Children.Add(priorityrowdone("Reserve your catering", "Catering & Bars"));
-            Feb.Children.Add(notdonerow("Book a Dj", "Entertainment"));
-            Feb.Children.Add(seperatorbetweenmonths());
+            //StackLayout Feb = createmonthstack("February", "2019");
+            //Feb.Children.Add(priorityrowdone("Reserve your catering", "Catering & Bars"));
+            //Feb.Children.Add(notdonerow("Book a Dj", "Entertainment"));
+            //Feb.Children.Add(seperatorbetweenmonths());
 
-            StackLayout March = createmonthstack("March", "2019");
-            March.Children.Add(priorityrownotdone("Book my hairdresser", "Hair & Beuaty"));
-            March.Children.Add(notdonerow("Book my make up artist", "Hair & Beuaty"));
-            March.Children.Add(seperatorbetweenmonths());
-            checkList.Children.Add(december);
-            checkList.Children.Add(Feb);
-            checkList.Children.Add(March);
+            //StackLayout March = createmonthstack("March", "2019");
+            //March.Children.Add(priorityrownotdone("Book my hairdresser", "Hair & Beuaty"));
+            //March.Children.Add(notdonerow("Book my make up artist", "Hair & Beuaty"));
+            //March.Children.Add(seperatorbetweenmonths());
+            //checkList.Children.Add(december);
+            //checkList.Children.Add(Feb);
+            //checkList.Children.Add(March);
             
         }
-        public StackLayout createtablerow(string namet, string icon)
+
+		private Page checklist(todoobj o)
+		{
+			throw new NotImplementedException();
+		}
+
+		public StackLayout createtablerow(string namet, string icon)
         {
             StackLayout tablelayout = new StackLayout();
             tablelayout.Orientation = StackOrientation.Vertical;
@@ -557,13 +640,13 @@ namespace PlanMy.Views
             vlayout.Children.Add(line);
             return vlayout;
         }
-        public StackLayout createmonthstack(string month, string year)
+        public StackLayout createmonthstack(string monthyear)
         {
             StackLayout stack = new StackLayout();
             stack.Orientation = StackOrientation.Vertical;
             //stack.Margin = new Thickness(15, 0, 15, 0);
             Label title = new Label();
-            title.Text = "BY " + month + " " + year;
+            title.Text = "BY " + monthyear;
             title.TextColor = Color.Black;
             title.FontAttributes = FontAttributes.Bold;
             title.FontSize = 16;
@@ -578,11 +661,8 @@ namespace PlanMy.Views
         {
             StackLayout stack = new StackLayout();
             stack.Orientation = StackOrientation.Horizontal;
-            stack.GestureRecognizers.Add(
-    new TapGestureRecognizer()
-    {
-        Command = new Command(() => { Navigation.PushModalAsync(new checklist()); })
-    });
+           
+   
             Image imgcheck = new Image();
             imgcheck.Source = "notchecked.png";
             stack.Children.Add(imgcheck);
@@ -642,11 +722,7 @@ namespace PlanMy.Views
         {
             StackLayout stack = new StackLayout();
             stack.Orientation = StackOrientation.Horizontal;
-            stack.GestureRecognizers.Add(
-    new TapGestureRecognizer()
-    {
-        Command = new Command(() => { Navigation.PushModalAsync(new checklist()); })
-    });
+        
 
             Image imgcheck = new Image();
             imgcheck.Source = "checked.png";
@@ -707,11 +783,7 @@ namespace PlanMy.Views
         {
             StackLayout stack = new StackLayout();
             stack.Orientation = StackOrientation.Horizontal;
-            stack.GestureRecognizers.Add(
-    new TapGestureRecognizer()
-    {
-        Command = new Command(() => { Navigation.PushModalAsync(new checklist()); })
-    });
+            
             Image imgcheck = new Image();
             imgcheck.Source = "notchecked.png";
             imgcheck.Margin = new Thickness(10, 0, 0, 0);
@@ -745,11 +817,7 @@ namespace PlanMy.Views
         {
             StackLayout stack = new StackLayout();
             stack.Orientation = StackOrientation.Horizontal;
-            stack.GestureRecognizers.Add(
-    new TapGestureRecognizer()
-    {
-        Command = new Command(() => { Navigation.PushModalAsync(new checklist()); })
-    });
+          
             Image imgcheck = new Image();
             imgcheck.Source = "checked.png";
             imgcheck.Margin = new Thickness(10, 0, 0, 0);
@@ -789,7 +857,13 @@ namespace PlanMy.Views
             return stack;
 
         }
-    }
+		/// <summary>
+		///  date picker for new task//
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		
+	}
 	
 
 }

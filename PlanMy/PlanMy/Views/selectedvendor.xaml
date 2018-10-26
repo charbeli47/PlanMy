@@ -2,7 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:abstractions="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
-             x:Class="PlanMy.selectedvendor">
+             x:Class="PlanMy.selectedvendor"
+             xmlns:controls="clr-namespace:Xamd.ImageCarousel.Forms.Plugin.Abstractions;assembly=Xamd.ImageCarousel.Forms.Plugin.Abstractions"
+             xmlns:rating="clr-namespace:Syncfusion.SfRating.XForms;assembly=Syncfusion.SfRating.XForms">
     <ContentPage.Content>
         <ScrollView>
         <StackLayout BackgroundColor="white" Spacing="-6">
@@ -27,8 +29,8 @@
                 </Frame>
             </StackLayout>
             <StackLayout x:Name="Content" Orientation="Vertical" Margin="0,3,0,0">
-                <Image x:Name="postimage" Source="vendor.png" HorizontalOptions="FillAndExpand"></Image>
-                <Grid HeightRequest="20" RowSpacing="0" ColumnSpacing="0" Margin="0,-6,0,0">
+                    <controls:ImageCarousel x:Name="imgSlider" HeightRequest="300" WidthRequest="300" />
+                    <Grid HeightRequest="20" RowSpacing="0" ColumnSpacing="0" Margin="0,-6,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
 
@@ -47,7 +49,7 @@
                 </Grid>
                 <StackLayout Orientation="Vertical" Margin="15,0,15,0">
                     <StackLayout Orientation="Horizontal">
-                        <Label x:Name="Title" FontSize="18" FontAttributes="Bold" TextColor="Black">Four Seasons Hotel Beriut</Label>
+                        <Label x:Name="Titlepost" FontSize="18" FontAttributes="Bold" TextColor="Black">Four Seasons Hotel Beriut</Label>
                         <Image Source="bluestar.png"></Image>
                     </StackLayout>
                     <StackLayout Orientation="Horizontal">
@@ -57,7 +59,7 @@
                     </StackLayout>
                     <StackLayout Orientation="Horizontal">
                         <Image Source="moreinformation2.png"></Image>
-                        <Image Source="phone.png"></Image>
+                        <Button Image="phone.png" x:Name="phonebut" BackgroundColor="Transparent"></Button>
                     </StackLayout>
                    
                 </StackLayout>
@@ -111,7 +113,7 @@
                             <Label x:Name="writereview" TextColor="#1BA2A8" FontSize="12" HorizontalOptions="End" Margin="80,0,15,0">Write a Review</Label>
                         </StackLayout>
                         <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" HeightRequest="150" BackgroundColor="#EBEBEB">
-
+                            <rating:SfRating x:Name="rating"  BackgroundColor="White" Precision="Half" TooltipPlacement="TopLeft" TooltipPrecision="2"  TooltipBackgroundColor="Yellow" TooltipTextColor="Black"></rating:SfRating>
                         </StackLayout>
 
                         <StackLayout Orientation="Horizontal" HorizontalOptions="Fill" Margin="15,0,15,0">
@@ -167,9 +169,7 @@
                             </StackLayout>
                             <ScrollView>
                                 <Image Source="videothumb.png"/>
-                                <Image Source="videothumb.png"/>
-                                <Image Source="videothumb.png"/>
-                                <Image Source="videothumb.png"/>
+                               
                             </ScrollView>
                             <Image Source="allvideos" Margin="15,0,15,20"></Image>
                         </StackLayout>

@@ -11,6 +11,7 @@ using PlanMy.Library;
 using Android.Content;
 using System.Threading.Tasks;
 using System.IO;
+using Xamd.ImageCarousel.Forms.Plugin.Droid;
 
 namespace PlanMy.Droid
 {
@@ -25,8 +26,10 @@ namespace PlanMy.Droid
         {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
-            
-            base.OnCreate(bundle);
+			ImageCarouselRenderer.Init();
+			Xamarin.FormsMaps.Init(this,bundle);
+
+			base.OnCreate(bundle);
             FacebookSdk.SdkInitialize(this.ApplicationContext);
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());

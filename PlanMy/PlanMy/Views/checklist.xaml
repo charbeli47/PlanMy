@@ -34,18 +34,18 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Image Source="pending.png" Grid.Row="0" Grid.Column="0"  />
-                        <Image Source="edit.png" Grid.Row="0" Grid.Column="1"   />
-                        <Image Source="delete.png"  Grid.Row="0" Grid.Column="2"   />
+                        <Button Image="pending.png" BackgroundColor="Transparent" x:Name="pendingbut" Grid.Row="0" Grid.Column="0"  />
+                        <Button Image="edit.png" BackgroundColor="Transparent" x:Name="edittask" Grid.Row="0" Grid.Column="1"   />
+                        <Button Image="delete.png" x:Name="deletetask" BackgroundColor="Transparent" Grid.Row="0" Grid.Column="2"   />
                     </Grid>
                     <StackLayout Orientation="Horizontal" HeightRequest="1" BackgroundColor="Gray"></StackLayout>
                 </StackLayout>
 
             </StackLayout>
                 <Label x:Name="title" FontAttributes="Bold" FontSize="20" TextColor="Black" Margin="15,0,15,0">Schedule an engagement photoshoot</Label>
-                <Label x:Name="description" FontAttributes="Italic" FontSize="18" TextColor="DarkGray" Margin="15,0,15,0">Photography and Videography</Label>
-                <Label x:Name="month" FontAttributes="Italic" FontSize="22" TextColor="LightGray" Margin="15,0,15,0">By December 2018</Label>
-                <Label x:Name="text" Margin="15,30,15,0" FontSize="18" TextColor="Gray">Contact different suppliers to get the best offer and shooting should be done before mid september so we can use the pictures for the invitations</Label>
+                <Label x:Name="category" FontAttributes="Italic" FontSize="18" TextColor="DarkGray" Margin="15,0,15,0">Photography and Videography</Label>
+                <Label x:Name="date" FontAttributes="Italic" FontSize="22" TextColor="LightGray" Margin="15,0,15,0">By December 2018</Label>
+                <Label x:Name="description" Margin="15,30,15,0" FontSize="18" TextColor="Gray">Contact different suppliers to get the best offer and shooting should be done before mid september so we can use the pictures for the invitations</Label>
                 <StackLayout Orientation="Horizontal" BackgroundColor="LightGray" HeightRequest="5"></StackLayout>
                 <Label FontAttributes="Bold" FontSize="18" TextColor="Black" Margin="0,30,0,0" HorizontalOptions="Center">Suppliers</Label>
                 <Label FontAttributes="Bold" FontSize="16" TextColor="Gray" HorizontalOptions="Center" Margin="0,-5,0,0">you haven't save any supplier yet</Label>
