@@ -2715,32 +2715,26 @@ namespace PlanMy.Droid
 			// aapt resource value: 0x7f02005f
 			public const int avd_hide_password = 2130837599;
 			
-			// aapt resource value: 0x7f0201b3
-			public const int avd_hide_password_1 = 2130837939;
+			// aapt resource value: 0x7f0201c9
+			public const int avd_hide_password_1 = 2130837961;
 			
-			// aapt resource value: 0x7f0201b4
-			public const int avd_hide_password_2 = 2130837940;
+			// aapt resource value: 0x7f0201ca
+			public const int avd_hide_password_2 = 2130837962;
 			
-			// aapt resource value: 0x7f0201b5
-			public const int avd_hide_password_3 = 2130837941;
-			
-			// aapt resource value: 0x7f0201b6
-			public const int avd_hide_password_3 = 2130837942;
+			// aapt resource value: 0x7f0201cb
+			public const int avd_hide_password_3 = 2130837963;
 			
 			// aapt resource value: 0x7f020060
 			public const int avd_show_password = 2130837600;
 			
-			// aapt resource value: 0x7f0201b6
-			public const int avd_show_password_1 = 2130837942;
+			// aapt resource value: 0x7f0201cc
+			public const int avd_show_password_1 = 2130837964;
 			
-			// aapt resource value: 0x7f0201b7
-			public const int avd_show_password_2 = 2130837943;
+			// aapt resource value: 0x7f0201cd
+			public const int avd_show_password_2 = 2130837965;
 			
-			// aapt resource value: 0x7f0201b8
-			public const int avd_show_password_3 = 2130837944;
-			
-			// aapt resource value: 0x7f0201b9
-			public const int avd_show_password_3 = 2130837945;
+			// aapt resource value: 0x7f0201ce
+			public const int avd_show_password_3 = 2130837966;
 			
 			// aapt resource value: 0x7f020061
 			public const int ballguest = 2130837601;
@@ -3646,16 +3640,7 @@ namespace PlanMy.Droid
 			public const int mr_dialog_material_background_dark = 2130837901;
 			
 			// aapt resource value: 0x7f02018e
-			public const int notification_icon_background = 2130837902;
-			
-			// aapt resource value: 0x7f0201b1
-			public const int notification_template_icon_bg = 2130837937;
-			
-			// aapt resource value: 0x7f0201b2
-			public const int notification_template_icon_low_bg = 2130837938;
-			
-			// aapt resource value: 0x7f0201b3
-			public const int notification_template_icon_low_bg = 2130837939;
+			public const int mr_dialog_material_background_light = 2130837902;
 			
 			// aapt resource value: 0x7f02018f
 			public const int mr_group_collapse = 2130837903;
@@ -3715,49 +3700,121 @@ namespace PlanMy.Droid
 			public const int notification_bg_normal = 2130837921;
 			
 			// aapt resource value: 0x7f0201a2
-			public const int seatingchart = 2130837922;
+			public const int notification_bg_normal_pressed = 2130837922;
 			
 			// aapt resource value: 0x7f0201a3
-			public const int suppliers = 2130837923;
+			public const int notification_icon_background = 2130837923;
+			
+			// aapt resource value: 0x7f0201c7
+			public const int notification_template_icon_bg = 2130837959;
+			
+			// aapt resource value: 0x7f0201c8
+			public const int notification_template_icon_low_bg = 2130837960;
 			
 			// aapt resource value: 0x7f0201a4
-			public const int tasks = 2130837924;
+			public const int notification_tile_bg = 2130837924;
 			
 			// aapt resource value: 0x7f0201a5
-			public const int timerback = 2130837925;
+			public const int notify_panel_notification_icon_bg = 2130837925;
 			
 			// aapt resource value: 0x7f0201a6
-			public const int todo = 2130837926;
+			public const int orders = 2130837926;
 			
 			// aapt resource value: 0x7f0201a7
-			public const int tooltip_frame_dark = 2130837927;
+			public const int pending = 2130837927;
 			
 			// aapt resource value: 0x7f0201a8
-			public const int tooltip_frame_light = 2130837928;
+			public const int pending2 = 2130837928;
 			
 			// aapt resource value: 0x7f0201a9
-			public const int twitter = 2130837929;
+			public const int phone = 2130837929;
 			
 			// aapt resource value: 0x7f0201aa
-			public const int uparrow = 2130837930;
+			public const int photos = 2130837930;
 			
 			// aapt resource value: 0x7f0201ab
-			public const int vendor = 2130837931;
+			public const int pinlocation = 2130837931;
 			
 			// aapt resource value: 0x7f0201ac
-			public const int vendors = 2130837932;
+			public const int planning = 2130837932;
 			
 			// aapt resource value: 0x7f0201ad
-			public const int videos = 2130837933;
+			public const int plus = 2130837933;
 			
 			// aapt resource value: 0x7f0201ae
-			public const int videothumb = 2130837934;
+			public const int priority = 2130837934;
 			
 			// aapt resource value: 0x7f0201af
-			public const int x = 2130837935;
+			public const int profile = 2130837935;
 			
 			// aapt resource value: 0x7f0201b0
-			public const int xamarin_logo = 2130837936;
+			public const int profileheader = 2130837936;
+			
+			// aapt resource value: 0x7f0201b1
+			public const int promotions = 2130837937;
+			
+			// aapt resource value: 0x7f0201b2
+			public const int recievecoupon = 2130837938;
+			
+			// aapt resource value: 0x7f0201b3
+			public const int RoundedCornerEntry = 2130837939;
+			
+			// aapt resource value: 0x7f0201b4
+			public const int savechanges = 2130837940;
+			
+			// aapt resource value: 0x7f0201b5
+			public const int search = 2130837941;
+			
+			// aapt resource value: 0x7f0201b6
+			public const int searchblue = 2130837942;
+			
+			// aapt resource value: 0x7f0201b7
+			public const int SearchEventEntry = 2130837943;
+			
+			// aapt resource value: 0x7f0201b8
+			public const int seatingchart = 2130837944;
+			
+			// aapt resource value: 0x7f0201b9
+			public const int suppliers = 2130837945;
+			
+			// aapt resource value: 0x7f0201ba
+			public const int tasks = 2130837946;
+			
+			// aapt resource value: 0x7f0201bb
+			public const int timerback = 2130837947;
+			
+			// aapt resource value: 0x7f0201bc
+			public const int todo = 2130837948;
+			
+			// aapt resource value: 0x7f0201bd
+			public const int tooltip_frame_dark = 2130837949;
+			
+			// aapt resource value: 0x7f0201be
+			public const int tooltip_frame_light = 2130837950;
+			
+			// aapt resource value: 0x7f0201bf
+			public const int twitter = 2130837951;
+			
+			// aapt resource value: 0x7f0201c0
+			public const int uparrow = 2130837952;
+			
+			// aapt resource value: 0x7f0201c1
+			public const int vendor = 2130837953;
+			
+			// aapt resource value: 0x7f0201c2
+			public const int vendors = 2130837954;
+			
+			// aapt resource value: 0x7f0201c3
+			public const int videos = 2130837955;
+			
+			// aapt resource value: 0x7f0201c4
+			public const int videothumb = 2130837956;
+			
+			// aapt resource value: 0x7f0201c5
+			public const int x = 2130837957;
+			
+			// aapt resource value: 0x7f0201c6
+			public const int xamarin_logo = 2130837958;
 			
 			static Drawable()
 			{

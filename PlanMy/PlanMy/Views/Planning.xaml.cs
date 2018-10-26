@@ -20,326 +20,47 @@ namespace PlanMy.Views
 	{
 		public IEnumerable<WordPressPCL.Models.ItemCategory> cats;
 
-		public Planning ()
-		{
-			InitializeComponent ();
-			/// load cats///
-			
-
-			Loadcats();
-			// finish loadcats///
-
-			gettasks();
-
-			allbut.Clicked += (object sender, EventArgs e) =>
-			{
-				//guestsView = new guests();
-				checkList.IsVisible = true;
-				todostack.IsVisible = false;
-				donestack.IsVisible = false;
-			
-				//await Navigation.PushAsync(new guests());
-			};
-		
-			todobut.Clicked += async (s, e) => {
-			
-				checkList.IsVisible = false;
-				todostack.IsVisible = true;
-				donestack.IsVisible =false;
-			};
-			donebut.Clicked += (object sender, EventArgs e) =>
-			{
-				checkList.IsVisible = false;
-				todostack.IsVisible = false;
-				donestack.IsVisible = true;
-			
-			};
-
-<<<<<<< HEAD
-		
-=======
-			///tasks get for all done and todo//
-			using (WebClient wc = new WebClient())
-			{
-				var json = wc.DownloadString("https://www.planmy.me/maizonpub-api/todolist.php?action=get&todo_user=169");
-				List<todoobj> listoftodo = JsonConvert.DeserializeObject<List<todoobj>>(json);
-				IDictionary<todoobj, string> dictmonthtodo = new Dictionary<todoobj, string>();
-				foreach (todoobj obj in listoftodo)
-				{
-					//int toid = Int32.Parse(obj.todo_id);
-					DateTime dateTodo = DateTime.Parse(obj.todo_date);
-					string monthName = dateTodo.ToString("MMM", CultureInfo.InvariantCulture);
-					string year = dateTodo.Year.ToString();
-					dictmonthtodo.Add(obj, monthName+" "+year);
-			
-				}
-
-				foreach (var valuee in dictmonthtodo.Values.Distinct())
-				{
-					StackLayout month = createmonthstack(valuee);
-					///todostack.Children.Add(month);
-					List<todoobj> specifiedobj = dictmonthtodo.Where(item => item.Value==valuee).Select(item => item.Key).ToList();
-
-					foreach(todoobj o in specifiedobj)
-					{
-						StackLayout row;
-						//if (o.todo_category.ToString() != null)
-						//{
-						//row = notdonerow(o.todo_details, o.todo_category.ToString());
-						//}
-						//else
-						//{
-						//row = notdonerow(o.todo_details, "no category");
-
-						//}
-						string categoryo;
-						foreach (WordPressPCL.Models.ItemCategory c in cats)
-						{
-
-							if (o.todo_category.ToString() == c.Id.ToString())
-							{
-								categoryo = c.Name;
-							}
-							else
-							{
-								categoryo = "no category";
-							}
-							row = notdonerow(o.todo_title, categoryo);
-
-							row.GestureRecognizers.Add(new TapGestureRecognizer
-							{
-								Command = new Command(() => Navigation.PushAsync(new checklist(o))),
-							});
-							month.Children.Add(row);
-						}
-
-						
-					}
-					todostack.Children.Add(month);
-					todostack.Children.Add(seperatorbetweenmonths());
-
-				}
+        public Planning()
+        {
+            InitializeComponent();
+            /// load cats///
 
 
+            Loadcats();
+            // finish loadcats///
 
->>>>>>> 4f678ca32030fd2d2fa38703d2dbe62ecf7433ec
+            gettasks();
 
-
-
-		
-			
-				//foreach (todoobj obj in listoftodo)
-				//{
-				//StackLayout row = notdonerow(obj.todo_details, obj.todo_category.ToString());
-				//todostack.Children.Add(row);
-				//}
-				//todostack.Children.Add(seperatorbetweenmonths());
-
-			
-
-
-
-
-
-
-			/// actions for favorites//
-			List<favoritesobject> fo = new List<favoritesobject>();
-			favoritesobject object1 = new favoritesobject();
-			object1.icon = "";
-			object1.name = "CHAMPAGNE";
-			object1.categorie = "Clothing & Accessories";
-
-			favoritesobject object2 = new favoritesobject();
-			object1.icon = "";
-			object1.name = "FOUR SEASONS";
-			object1.categorie = "VENUES";
-
-			favoritesobject object3 = new favoritesobject();
-			object1.icon = "";
-			object1.name = "NAJI OSTA";
-			object1.categorie = "ENTERTAINMENT";
-
-			favoritesobject object4 = new favoritesobject();
-			object1.icon = "";
-			object1.name = "CHAMPAGNE";
-			object1.categorie = "Clothing & Accessories";
-
-			favoritesobject object5 = new favoritesobject();
-			object1.icon = "";
-			object1.name = "CHAMPAGNE";
-			object1.categorie = "Clothing & Accessories";
-
-			fo.Add(object1);
-			fo.Add(object2);
-			fo.Add(object3);
-			fo.Add(object4);
-			fo.Add(object5);
-			FavoritesList.FlowItemsSource = fo;
-
-
-
-			NavigationPage.SetHasNavigationBar(this, false);
-            planningView.TranslationX = 0;
-            guestsView.TranslationX = Bounds.Width;
-            budgetView.TranslationX = Bounds.Width * 2;
-            checklistbut.Clicked += (object sender, EventArgs e) =>
-			{
-				checklistbut.Image = "bchecklist.png";
-				guestbut.Image = "guestlist.png";
-				budgetbut.Image = "budget.png";
-				suppliersbut.Image = "suppliers.png";
-				ordersbut.Image = "orders.png";
-				planningView.IsVisible = true;
-                guestsView.IsVisible = false;
-                budgetView.IsVisible = false;
-				favoriteView.IsVisible = false;
-			};
-
-			guestbut.Clicked += (object sender, EventArgs e) =>
-			{
-				checklistbut.Image = "checklist.png";
-				guestbut.Image = "bguestslist.png";
-				budgetbut.Image = "budget.png";
-				suppliersbut.Image = "suppliers.png";
-				ordersbut.Image = "orders.png";
-
-				//guestsView = new guests();
-				planningView.IsVisible = false;
-                guestsView.IsVisible = true;
-                budgetView.IsVisible = false;
-				favoriteView.IsVisible = false;
-				//await Navigation.PushAsync(new guests());
-			};
-			budgetbut.Clicked +=  (object sender, EventArgs e) =>
-			{
-				checklistbut.Image = "checklist.png";
-				guestbut.Image = "guestlist.png";
-				budgetbut.Image = "bbudget.png";
-				suppliersbut.Image = "suppliers.png";
-				ordersbut.Image = "orders.png";
-				planningView.IsVisible = false;
-                guestsView.IsVisible = false;
-                budgetView.IsVisible = true;
-				favoriteView.IsVisible = false;
-			};
-            suppliersbut.Clicked += async (s, e) => {
-				checklistbut.Image = "checklist.png";
-				guestbut.Image = "guestlist.png";
-				budgetbut.Image = "budget.png";
-				suppliersbut.Image = "bluesuppliers.png";
-				ordersbut.Image = "orders.png";
-				planningView.IsVisible = false;
-				guestsView.IsVisible = false;
-				budgetView.IsVisible = false;
-				favoriteView.IsVisible = true;
-			};
-            StackLayout table1 = createtablerow("Venues", "location.png");
-            StackLayout table2 = createtablerow("Lighting & sound", "location.png");
-            table1.Children.Add(createsupplierrowintable("Domaine de Zekrit", "25 000", "10 000"));
-
-            table2.Children.Add(createsupplierrowintable("Wicked Solutions", "5 000", "1000"));
-            table2.Children.Add(createsupplierrowintable("Basement Music", "2 000", "200"));
-
-            content.Children.Add(table1);
-            content.Children.Add(createseperatorbetweentables());
-            content.Children.Add(table2);
-            content.Children.Add(createseperatorbetweentables());
-
-           // addtablebut.Clicked += (object sender, EventArgs e) =>
-            //{
-              //  popupaddtable.IsVisible = true;
-            //};
-
-            //addguestbut.Clicked += (object sender, EventArgs e) =>
-            //{
-              //  popupguest.IsVisible = true;
-            //};
-            //closepopuptable.Clicked += (object sender, EventArgs e) =>
-            //{
-              //  popupaddtable.IsVisible = false;
-            //};
-            //closepopupguest.Clicked += (object sender, EventArgs e) =>
-            //{
-              //  popupguest.IsVisible = false;
-            //};
-
-
-
-
-
-            allguest.Clicked += (object sender, EventArgs e) =>
+            allbut.Clicked += (object sender, EventArgs e) =>
             {
-                allguest.Image = "ballguest.png";
-                seatchart.Image = "seatingchart.png";
-                allguestc.IsVisible = true;
-                seatcharc.IsVisible = false;
-            };
-            seatchart.Clicked += (object sender, EventArgs e) =>
-            {
-                allguest.Image = "allguest.png";
-                seatchart.Image = "bseatingchart.png";
-                allguestc.IsVisible = false;
-                seatcharc.IsVisible = true;
+                //guestsView = new guests();
+                checkList.IsVisible = true;
+                todostack.IsVisible = false;
+                donestack.IsVisible = false;
+
+                //await Navigation.PushAsync(new guests());
             };
 
-            singleguest sg = new singleguest();
-            sg.name = "Anthony Assaad";
-            sg.status = "notattending.png";
+            todobut.Clicked += async (s, e) => {
 
-            singleguest sg1 = new singleguest();
-            sg1.name = "Marc Assaad";
-            sg1.status = "attending.png";
-
-
-            singleguest sg2 = new singleguest();
-            sg2.name = "Marwan Maalouf";
-            sg2.status = "pending2.png";
-            List<singleguest> lg = new List<singleguest>();
-
-            lg.Add(sg);
-            lg.Add(sg1);
-            lg.Add(sg2);
-
-            guestList.ItemsSource = lg;
-
-
-            StackLayout gtable1 = createtableguestrow("The Hosts", "3");
-            // add guest to table///
-            gtable1.Children.Add(createguestrowintable("Rouzana Boustani", "attending.png"));
-            gtable1.Children.Add(createguestrowintable("Rouzana Boustani", "attending.png"));
-            gtable1.Children.Add(createguestrowintable("Rouzana Boustani", "attending.png"));
-
-
-            seatcharc.Children.Add(gtable1);
-            seatcharc.Children.Add(createseperatorbetweentables());
-            seatcharc.Children.Add(createtableguestrow("The Haddads", "28"));
-            seatcharc.Children.Add(createseperatorbetweentables());
-            seatcharc.Children.Add(createtableguestrow("The Semaans", "30"));
-            seatcharc.Children.Add(createseperatorbetweentables());
-            newtask.Clicked += async (object sender, EventArgs e) =>
-            {
-                await Navigation.PushModalAsync(new newtask(false,null));
+                checkList.IsVisible = false;
+                todostack.IsVisible = true;
+                donestack.IsVisible = false;
             };
-           // StackLayout december = createmonthstack("DECEMBER", "2018");
-            //december.Children.Add(donerow());
-            //december.Children.Add(donerow());
-            //december.Children.Add(seperatorbetweenmonths());
+            donebut.Clicked += (object sender, EventArgs e) =>
+            {
+                checkList.IsVisible = false;
+                todostack.IsVisible = false;
+                donestack.IsVisible = true;
 
-            //StackLayout Feb = createmonthstack("February", "2019");
-            //Feb.Children.Add(priorityrowdone("Reserve your catering", "Catering & Bars"));
-            //Feb.Children.Add(notdonerow("Book a Dj", "Entertainment"));
-            //Feb.Children.Add(seperatorbetweenmonths());
+            };
 
-            //StackLayout March = createmonthstack("March", "2019");
-            //March.Children.Add(priorityrownotdone("Book my hairdresser", "Hair & Beuaty"));
-            //March.Children.Add(notdonerow("Book my make up artist", "Hair & Beuaty"));
-            //March.Children.Add(seperatorbetweenmonths());
-            //checkList.Children.Add(december);
-            //checkList.Children.Add(Feb);
-            //checkList.Children.Add(March);
+            /*<<<<<<< HEAD
+
+            =======*/
+            ///tasks get for all done and todo//
             
         }
-
 		private Page checklist(todoobj o)
 		{
 			throw new NotImplementedException();
@@ -866,7 +587,287 @@ namespace PlanMy.Views
 		{
 			WordpressService service = new WordpressService();
 			cats = await service.GetItemCategoriesAsync();
-		}
+            using (WebClient wc = new WebClient())
+            {
+                var json = wc.DownloadString("https://www.planmy.me/maizonpub-api/todolist.php?action=get&todo_user=169");
+                List<todoobj> listoftodo = JsonConvert.DeserializeObject<List<todoobj>>(json);
+                IDictionary<todoobj, string> dictmonthtodo = new Dictionary<todoobj, string>();
+                foreach (todoobj obj in listoftodo)
+                {
+                    //int toid = Int32.Parse(obj.todo_id);
+                    DateTime dateTodo = DateTime.Parse(obj.todo_date);
+                    string monthName = dateTodo.ToString("MMM", CultureInfo.InvariantCulture);
+                    string year = dateTodo.Year.ToString();
+                    dictmonthtodo.Add(obj, monthName + " " + year);
+
+                }
+
+                foreach (var valuee in dictmonthtodo.Values.Distinct())
+                {
+                    StackLayout month = createmonthstack(valuee);
+                    ///todostack.Children.Add(month);
+                    List<todoobj> specifiedobj = dictmonthtodo.Where(item => item.Value == valuee).Select(item => item.Key).ToList();
+
+                    foreach (todoobj o in specifiedobj)
+                    {
+                        StackLayout row;
+                        //if (o.todo_category.ToString() != null)
+                        //{
+                        //row = notdonerow(o.todo_details, o.todo_category.ToString());
+                        //}
+                        //else
+                        //{
+                        //row = notdonerow(o.todo_details, "no category");
+
+                        //}
+                        string categoryo;
+                        foreach (WordPressPCL.Models.ItemCategory c in cats)
+                        {
+
+                            if (o.todo_category.ToString() == c.Id.ToString())
+                            {
+                                categoryo = c.Name;
+                            }
+                            else
+                            {
+                                categoryo = "no category";
+                            }
+                            row = notdonerow(o.todo_title, categoryo);
+
+                            row.GestureRecognizers.Add(new TapGestureRecognizer
+                            {
+                                Command = new Command(() => Navigation.PushAsync(new checklist(o))),
+                            });
+                            month.Children.Add(row);
+                        }
+
+
+                    }
+                    todostack.Children.Add(month);
+                    todostack.Children.Add(seperatorbetweenmonths());
+
+                }
+
+
+
+                //>>>>>>> 4f678ca32030fd2d2fa38703d2dbe62ecf7433ec
+
+
+
+
+
+                //foreach (todoobj obj in listoftodo)
+                //{
+                //StackLayout row = notdonerow(obj.todo_details, obj.todo_category.ToString());
+                //todostack.Children.Add(row);
+                //}
+                //todostack.Children.Add(seperatorbetweenmonths());
+
+
+
+
+
+
+
+
+                /// actions for favorites//
+                List<favoritesobject> fo = new List<favoritesobject>();
+                favoritesobject object1 = new favoritesobject();
+                object1.icon = "";
+                object1.name = "CHAMPAGNE";
+                object1.categorie = "Clothing & Accessories";
+
+                favoritesobject object2 = new favoritesobject();
+                object1.icon = "";
+                object1.name = "FOUR SEASONS";
+                object1.categorie = "VENUES";
+
+                favoritesobject object3 = new favoritesobject();
+                object1.icon = "";
+                object1.name = "NAJI OSTA";
+                object1.categorie = "ENTERTAINMENT";
+
+                favoritesobject object4 = new favoritesobject();
+                object1.icon = "";
+                object1.name = "CHAMPAGNE";
+                object1.categorie = "Clothing & Accessories";
+
+                favoritesobject object5 = new favoritesobject();
+                object1.icon = "";
+                object1.name = "CHAMPAGNE";
+                object1.categorie = "Clothing & Accessories";
+
+                fo.Add(object1);
+                fo.Add(object2);
+                fo.Add(object3);
+                fo.Add(object4);
+                fo.Add(object5);
+                FavoritesList.FlowItemsSource = fo;
+
+
+
+                NavigationPage.SetHasNavigationBar(this, false);
+                planningView.TranslationX = 0;
+                guestsView.TranslationX = Bounds.Width;
+                budgetView.TranslationX = Bounds.Width * 2;
+                checklistbut.Clicked += (object sender, EventArgs e) =>
+                {
+                    checklistbut.Image = "bchecklist.png";
+                    guestbut.Image = "guestlist.png";
+                    budgetbut.Image = "budget.png";
+                    suppliersbut.Image = "suppliers.png";
+                    ordersbut.Image = "orders.png";
+                    planningView.IsVisible = true;
+                    guestsView.IsVisible = false;
+                    budgetView.IsVisible = false;
+                    favoriteView.IsVisible = false;
+                };
+
+                guestbut.Clicked += (object sender, EventArgs e) =>
+                {
+                    checklistbut.Image = "checklist.png";
+                    guestbut.Image = "bguestslist.png";
+                    budgetbut.Image = "budget.png";
+                    suppliersbut.Image = "suppliers.png";
+                    ordersbut.Image = "orders.png";
+
+                    //guestsView = new guests();
+                    planningView.IsVisible = false;
+                    guestsView.IsVisible = true;
+                    budgetView.IsVisible = false;
+                    favoriteView.IsVisible = false;
+                    //await Navigation.PushAsync(new guests());
+                };
+                budgetbut.Clicked += (object sender, EventArgs e) =>
+                {
+                    checklistbut.Image = "checklist.png";
+                    guestbut.Image = "guestlist.png";
+                    budgetbut.Image = "bbudget.png";
+                    suppliersbut.Image = "suppliers.png";
+                    ordersbut.Image = "orders.png";
+                    planningView.IsVisible = false;
+                    guestsView.IsVisible = false;
+                    budgetView.IsVisible = true;
+                    favoriteView.IsVisible = false;
+                };
+                suppliersbut.Clicked += async (s, e) => {
+                    checklistbut.Image = "checklist.png";
+                    guestbut.Image = "guestlist.png";
+                    budgetbut.Image = "budget.png";
+                    suppliersbut.Image = "bluesuppliers.png";
+                    ordersbut.Image = "orders.png";
+                    planningView.IsVisible = false;
+                    guestsView.IsVisible = false;
+                    budgetView.IsVisible = false;
+                    favoriteView.IsVisible = true;
+                };
+                StackLayout table1 = createtablerow("Venues", "location.png");
+                StackLayout table2 = createtablerow("Lighting & sound", "location.png");
+                table1.Children.Add(createsupplierrowintable("Domaine de Zekrit", "25 000", "10 000"));
+
+                table2.Children.Add(createsupplierrowintable("Wicked Solutions", "5 000", "1000"));
+                table2.Children.Add(createsupplierrowintable("Basement Music", "2 000", "200"));
+
+                content.Children.Add(table1);
+                content.Children.Add(createseperatorbetweentables());
+                content.Children.Add(table2);
+                content.Children.Add(createseperatorbetweentables());
+
+                // addtablebut.Clicked += (object sender, EventArgs e) =>
+                //{
+                //  popupaddtable.IsVisible = true;
+                //};
+
+                //addguestbut.Clicked += (object sender, EventArgs e) =>
+                //{
+                //  popupguest.IsVisible = true;
+                //};
+                //closepopuptable.Clicked += (object sender, EventArgs e) =>
+                //{
+                //  popupaddtable.IsVisible = false;
+                //};
+                //closepopupguest.Clicked += (object sender, EventArgs e) =>
+                //{
+                //  popupguest.IsVisible = false;
+                //};
+
+
+
+
+
+                allguest.Clicked += (object sender, EventArgs e) =>
+                {
+                    allguest.Image = "ballguest.png";
+                    seatchart.Image = "seatingchart.png";
+                    allguestc.IsVisible = true;
+                    seatcharc.IsVisible = false;
+                };
+                seatchart.Clicked += (object sender, EventArgs e) =>
+                {
+                    allguest.Image = "allguest.png";
+                    seatchart.Image = "bseatingchart.png";
+                    allguestc.IsVisible = false;
+                    seatcharc.IsVisible = true;
+                };
+
+                singleguest sg = new singleguest();
+                sg.name = "Anthony Assaad";
+                sg.status = "notattending.png";
+
+                singleguest sg1 = new singleguest();
+                sg1.name = "Marc Assaad";
+                sg1.status = "attending.png";
+
+
+                singleguest sg2 = new singleguest();
+                sg2.name = "Marwan Maalouf";
+                sg2.status = "pending2.png";
+                List<singleguest> lg = new List<singleguest>();
+
+                lg.Add(sg);
+                lg.Add(sg1);
+                lg.Add(sg2);
+
+                guestList.ItemsSource = lg;
+
+
+                StackLayout gtable1 = createtableguestrow("The Hosts", "3");
+                // add guest to table///
+                gtable1.Children.Add(createguestrowintable("Rouzana Boustani", "attending.png"));
+                gtable1.Children.Add(createguestrowintable("Rouzana Boustani", "attending.png"));
+                gtable1.Children.Add(createguestrowintable("Rouzana Boustani", "attending.png"));
+
+
+                seatcharc.Children.Add(gtable1);
+                seatcharc.Children.Add(createseperatorbetweentables());
+                seatcharc.Children.Add(createtableguestrow("The Haddads", "28"));
+                seatcharc.Children.Add(createseperatorbetweentables());
+                seatcharc.Children.Add(createtableguestrow("The Semaans", "30"));
+                seatcharc.Children.Add(createseperatorbetweentables());
+                newtask.Clicked += async (object sender, EventArgs e) =>
+                {
+                    await Navigation.PushModalAsync(new newtask(false, null));
+                };
+                // StackLayout december = createmonthstack("DECEMBER", "2018");
+                //december.Children.Add(donerow());
+                //december.Children.Add(donerow());
+                //december.Children.Add(seperatorbetweenmonths());
+
+                //StackLayout Feb = createmonthstack("February", "2019");
+                //Feb.Children.Add(priorityrowdone("Reserve your catering", "Catering & Bars"));
+                //Feb.Children.Add(notdonerow("Book a Dj", "Entertainment"));
+                //Feb.Children.Add(seperatorbetweenmonths());
+
+                //StackLayout March = createmonthstack("March", "2019");
+                //March.Children.Add(priorityrownotdone("Book my hairdresser", "Hair & Beuaty"));
+                //March.Children.Add(notdonerow("Book my make up artist", "Hair & Beuaty"));
+                //March.Children.Add(seperatorbetweenmonths());
+                //checkList.Children.Add(december);
+                //checkList.Children.Add(Feb);
+                //checkList.Children.Add(March);
+
+            }
+        }
 		///tasks get for all done and todo//
 		public async void gettasks()
 		{

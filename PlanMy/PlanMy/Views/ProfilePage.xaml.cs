@@ -3,7 +3,7 @@ using PlanMy.Library;
 using PlanMy.Models;
 using PlanMy.ViewModels;
 using System;
-
+using System.Threading;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -42,6 +42,23 @@ namespace PlanMy.Views
                     ProfileImg.Source = user.event_img;
                     StartPlanningBtn.IsVisible = false;
                     planningstarted.IsVisible = true;
+                    eventlocation.Text = user.event_location;
+                    eventwebsite.Text = user.event_name;
+                    DateTime endTime = DateTime.Parse(user.event_date);
+                    var timespan = endTime.Subtract(DateTime.Now);
+                    Xamarin.Forms.Device.StartTimer(timespan, () =>
+                    {
+                        if (timespan.TotalDays > 0 && timespan.TotalHours > 0 && timespan.TotalMinutes > 0 && timespan.TotalSeconds > 0)
+                        {
+                            // Do something
+                            dayDisplay.Text = timespan.Days.ToString();
+                            hourDisplay.Text = timespan.Hours.ToString();
+                            minuteDisplay.Text = timespan.Minutes.ToString();
+                            secondDisplay.Text = timespan.Seconds.ToString();
+                        }
+
+                        return true; // True = Repeat again, False = Stop the timer
+                    });
                 }
             }
             /*var fbp = await con.GetData("FaceBookProfile");
@@ -59,16 +76,25 @@ namespace PlanMy.Views
             //var products = await p.GetAll();
             foreach (var item in featuredItems)
             {
-                Button img = new Button();
-                img.Image = item.featured_img;
+                Image img = new Image();
+                
+                img.Source = item.featured_img;
                 img.Margin = new Thickness(10, 0, 0, 0);
-                img.Clicked += (s, e) => {
-                    //Navigation.PushAsync(new selectedvendor(item.Title.Rendered,item));
+                /*img.Clicked += (s, e) => {
+                    Navigation.PushAsync(new selectedvendor(item.Title.Rendered,item));
+                };*/
+                TapGestureRecognizer recognizer = new TapGestureRecognizer();
+                recognizer.Tapped += (sender2, args) =>
+                {
+                    //(MainPage as ContentPage).Content = this.Content;
+                    Navigation.PushAsync(new selectedvendor(item.Title.Rendered, item),true);
                 };
+                img.GestureRecognizers.Add(recognizer);
                 favVendors.Children.Add(img);
             }
             
         }
+        
 
         private void configBtn_Clicked(object sender, EventArgs e)
         {
@@ -128,4 +154,5 @@ namespace PlanMy.Views
             }
         }
     }
+    
 }
