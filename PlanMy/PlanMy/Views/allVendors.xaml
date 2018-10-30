@@ -14,13 +14,13 @@
 
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="35" />
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="35" />
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="backarrow" BackgroundColor="Transparent" Image="arrow.png" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"  />
-                            <Label x:Name="Pagetitle" TextColor="Black" FontSize = "16" Text="VENDORS" Grid.Row="0" Grid.Column="1" />
-                            <Image Source="custmenuicon.png"  Grid.Row="0" Grid.Column="2" HorizontalOptions="End"   />
+                            <Button x:Name="backarrow" BackgroundColor="Transparent" Image="arrow.png" Grid.Row="0" HeightRequest="35" Grid.Column="0" HorizontalOptions="StartAndExpand"  />
+                            <Label x:Name="Pagetitle" TextColor="Black" FontSize = "22" Text="VENDORS" Grid.Row="0" Grid.Column="1" />
+                            <Image Source="custmenuicon.png"  Grid.Row="0" Grid.Column="2" HorizontalOptions="EndAndExpand"  HeightRequest="35" />
                         </Grid>
                     </StackLayout>
                 </Frame>

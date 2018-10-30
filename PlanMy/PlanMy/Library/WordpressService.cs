@@ -61,6 +61,12 @@ namespace PlanMy.Library
             //posts = posts.Skip((page - 1) * perPage).Take(perPage);//.Where(x => ((Dictionary<string,string>)x.Meta)["featured_item"]=="on");
             return posts;
         }
+        public async Task<Item> GetItemByIDAsync(int id)
+        {
+            var posts = await _client.Items.GetByID(id);
+            //posts = posts.Skip((page - 1) * perPage).Take(perPage);//.Where(x => ((Dictionary<string,string>)x.Meta)["featured_item"]=="on");
+            return posts;
+        }
         public async Task<IEnumerable<Item>> GetItemsByFilterAsync(int categoryId, int[] ItemTypes, int[] HoneymoonExperience, int[] TypeOfService, int[] Capacity, int[] ItemSetting, int[] ItemCateringServices, int[] ItemtypeOfFurniture, int[] ItemClientele, int[] ItemClothing, int[] ItemBeautyServices, int[] ItemTypeOfMusicians, int[] ItemCity, int page = 0, int perPage = 100)
         {
             page++;
