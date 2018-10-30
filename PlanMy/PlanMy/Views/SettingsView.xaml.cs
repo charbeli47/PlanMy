@@ -2,6 +2,7 @@
 using PlanMy.Library;
 using PlanMy.Models;
 using PlanMy.ViewModels;
+using Plugin.Share;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,6 +75,10 @@ namespace PlanMy.Views
                 logoutBtn.IsVisible = true;
             else
                 logoutBtn.IsVisible = false;
+            if(_profile.user!=null)
+            {
+                privateEventSwith.IsToggled = _profile.user.private_event == "true" || _profile.user.private_event == "True";
+            }
         }
 
         private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
@@ -81,6 +86,38 @@ namespace PlanMy.Views
             var p = (StackLayout)Parent;
             p.Children.Remove(this);
             _profile.settingsVisible = false;
+        }
+
+        private void TapGestureRecognizer_Tapped_1(object sender, EventArgs e)
+        {
+
+        }
+
+        
+
+        private void TapGestureRecognizer_Tapped_3(object sender, EventArgs e)
+        {
+            CrossShare.Current.Share(new Plugin.Share.Abstractions.ShareMessage
+            {
+                Text = "Download PlanMy on your device",
+                Title = "Share",
+                Url="https://www.planmy.me"
+            });
+        }
+
+        private async void privateEventSwith_Toggled(object sender, ToggledEventArgs e)
+        {
+            Connect con = new Connect();
+            var usr = await con.GetData("User");
+            string isprivate = e.Value ? "1" : "0";
+            if (!string.IsNullOrEmpty(usr))
+            {
+                UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                string link = "https://planmy.me/maizonpub-api/users.php?action=setprivateevent&userid=" + cookie.user.id + "&isprivate=" + isprivate;
+                WebClient client = new WebClient();
+                string resp = client.DownloadString(link);
+            }
+            _profile.user.private_event = e.Value.ToString();
         }
     }
 }

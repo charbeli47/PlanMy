@@ -8,16 +8,16 @@ using PlanMy.Droid;
 [assembly: ExportRenderer(typeof(searchevententry), typeof(searchevententryrenderer))]
 namespace PlanMy.Droid
 {
-	class searchevententryrenderer : EntryRenderer
+	class searchevententryrenderer : SearchBarRenderer
 	{
-		protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
-		{
-			base.OnElementChanged(e);
-			if (Control != null)
-			{
-				this.Control.Background = this.Resources.GetDrawable(Resource.Drawable.SearchEventEntry);
-			}
-		}
+        protected override void OnElementChanged(ElementChangedEventArgs<SearchBar> e)
+        {
+            base.OnElementChanged(e);
+            if (Control != null)
+            {
+                this.Control.Background = this.Resources.GetDrawable(Resource.Drawable.SearchEventEntry);
+            }
+        }
 
 	}
 }

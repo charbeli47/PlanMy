@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-android:shape="rectangle" android:padding="35dp" >
+android:shape="rectangle" android:padding="40dp" >
   <!--solid defines the fill color of the Editor-->
   <solid android:color="#70000000"/>
   <!--stroke defines the border color-->

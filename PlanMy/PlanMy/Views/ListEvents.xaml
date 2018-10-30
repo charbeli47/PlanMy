@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:abstractions="clr-namespace:ImageCircle.Forms.Plugin.Abstractions;assembly=ImageCircle.Forms.Plugin"
+             x:Class="PlanMy.Views.ListEvents">
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="White">
+            <StackLayout x:Name="Header">
+                <Frame OutlineColor="Black">
+                    <StackLayout x:Name="Menutitle">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+
+                            </Grid.ColumnDefinitions>
+                            <Button Image="blackarrow.png" x:Name="backarrow" Clicked="backarrow_Clicked" BackgroundColor="Transparent" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start" WidthRequest="35" HeightRequest="35"  />
+                            <Label x:Name="Pagetitle" TextColor="Black" FontSize = "22" Text="LIST OF EVENTS" Grid.Row="0" Grid.Column="1" />
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+            <StackLayout>
+                <ListView x:Name="EventsListView" HasUnevenRows="false" ItemSelected="EventsListView_ItemSelected">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal" >
+                                    <abstractions:CircleImage Source="{Binding event_img}"
+    HeightRequest="200"
+    WidthRequest="200"
+    HorizontalOptions="Start"
+    Margin="25,0,15,0">
+                                        
+                                    </abstractions:CircleImage>
+                                    <StackLayout Orientation="Horizontal">
+
+                                        <StackLayout Orientation="Vertical" Margin="0,0,0,0">
+                                            <Label Text="{Binding event_name}" TextColor="black" VerticalOptions="Center" FontSize="16" FontAttributes="Bold"  />
+                                            <StackLayout Orientation="Horizontal" Margin="0,0,0,0">
+                                                <Label Text="{Binding event_location}" TextColor="Gray"  FontSize="16" FontAttributes="Italic"    />
+                                                <Label Text="{Binding event_date}" TextColor="Gray"  FontSize="16" Margin="30,0,0,30" FontAttributes="Italic"    />
+
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </StackLayout>
+
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

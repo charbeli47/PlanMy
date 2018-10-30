@@ -12,6 +12,8 @@ using Android.Content;
 using System.Threading.Tasks;
 using System.IO;
 using Xamd.ImageCarousel.Forms.Plugin.Droid;
+using AuditApp.Android;
+using CarouselView.FormsPlugin.Android;
 
 namespace PlanMy.Droid
 {
@@ -27,9 +29,12 @@ namespace PlanMy.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 			ImageCarouselRenderer.Init();
-			Xamarin.FormsMaps.Init(this,bundle);
-
-			base.OnCreate(bundle);
+            CarouselViewRenderer.Init();
+            Xamarin.FormsMaps.Init(this,bundle);
+            AndroidPlaystoreAudit.Instance.UsesUntilPrompt = 6;
+            AndroidPlaystoreAudit.Instance.TimeUntilPrompt = new TimeSpan(0, 0, 0, 0);
+            AndroidPlaystoreAudit.Instance.Run(this);
+            base.OnCreate(bundle);
             FacebookSdk.SdkInitialize(this.ApplicationContext);
             global::Xamarin.Forms.Forms.Init(this, bundle);
             LoadApplication(new App());

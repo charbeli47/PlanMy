@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions"
+             x:Class="PlanMy.Views.SingleDeal">
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout x:Name="Header">
+                <Frame OutlineColor="Black"  x:Name="Headerframe">
+                    <StackLayout x:Name="Menu">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="35" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="backarrow" Clicked="backarrow_Clicked" HeightRequest="35"  BackgroundColor="Transparent" Image="arrow.png" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"  />
+                            <Label x:Name="Pagetitle" TextColor="Black" FontSize = "16" Grid.Row="0" Grid.Column="1" />
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+            <ScrollView HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="0,3,0,0">
+                <StackLayout x:Name="Content" Orientation="Vertical" >
+                    <controls:CarouselViewControl  x:Name="carouselView" Orientation="Horizontal" InterPageSpacing="10" Position="0" HeightRequest="300" HorizontalOptions="FillAndExpand" IndicatorsShape="Circle" ShowIndicators="True" ShowArrows="True" CurrentPageIndicatorTintColor="#FFFFFF" IndicatorsTintColor="#CCFFFFFF">
+                        <controls:CarouselViewControl.ItemTemplate>
+                            <DataTemplate>
+                                <Image TranslationX="{Binding Position}" Source="{Binding src}" HeightRequest="300" HorizontalOptions="FillAndExpand"></Image>
+                            </DataTemplate>
+                        </controls:CarouselViewControl.ItemTemplate>
+                    </controls:CarouselViewControl>
+                    <WebView x:Name="desc" HorizontalOptions="FillAndExpand" HeightRequest="250"></WebView>
+                    <Button BackgroundColor="#00b8be" Text="ADD TO BASKET" TextColor="White" HeightRequest="35" Clicked="Button_Clicked" HorizontalOptions="CenterAndExpand"></Button>
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

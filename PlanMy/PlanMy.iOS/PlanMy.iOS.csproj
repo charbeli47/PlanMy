@@ -134,6 +134,9 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CarouselView.FormsPlugin">
+      <Version>5.2.0</Version>
+    </PackageReference>
     <PackageReference Include="Syncfusion.Xamarin.SfRating">
       <Version>16.3.0.21</Version>
     </PackageReference>
@@ -147,6 +150,9 @@
     <PackageReference Include="Xamarin.Forms.Maps">
       <Version>3.3.0.912540</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.iRate">
+      <Version>1.11.7</Version>
+    </PackageReference>
     <PackageReference Include="Xamd.Plugins.Forms.ImageCarousel">
       <Version>1.0.2</Version>
     </PackageReference>
@@ -157,5 +163,8 @@
       <Project>{2EA6E23F-124A-488B-94ED-3359E3E0743A}</Project>
       <Name>PlanMy</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\basket.png" />
   </ItemGroup>
 </Project>

@@ -27,12 +27,19 @@
             </StackLayout.GestureRecognizers>
             <StackLayout HorizontalOptions="End" WidthRequest="200" VerticalOptions="FillAndExpand" BackgroundColor="White">
                 <Label x:Name="usernameLabel" HorizontalOptions="FillAndExpand" Margin="5,5,5,5" TextColor="Gray"></Label>
-                <Label TextColor="Black" x:Name="helpBtn" Margin="10,10,0,0" FontAttributes="Bold" Text="Help" BackgroundColor="Transparent"></Label>
-                <Label TextColor="Black" x:Name="rateBtn" Margin="10,10,0,0" FontAttributes="Bold"  Text="Rate our app" BackgroundColor="Transparent"></Label>
-                <Label TextColor="Black" x:Name="shareBtn" Margin="10,10,0,0" FontAttributes="Bold" Text="Share the app" BackgroundColor="Transparent"></Label>
+                <Label TextColor="Black" x:Name="helpBtn" Margin="10,10,0,0" FontAttributes="Bold" Text="Chat with us" BackgroundColor="Transparent">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"></TapGestureRecognizer>
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label TextColor="Black" x:Name="shareBtn" Margin="10,10,0,0" FontAttributes="Bold" Text="Share the app" BackgroundColor="Transparent">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_3"></TapGestureRecognizer>
+                    </Label.GestureRecognizers>
+                </Label>
                 <StackLayout Orientation="Horizontal">
                     <Label TextColor="Black" Text="Private Event" FontAttributes="Bold" Margin="10,10,0,0"></Label>
-                    <Switch x:Name="privateEventSwith"></Switch>
+                    <Switch x:Name="privateEventSwith" Toggled="privateEventSwith_Toggled"></Switch>
                 </StackLayout>
                 <Label TextColor="Black" x:Name="logoutBtn" Text="Log Out" Margin="10,10,0,0" FontAttributes="Bold" BackgroundColor="Transparent" HorizontalOptions="StartAndExpand"></Label>
                 <planMy:FacebookLoginButton Margin="0,0,0,0" BackgroundColor="Transparent" x:Name="fbBtn"  />
