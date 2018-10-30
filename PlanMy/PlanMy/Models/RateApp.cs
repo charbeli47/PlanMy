@@ -5,7 +5,8 @@ using Xamarin.Forms;
 
 namespace PlanMy.Models
 {
-    public class searchevententry : SearchBar
+    public interface IRateApp
     {
+        void RateThisApp();
     }
 }

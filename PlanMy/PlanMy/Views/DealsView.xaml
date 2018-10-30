@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:PlanMy.Models"
+             xmlns:flv="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
+             x:Class="PlanMy.Views.DealsView">
+  <ContentView.Content>
+        <ScrollView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <StackLayout>
+                <Frame OutlineColor="Black" Margin="15,10,15,0" CornerRadius="15">
+                    <models:Pickerarrow  x:Name="CategoriePicker" 
+                TextColor="Black" Title="Choose a Category"
+                FontSize="14" FontAttributes="Italic"
+                 HeightRequest="15" ItemDisplayBinding="{Binding name}" SelectedIndexChanged="CategoriePicker_SelectedIndexChanged">
+                    </models:Pickerarrow>
+                </Frame>
+                <flv:FlowListView FlowColumnCount="2" SeparatorVisibility="None" HasUnevenRows="false"
+	x:Name="dealsList" RowHeight="270" Margin="15,20,15,0" FlowItemTapped="dealsList_FlowItemTapped">
+
+                    <flv:FlowListView.FlowColumnTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Vertical">
+                                <Image Source="{Binding img}" HorizontalOptions="Fill" HeightRequest="150"/>
+                                <Label  Text="{Binding title}" TextColor="black" FontAttributes="Bold" Font="14" Margin="15,0,0,0"/>
+
+                                <Label VerticalTextAlignment="Center" HorizontalTextAlignment="Center" BackgroundColor="#00b8be" HeightRequest="35" WidthRequest="150" HorizontalOptions="Center" TextColor="White" Text="Get Offer"></Label>
+
+                            </StackLayout>
+
+                        </DataTemplate>
+                    </flv:FlowListView.FlowColumnTemplate>
+
+                </flv:FlowListView>
+            </StackLayout>
+        </ScrollView>
+    </ContentView.Content>
+</ContentView>

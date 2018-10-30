@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:flv="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
+             x:Class="PlanMy.Views.BundlesView">
+    <ContentView.Content>
+        <flv:FlowListView FlowColumnCount="1" SeparatorVisibility="None" HasUnevenRows="false"
+	x:Name="bundlesList" RowHeight="270" Margin="15,20,15,0" FlowItemTapped="dealsList_FlowItemTapped">
+
+            <flv:FlowListView.FlowColumnTemplate>
+                <DataTemplate>
+                    <StackLayout Orientation="Vertical">
+                        <Image Source="{Binding img}" HorizontalOptions="Fill" HeightRequest="150"/>
+                        <Label  Text="{Binding title}" TextColor="black" FontAttributes="Bold" Font="14" Margin="0,0,0,0" HorizontalOptions="CenterAndExpand"/>
+
+                        <Label VerticalTextAlignment="Center" HorizontalTextAlignment="Center" BackgroundColor="#00b8be" HeightRequest="35" WidthRequest="150" HorizontalOptions="CenterAndExpand" TextColor="White" Text="Buy Now"></Label>
+
+                    </StackLayout>
+
+                </DataTemplate>
+            </flv:FlowListView.FlowColumnTemplate>
+
+        </flv:FlowListView>
+    </ContentView.Content>
+</ContentView>
