@@ -506,7 +506,14 @@
             <param name="HttpHelper">reference to HttpHelper class for interaction with HTTP</param>
             <param name="defaultPath">path to site, EX. http://demo.com/wp-json/ </param>
         </member>
-        <returns>List of pages</returns>
+        <member name="M:WordPressPCL.Client.Pages.GetPagesByAuthor(System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Get pages by its author
+            </summary>
+            <param name="authorId">Author id</param>
+            <param name="embed">includ embed info</param>
+            <param name="useAuth">Send request with authenication header</param>
+            <returns>List of pages</returns>
         </member>
         <member name="M:WordPressPCL.Client.Pages.GetPagesBySearch(System.String,System.Boolean,System.Boolean)">
             <summary>
@@ -583,14 +590,6 @@
             <param name="defaultPath">path to site, EX. http://demo.com/wp-json/ </param>
         </member>
         <member name="M:WordPressPCL.Client.Posts.GetStickyPosts(System.Boolean,System.Boolean)">
-            <summary>
-            Get sticky posts
-            </summary>
-            <param name="embed">includ embed info</param>
-            <param name="useAuth">Send request with authenication header</param>
-            <returns>List of posts</returns>
-        </member>
-        <member name="M:WordPressPCL.Client.Posts.GetPostsByCategory(System.Int32,System.Boolean,System.Boolean)
             <summary>
             Get sticky posts
             </summary>
@@ -675,7 +674,15 @@
             </summary>
             <param name="embed">Include embed info</param>
             <param name="useAuth">Send request with authenication header</param>
-       est with authenication header</param>
+            <returns>List of all result</returns>
+        </member>
+        <member name="M:WordPressPCL.Client.PostStatuses.GetByID(System.Object,System.Boolean,System.Boolean)">
+            <summary>
+            Get Entity by Id
+            </summary>
+            <param name="ID">ID</param>
+            <param name="embed">include embed info</param>
+            <param name="useAuth">Send request with authenication header</param>
             <returns>Entity by Id</returns>
         </member>
         <member name="T:WordPressPCL.Client.PostTypes">
@@ -753,14 +760,6 @@
             </summary>
             <param name="embed">Include embed info</param>
             <param name="useAuth">Send request with authenication header</param>
-            <returns>List of all result</returns>
-        </member>
-        <member name="M:WordPressPCL.Client.Taxonomies.GetByID(System.Object,System.Boolean,System.Boolean)">
-            <summary>
-            Get Entity by Id
-            </summary>
-            <param name="ID">ID</param>
-            <param name="embed">include="useAuth">Send request with authenication header</param>
             <returns>List of all result</returns>
         </member>
         <member name="M:WordPressPCL.Client.Taxonomies.GetByID(System.Object,System.Boolean,System.Boolean)">
@@ -1048,19 +1047,7 @@
             </summary>
             <remarks>Context: view, edit</remarks>
         </member>
-        <member name="P:WordPressPCL.Models.Category.Parent">
-            <summary>
-            The parent term ID.
-            </summary>
-            <remarks>Context: view, edit</remarks>
-        </member>
-        <member name="P:WordPressPCL.Models.Category.Meta">
-            <summary>
-            Meta fields.
-            </summary>
-            <remarks>Context: view, edit</remarks>
-        </member>
-        <member name="M:WordPressPCL.Models.Category.#ctor">
+        <member name="P:Wo    <member name="M:WordPressPCL.Models.Category.#ctor">
             <summary>
             Parameterless constructor
             </summary>
@@ -1156,6 +1143,17 @@
             </summary>
             <remarks>Context: view, edit, embed</remarks>
         </member>
+        <member name="P:WordPressPCL.Models.Comment.Status">
+            <summary>
+            State of the object.
+            </summary>
+            <remarks>Context: view, edit</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Comment.Type">
+            <summary>
+            Type of Comment for the object.
+            </summary>
+            <remarks>Cmember>
         <member name="P:WordPressPCL.Models.Comment.Status">
             <summary>
             State of the object.
@@ -1398,19 +1396,7 @@
         </member>
         <member name="F:WordPressPCL.Models.UsersOrderBy.Include">
             <summary>
-            Order By Include
-            </summary>
-        </member>
-        <member name="F:WordPressPCL.Models.UsersOrderBy.RegisteredDate">
-            <summary>
-            Order By Registered Date
-            </summary>
-        </member>
-        <member name="F:WordPressPCL.Models.UsersOrderBy.Slug">
-            <summary>
-            Order By Slug
-            </summary>
-        </member>
+      mber>
         <member name="F:WordPressPCL.Models.UsersOrderBy.Email">
             <summary>
             Order By email
@@ -1522,6 +1508,19 @@
         <member name="F:WordPressPCL.Models.PagesOrderBy.Include">
             <summary>
             Order By Include
+            </summary>
+        </member>
+        <member name="F:WordPressPCL.Models.PagesOrderBy.Title">
+            <summary>
+            Order By Title
+            </summary>
+        </member>
+        <member name="F:WordPressPCL.Models.PagesOrderBy.Slug">
+            <summary>
+            Order By Slug
+            </summary>
+        </member>
+        <member name="F:WordPrlude
             </summary>
         </member>
         <member name="F:WordPressPCL.Models.PagesOrderBy.Title">
@@ -1770,7 +1769,17 @@
             </summary>
         </member>
         <member name="M:WordPressPCL.Models.WPException.#ctor(WordPressPCL.Models.BadRequest)">
-            <summary>     <param name="request">additional request info</param>
+            <summary>
+            default constructor
+            </summary>
+            <param name="request">additional request info</param>
+        </member>
+        <member name="M:WordPressPCL.Models.WPException.#ctor(System.String,WordPressPCL.Models.BadRequest)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="message">additional message</param>
+            <param name="request">additional request info</param>
         </member>
         <member name="M:WordPressPCL.Models.WPException.#ctor(System.String,System.Exception,WordPressPCL.Models.BadRequest)">
             <summary>
@@ -2106,20 +2115,7 @@
             </summary>
         </member>
         <member name="M:WordPressPCL.Models.ItemCategory.#ctor(System.String)">
-            <summary>
-            Default constructor
-            </summary>
-            <param name="name"></param>
-        </member>
-        <member name="T:WordPressPCL.Models.Links">
-            <summary>
-            Links helper class
-            </summary>
-        </member>
-        <member name="P:WordPressPCL.Models.Links.Self">
-            <summary>
-            Self link
-            </summary>
+            <summry>
         </member>
         <member name="P:WordPressPCL.Models.Links.Collection">
             <summary>
@@ -3682,16 +3678,6 @@
             Whether to hide terms not assigned to any posts.
             </summary>
         </member>
-        <membeessPCL.Utility.CategoriesQueryBuilder.Slugs">
-            <summary>
-            Limit result set to users with a specific slug.
-            </summary>
-        </member>
-        <member name="P:WordPressPCL.Utility.CategoriesQueryBuilder.HideEmpty">
-            <summary>
-            Whether to hide terms not assigned to any posts.
-            </summary>
-        </member>
         <member name="P:WordPressPCL.Utility.CategoriesQueryBuilder.Post">
             <summary>
             Limit result set to terms assigned to a specific post.
@@ -4264,7 +4250,17 @@
         </member>
         <member name="P:WordPressPCL.Utility.TagsQueryBuilder.HideEmpty">
             <summary>
-            Whether to hide terms not assigned to any potruct queries with valid parameters
+            Whether to hide terms not assigned to any posts.
+            </summary>
+        </member>
+        <member name="P:WordPressPCL.Utility.TagsQueryBuilder.Post">
+            <summary>
+            Limit result set to terms assigned to a specific post.
+            </summary>
+        </member>
+        <member name="T:WordPressPCL.Utility.TaxonomiesQueryBuilder">
+            <summary>
+            Taxonomies Query Builder class to construct queries with valid parameters
             </summary>
         </member>
         <member name="P:WordPressPCL.Utility.TaxonomiesQueryBuilder.Type">
