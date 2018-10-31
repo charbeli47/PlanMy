@@ -22,8 +22,16 @@ namespace PlanMy.Views
 		{
 			InitializeComponent ();
 			NavigationPage.SetHasNavigationBar(this, false);
-			// for messages//
-			listmsgs = new List<message>();
+            List<Views> vs = new List<Views>();
+            VendorsView v = new VendorsView();
+            favoriteView f = new favoriteView();
+            messageView m = new messageView();
+            vs.Add(new Views { content = v });
+            vs.Add(new Views { content = f });
+            vs.Add(new Views { content = m });
+            carouselView.ItemsSource = vs;
+            // for messages//
+            /*listmsgs = new List<message>();
 			message msg = new message();
 			msg.title = "Candid Image";
 			msg.msg = "Hello thanks for ....";
@@ -72,41 +80,44 @@ namespace PlanMy.Views
 			FavoritesList.FlowItemsSource = fo;
 			//////
 
+            */
 
-		
 
-			search.Clicked += (object sender, EventArgs e) =>
+            search.Clicked += (object sender, EventArgs e) =>
 			{
 				search.Image = "searchblue.png";
 				favorites.Image = "favorites.png";
 				message.Image = "messages.png";
-				messageview.IsVisible = false;
-				favoriteview.IsVisible = false;
-				vendorview.IsVisible = true;
-			};
+                carouselView.Position = 0;
+                //messageview.IsVisible = false;
+                //favoriteview.IsVisible = false;
+                //vendorview.IsVisible = true;
+            };
 
 			favorites.Clicked += (object sender, EventArgs e) =>
 			{
 				search.Image = "search.png";
 				favorites.Image = "favoritesblue.png";
 				message.Image = "messages.png";
-				messageview.IsVisible = false;
-				favoriteview.IsVisible = true;
-				vendorview.IsVisible = false;
-			};
+                carouselView.Position = 1;
+                //messageview.IsVisible = false;
+                //favoriteview.IsVisible = true;
+                //vendorview.IsVisible = false;
+            };
 
 			message.Clicked += (object sender, EventArgs e) =>
 			{
 				search.Image = "search.png";
 				favorites.Image = "favorites.png";
 				message.Image = "messagesblue.png";
-				messageview.IsVisible = true;
-				favoriteview.IsVisible = false;
-				vendorview.IsVisible = false;
-			};
+                carouselView.Position = 2;
+                //messageview.IsVisible = true;
+                //favoriteview.IsVisible = false;
+                //vendorview.IsVisible = false;
+            };
 
 
-			LoadVendors();
+			/*LoadVendors();
 
 			VendorsListView.ItemSelected += (object sender, SelectedItemChangedEventArgs e) =>
 			{
@@ -124,34 +135,56 @@ namespace PlanMy.Views
 				//var newpage = new allVendors(selectedvendor.Id,selectedvendor.Name);
 				Navigation.PushModalAsync(new allVendors(selectedvendor.Id, selectedvendor.Name));
 			};
-
+            */
 
 
 		}
 
-		private void Entry_TextChanged(object sender, TextChangedEventArgs e)
-		{
-			VendorsListView.BeginRefresh();
+        private void carouselView_PositionSelected(object sender, CarouselView.FormsPlugin.Abstractions.PositionSelectedEventArgs e)
+        {
+            switch (e.NewValue)
+            {
+                case 0:
+                    search.Image = "searchblue.png";
+                    favorites.Image = "favorites.png";
+                    message.Image = "messages.png";
+                    break;
+                case 1:
+                    search.Image = "search.png";
+                    favorites.Image = "favoritesblue.png";
+                    message.Image = "messages.png";
+                    break;
+                case 2:
+                    search.Image = "search.png";
+                    favorites.Image = "favorites.png";
+                    message.Image = "messagesblue.png";
+                    break;
+            }
+        }
 
-			if (string.IsNullOrWhiteSpace(e.NewTextValue))
-				VendorsListView.ItemsSource = vendors;
-			else
-				VendorsListView.ItemsSource = vendors.Where(i => i.Name.ToLower().Contains(e.NewTextValue.ToString().ToLower()));
+        //private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //	VendorsListView.BeginRefresh();
 
-			VendorsListView.EndRefresh();
-		}
+        //	if (string.IsNullOrWhiteSpace(e.NewTextValue))
+        //		VendorsListView.ItemsSource = vendors;
+        //	else
+        //		VendorsListView.ItemsSource = vendors.Where(i => i.Name.ToLower().Contains(e.NewTextValue.ToString().ToLower()));
 
-		async void LoadVendors()
-		{
+        //	VendorsListView.EndRefresh();
+        //}
 
-			WordpressService service = new WordpressService();
-			//var vendors = service.GetItemCategoriesAsync();
-			vendors = await service.GetItemCategoriesAsync();
-			VendorsListView.ItemsSource = vendors;
-		}
+        //async void LoadVendors()
+        //{
+
+        //	WordpressService service = new WordpressService();
+        //	//var vendors = service.GetItemCategoriesAsync();
+        //	vendors = await service.GetItemCategoriesAsync();
+        //	VendorsListView.ItemsSource = vendors;
+        //}
 
 
-	}
+    }
 
 	
 }

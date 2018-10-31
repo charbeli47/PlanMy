@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanMy.Views.PaymentPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout x:Name="Header">
+                <Frame OutlineColor="Black"  x:Name="Headerframe">
+                    <StackLayout x:Name="Menu">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="35" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="backarrow" Clicked="backarrow_Clicked" HeightRequest="35"  BackgroundColor="Transparent" Image="arrow.png" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"  />
+                            <Label x:Name="Pagetitle" Text="PAYMENT" TextColor="Black" FontSize = "16" Grid.Row="0" Grid.Column="1" />
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+            <WebView x:Name="paymentWebView" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"></WebView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

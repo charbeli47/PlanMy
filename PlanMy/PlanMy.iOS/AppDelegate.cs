@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using CarouselView.FormsPlugin.iOS;
 using Foundation;
+using MTiRate;
 using UIKit;
 using Xamd.ImageCarousel.Forms.Plugin.iOS;
 
@@ -24,12 +25,13 @@ namespace PlanMy.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-
-			Xamarin.FormsMaps.Init();
+            iRate.SharedInstance.DaysUntilPrompt = 0;
+            iRate.SharedInstance.UsesUntilPrompt = 6;
+            Xamarin.FormsMaps.Init();
 
 			LoadApplication(new App());
 			ImageCarouselRenderer.Init();
-
+            CarouselViewRenderer.Init();
 			return base.FinishedLaunching(app, options);
         }
     }

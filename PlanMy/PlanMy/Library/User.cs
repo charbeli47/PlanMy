@@ -46,6 +46,8 @@ namespace PlanMy.Library
     }
     public class ConfigUser
     {
+        public string private_event { get; set; }
+
         public string first_name { get; set; }
         public string last_name { get; set; }
         public string email { get; set; }

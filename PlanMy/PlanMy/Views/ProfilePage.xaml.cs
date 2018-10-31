@@ -13,7 +13,7 @@ namespace PlanMy.Views
 	public partial class ProfilePage : ContentPage
 	{
         public bool settingsVisible = false;
-        protected ConfigUser user;
+        public ConfigUser user;
         public SettingsView settingsView;
         public ProfilePage()
 		{
@@ -21,6 +21,50 @@ namespace PlanMy.Views
             
             NavigationPage.SetHasNavigationBar(this, false);
             LoadFavVendors();
+            searchevent.SearchButtonPressed += Searchevent_SearchButtonPressed;
+        }
+
+        private void Searchevent_SearchButtonPressed(object sender, EventArgs e)
+        {
+            var search = searchevent.Text;
+            Navigation.PushAsync(new ListEvents(search));
+        }
+        async void LoadData()
+        {
+            Connect con = new Connect();
+            var usr = await con.GetData("User");
+            if (!string.IsNullOrEmpty(usr))
+            {
+                UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                string usrdetails = await con.DownloadData("https://www.planmy.me/maizonpub-api/users.php", "action=get&userid=" + cookie.user.id);
+                user = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigUser>(usrdetails);
+                if (!string.IsNullOrEmpty(user.event_img))
+                {
+                    ProfileImg.Source = user.event_img;
+                    StartPlanningBtn.IsVisible = false;
+                    planningstarted.IsVisible = true;
+                    eventlocation.Text = user.event_location;
+                    eventwebsite.Text = user.event_name;
+                    DateTime endTime = DateTime.Parse(user.event_date);
+                    var timespan = endTime.Subtract(DateTime.Now);
+                    Xamarin.Forms.Device.StartTimer(new TimeSpan(0, 0, 1), () =>
+                    {
+                        if (timespan.TotalDays > 0 && timespan.TotalHours > 0 && timespan.TotalMinutes > 0 && timespan.TotalSeconds > 0)
+                        {
+                            // Do something
+                            dayDisplay.Text = timespan.Days.ToString();
+                            hourDisplay.Text = timespan.Hours.ToString();
+                            minuteDisplay.Text = timespan.Minutes.ToString();
+                            secondDisplay.Text = timespan.Seconds.ToString();
+                            timespan = timespan.Subtract(new TimeSpan(0, 0, 1));
+                            return true;
+                        }
+                        else
+                            return false;
+
+                    });
+                }
+            }
         }
         async void LoadFavVendors()
         {
@@ -46,7 +90,7 @@ namespace PlanMy.Views
                     eventwebsite.Text = user.event_name;
                     DateTime endTime = DateTime.Parse(user.event_date);
                     var timespan = endTime.Subtract(DateTime.Now);
-                    Xamarin.Forms.Device.StartTimer(timespan, () =>
+                    Xamarin.Forms.Device.StartTimer(new TimeSpan(0, 0, 1), () =>
                     {
                         if (timespan.TotalDays > 0 && timespan.TotalHours > 0 && timespan.TotalMinutes > 0 && timespan.TotalSeconds > 0)
                         {
@@ -55,9 +99,12 @@ namespace PlanMy.Views
                             hourDisplay.Text = timespan.Hours.ToString();
                             minuteDisplay.Text = timespan.Minutes.ToString();
                             secondDisplay.Text = timespan.Seconds.ToString();
+                            timespan = timespan.Subtract(new TimeSpan(0, 0, 1));
+                            return true;
                         }
-
-                        return true; // True = Repeat again, False = Stop the timer
+                        else
+                            return false;
+                        
                     });
                 }
             }
@@ -101,7 +148,7 @@ namespace PlanMy.Views
             settingsView = new SettingsView(this);
             
             settingsVisible = true;
-            settingsView.Margin = new Thickness(0, -Bounds.Height - 10, 0, 0);
+            settingsView.Margin = new Thickness(0, -Bounds.Height - 30, 0, 0);
             settingsView.HeightRequest = Bounds.Height;
             ContentStack.Children.Add(settingsView);
 
@@ -135,7 +182,7 @@ namespace PlanMy.Views
 
         private void EventPage_OperationCompleted(object sender, EventArgs e)
         {
-            LoadFavVendors();
+            LoadData();
         }
 
         private async void StartPlanningBtn_Clicked(object sender, EventArgs e)

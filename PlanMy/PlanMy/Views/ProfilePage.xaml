@@ -21,7 +21,7 @@
                     <Image Source="timerback.png" Margin="0,-30,0,0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"></Image>
                     <StackLayout Margin="0,-270,0,0" >
                         <StackLayout Margin="30,0,30,0"  Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                            <models:searchevententry BackgroundColor="Transparent" Placeholder="Search for an event" TextColor="White" HorizontalOptions="StartAndExpand" HeightRequest="40" WidthRequest="300" PlaceholderColor="White" />
+                            <models:searchevententry x:Name="searchevent" BackgroundColor="Transparent" Placeholder="Search for an event" FontAttributes="Italic" TextColor="White" HorizontalOptions="StartAndExpand" HeightRequest="40" WidthRequest="300" PlaceholderColor="White" />
                             <Button x:Name="configBtn" Image="configBtn.png" HorizontalOptions="End" Clicked="configBtn_Clicked" BackgroundColor="Transparent" WidthRequest="50"/>
                         </StackLayout>
                         <Image Source="header.png" HeightRequest="50" Margin="0,10,0,0"/>
