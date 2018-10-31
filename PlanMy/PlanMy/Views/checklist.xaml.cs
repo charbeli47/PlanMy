@@ -15,14 +15,16 @@ namespace PlanMy
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class checklist : ContentPage
 	{
-		public checklist(todoobj task,string catname)
+        public event EventHandler<EventArgs> OperationCompleted;
+        public checklist(todoobj task,string catname)
 		{
 			InitializeComponent();
 			// for testing purposes ///
 			// fill the data///
 			backarrow.Clicked += async (object sender, EventArgs e) =>
 			{
-				Navigation.PopModalAsync();
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
 			};
 			NavigationPage.SetHasNavigationBar(this, false);
 			title.Text = task.todo_title;
@@ -53,10 +55,11 @@ namespace PlanMy
 
 					var response = await request.Content.ReadAsStringAsync();
 
-					//jsonResponselogin res = JsonConvert.DeserializeObject<jsonResponselogin>(response);
+                    //jsonResponselogin res = JsonConvert.DeserializeObject<jsonResponselogin>(response);
 
-					//lbl1.Text = res.code + " " + res.status + " " + res.message;
-					Navigation.PushModalAsync(new Planning());
+                    //lbl1.Text = res.code + " " + res.status + " " + res.message;
+                    OperationCompleted?.Invoke(this, EventArgs.Empty);
+                    await Navigation.PopModalAsync();
 				}
 			};
 
@@ -66,7 +69,7 @@ namespace PlanMy
 			edittask.Clicked += async (object sender, EventArgs e) =>
 			{
 
-				Navigation.PushModalAsync(new newtask(true, task));
+				await Navigation.PushModalAsync(new newtask(true, task));
 			};
 
 			pendingbut.Clicked += async (object sender, EventArgs e) =>
@@ -132,8 +135,8 @@ namespace PlanMy
 				request.EnsureSuccessStatusCode();
 
 				var response = await request.Content.ReadAsStringAsync();
-
-				Navigation.PushModalAsync(new Planning());
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
 
 			}
 		}

@@ -120,7 +120,9 @@ namespace PlanMy.Views
 			};
 			addbudget.Clicked += async (object sender, EventArgs e) =>
 			{
-				await Navigation.PushModalAsync(new NewExpense(false,null));
+                var newexpense = new NewExpense(false, null);
+                newexpense.OperationCompleted += Newexpense_OperationCompleted;
+                await Navigation.PushModalAsync(newexpense);
 			};
 
 
@@ -159,16 +161,25 @@ namespace PlanMy.Views
         
             
         }
+        
+
+        private void Newexpense_OperationCompleted(object sender, EventArgs e)
+        {
+            getexpenses();
+        }
 
 
 
 
 
 
-		///functions for task //
-		public async void gettasks()
+        ///functions for task //
+        public async void gettasks()
 		{
-			WordpressService service = new WordpressService();
+            donestack.Children.Clear();
+            todostack.Children.Clear();
+            checkList.Children.Clear();
+            WordpressService service = new WordpressService();
 			cats = await service.GetItemCategoriesAsync();
 			categories = cats.ToList();
 			Connect con = new Connect();
@@ -228,7 +239,12 @@ namespace PlanMy.Views
 						}
 						doneroww.GestureRecognizers.Add(new TapGestureRecognizer
 						{
-							Command = new Command(() => Navigation.PushModalAsync(new checklist(o, categoryo))),
+							Command = new Command(() => {
+                                var checlist = new checklist(o, categoryo);
+                                checlist.OperationCompleted += Checlist_OperationCompleted;
+                                Navigation.PushModalAsync(checlist);
+
+                            } ),
 						});
 						donemonth.Children.Add(doneroww);
 						donemonth.Children.Add(seperatorbetweenmonths());
@@ -266,7 +282,11 @@ namespace PlanMy.Views
 						}
 						notdoneroww.GestureRecognizers.Add(new TapGestureRecognizer
 						{
-							Command = new Command(() => Navigation.PushModalAsync(new checklist(o, categoryo))),
+							Command = new Command(() => {
+                                var chl = new checklist(o, categoryo);
+                                chl.OperationCompleted += Checlist_OperationCompleted;
+                                Navigation.PushModalAsync(chl);
+                            }),
 						});
 						notdonemonth.Children.Add(notdoneroww);
 						notdonemonth.Children.Add(seperatorbetweenmonths());
@@ -315,7 +335,11 @@ namespace PlanMy.Views
 
 					row.GestureRecognizers.Add(new TapGestureRecognizer
 					{
-						Command = new Command(() => Navigation.PushModalAsync(new checklist(o, categoryo))),
+						Command = new Command(() => {
+                            var chl = new checklist(o, categoryo);
+                                chl.OperationCompleted += Checlist_OperationCompleted;
+                                Navigation.PushModalAsync(chl);
+                        } ),
 					});
 					month.Children.Add(row);
 					month.Children.Add(seperatorbetweenmonths());
@@ -330,7 +354,13 @@ namespace PlanMy.Views
 
 
 		}
-		public StackLayout notdonerow(string titletxt, string descriptiontxt)
+
+        private void Checlist_OperationCompleted(object sender, EventArgs e)
+        {
+            gettasks();
+        }
+
+        public StackLayout notdonerow(string titletxt, string descriptiontxt)
         {
             StackLayout stack = new StackLayout();
             stack.Orientation = StackOrientation.Horizontal;
@@ -548,7 +578,9 @@ namespace PlanMy.Views
 		//// functions for budget///
 		public async void getexpenses()
 		{
-			float estimatedtotalamount = 0;
+            budgetstack.Children.Clear();
+
+            float estimatedtotalamount = 0;
 			float actualtotalamount = 0;
 			float paidtotalamount = 0;
 			float remaining = 0;
@@ -560,9 +592,15 @@ namespace PlanMy.Views
 			foreach(expense e in listofcats)
 			{
 				StackLayout row = createtablerow(e.category_name);
-				row.GestureRecognizers.Add(new TapGestureRecognizer
-				{
-					Command = new Command(() => Navigation.PushModalAsync(new Categorieexpense(e))),
+                row.GestureRecognizers.Add(new TapGestureRecognizer
+                {
+                    
+
+                    Command = new Command(() => {
+                        var catexpense = new Categorieexpense(e);
+                        catexpense.OperationCompleted += Catexpense_OperationCompleted;
+                        Navigation.PushModalAsync(catexpense);
+                    } ),
 				});
 				//budgetstack.Children.Add(row);
 				string todostringg = await con.DownloadData("https://planmy.me/maizonpub-api/budget.php", "action=get&category_id="+e.category_id+"&user_id=169");
@@ -574,7 +612,12 @@ namespace PlanMy.Views
 					StackLayout rowexpense = createsupplierrowintable(ec.budget_list_name.ToString(),ec.budget_list_estimate_cost.ToString(),ec.budget_list_paid_cost.ToString());
 						rowexpense.GestureRecognizers.Add(new TapGestureRecognizer
 					{
-						Command = new Command(() => Navigation.PushModalAsync(new NewExpense(true,ec))),
+                            
+                    Command = new Command(() => {
+                        var newexpense = new NewExpense(true, ec);
+                        newexpense.OperationCompleted += Newexpense_OperationCompleted;
+                        Navigation.PushModalAsync(newexpense);
+                    }),
 					});
 
 					row.Children.Add(rowexpense);
@@ -592,10 +635,13 @@ namespace PlanMy.Views
 			remaining = actualtotalamount - paidtotalamount;
 			remaininglabel.Text = "Remaining $" + " " + remaining.ToString();
 		}
-		
-		
 
-		public StackLayout createsupplierrowintable(string venuname, string pricep, string paidprice)
+        private void Catexpense_OperationCompleted(object sender, EventArgs e)
+        {
+            getexpenses();
+        }
+
+        public StackLayout createsupplierrowintable(string venuname, string pricep, string paidprice)
 		{
 			StackLayout vlayout = new StackLayout();
 			vlayout.Orientation = StackOrientation.Vertical;

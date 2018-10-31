@@ -14,7 +14,8 @@ namespace PlanMy
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Categorieexpense : ContentPage
 	{
-		public Categorieexpense (expense category)
+        public event EventHandler<EventArgs> OperationCompleted;
+        public Categorieexpense (expense category)
 		{
 			InitializeComponent ();
 			expendcatname.Text = category.category_name;
@@ -30,7 +31,8 @@ namespace PlanMy
 
 			backarrow.Clicked += async (object sender, EventArgs e) =>
 			{
-				Navigation.PopModalAsync();
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
 			};
 		}
 
@@ -48,7 +50,8 @@ namespace PlanMy
 				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/budget_category.php?action=delete", formcontent);
 				request.EnsureSuccessStatusCode();
 				var response = await request.Content.ReadAsStringAsync();
-				Navigation.PushModalAsync(new Planning());
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
 
 			}
 		}
@@ -67,7 +70,8 @@ namespace PlanMy
 				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/budget_category.php?action=update", formcontent);
 				request.EnsureSuccessStatusCode();
 				var response = await request.Content.ReadAsStringAsync();
-				Navigation.PushModalAsync(new Planning());
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
 
 			}
 		}

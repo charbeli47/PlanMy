@@ -15,8 +15,8 @@ namespace PlanMy.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class NewExpense : ContentPage
 	{
-		
-		public NewExpense (bool isedit,expenseforcat ec)
+        public event EventHandler<EventArgs> OperationCompleted;
+        public NewExpense (bool isedit,expenseforcat ec)
 		{
 			InitializeComponent ();
 
@@ -31,7 +31,8 @@ namespace PlanMy.Views
 				Deleteexpenselabel.Clicked += async (object sender, EventArgs e) =>
 				{
 					deleteexpense(ec);
-					Navigation.PushModalAsync(new Planning());
+                    OperationCompleted?.Invoke(this, EventArgs.Empty);
+                    await Navigation.PopModalAsync();
 				};
 
 				addnewcat.IsVisible = false;
@@ -46,7 +47,8 @@ namespace PlanMy.Views
 			NavigationPage.SetHasNavigationBar(this, false);
 			backarrow.Clicked += async (object sender, EventArgs e) =>
 			{
-				Navigation.PopModalAsync();
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
 			};
 		
 
@@ -112,7 +114,8 @@ namespace PlanMy.Views
 				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/budget.php?action=insert", formcontent);
 				request.EnsureSuccessStatusCode();
 				var response = await request.Content.ReadAsStringAsync();
-				Navigation.PushModalAsync(new Planning());
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
 
 			}
 		}
@@ -162,7 +165,8 @@ namespace PlanMy.Views
 				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/budget.php?action=update", formcontent);
 				request.EnsureSuccessStatusCode();
 				var response = await request.Content.ReadAsStringAsync();
-				Navigation.PushModalAsync(new Planning());
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
 			}
 		}
 
@@ -179,7 +183,8 @@ namespace PlanMy.Views
 				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/budget.php?action=delete", formcontent);
 				request.EnsureSuccessStatusCode();
 				var response = await request.Content.ReadAsStringAsync();
-				Navigation.PushModalAsync(new Planning());
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
 			}
 		}
 
@@ -200,7 +205,8 @@ namespace PlanMy.Views
 				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/budget_category.php?action=insert", formcontent);
 				request.EnsureSuccessStatusCode();
 				var response = await request.Content.ReadAsStringAsync();
-				Navigation.PushModalAsync(new Planning());
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
 
 			}
 		}
