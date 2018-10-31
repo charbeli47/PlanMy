@@ -506,14 +506,7 @@
             <param name="HttpHelper">reference to HttpHelper class for interaction with HTTP</param>
             <param name="defaultPath">path to site, EX. http://demo.com/wp-json/ </param>
         </member>
-        <member name="M:WordPressPCL.Client.Pages.GetPagesByAuthor(System.Int32,System.Boolean,System.Boolean)">
-            <summary>
-            Get pages by its author
-            </summary>
-            <param name="authorId">Author id</param>
-            <param name="embed">includ embed info</param>
-            <param name="useAuth">Send request with authenication header</param>
-            <returns>List of pages</returns>
+        <returns>List of pages</returns>
         </member>
         <member name="M:WordPressPCL.Client.Pages.GetPagesBySearch(System.String,System.Boolean,System.Boolean)">
             <summary>
@@ -590,6 +583,14 @@
             <param name="defaultPath">path to site, EX. http://demo.com/wp-json/ </param>
         </member>
         <member name="M:WordPressPCL.Client.Posts.GetStickyPosts(System.Boolean,System.Boolean)">
+            <summary>
+            Get sticky posts
+            </summary>
+            <param name="embed">includ embed info</param>
+            <param name="useAuth">Send request with authenication header</param>
+            <returns>List of posts</returns>
+        </member>
+        <member name="M:WordPressPCL.Client.Posts.GetPostsByCategory(System.Int32,System.Boolean,System.Boolean)
             <summary>
             Get sticky posts
             </summary>
@@ -674,15 +675,7 @@
             </summary>
             <param name="embed">Include embed info</param>
             <param name="useAuth">Send request with authenication header</param>
-            <returns>List of all result</returns>
-        </member>
-        <member name="M:WordPressPCL.Client.PostStatuses.GetByID(System.Object,System.Boolean,System.Boolean)">
-            <summary>
-            Get Entity by Id
-            </summary>
-            <param name="ID">ID</param>
-            <param name="embed">include embed info</param>
-            <param name="useAuth">Send request with authenication header</param>
+       est with authenication header</param>
             <returns>Entity by Id</returns>
         </member>
         <member name="T:WordPressPCL.Client.PostTypes">
@@ -760,6 +753,14 @@
             </summary>
             <param name="embed">Include embed info</param>
             <param name="useAuth">Send request with authenication header</param>
+            <returns>List of all result</returns>
+        </member>
+        <member name="M:WordPressPCL.Client.Taxonomies.GetByID(System.Object,System.Boolean,System.Boolean)">
+            <summary>
+            Get Entity by Id
+            </summary>
+            <param name="ID">ID</param>
+            <param name="embed">include="useAuth">Send request with authenication header</param>
             <returns>List of all result</returns>
         </member>
         <member name="M:WordPressPCL.Client.Taxonomies.GetByID(System.Object,System.Boolean,System.Boolean)">
@@ -1648,7 +1649,19 @@
             Video
             </summary>
         </member>
-                Type attribution for the term.
+        <member name="F:WordPressPCL.Models.MediaQueryType.Audio">
+            <summary>
+            Audio
+            </summary>
+        </member>
+        <member name="F:WordPressPCL.Models.MediaQueryType.Application">
+            <summary>
+            Application
+            </summary>
+        </member>
+        <member name="T:WordPressPCL.Models.TermTaxonomy">
+            <summary>
+            Type attribution for the term.
             </summary>
         </member>
         <member name="F:WordPressPCL.Models.TermTaxonomy.Category">
@@ -1757,17 +1770,7 @@
             </summary>
         </member>
         <member name="M:WordPressPCL.Models.WPException.#ctor(WordPressPCL.Models.BadRequest)">
-            <summary>
-            default constructor
-            </summary>
-            <param name="request">additional request info</param>
-        </member>
-        <member name="M:WordPressPCL.Models.WPException.#ctor(System.String,WordPressPCL.Models.BadRequest)">
-            <summary>
-            Constructor
-            </summary>
-            <param name="message">additional message</param>
-            <param name="request">additional request info</param>
+            <summary>     <param name="request">additional request info</param>
         </member>
         <member name="M:WordPressPCL.Models.WPException.#ctor(System.String,System.Exception,WordPressPCL.Models.BadRequest)">
             <summary>
@@ -2234,14 +2237,6 @@
             <summary>
             The date the object was last modified, as GMT.
             </summary>
-            <remarks>Context: view, edit</remarks>          The date the object was last modified, in the site’s timezone.
-            </summary>
-            <remarks>Context: view, edit</remarks>
-        </member>
-        <member name="P:WordPressPCL.Models.MediaItem.ModifiedGmt">
-            <summary>
-            The date the object was last modified, as GMT.
-            </summary>
             <remarks>Context: view, edit</remarks>
         </member>
         <member name="P:WordPressPCL.Models.MediaItem.Slug">
@@ -2335,7 +2330,15 @@
         </member>
         <member name="P:WordPressPCL.Models.MediaItem.MediaDetails">
             <summary>
-  >
+            Details about the resource file, specific to its type.
+            <see cref="T:WordPressPCL.Models.MediaDetails"/>
+            </summary>
+            <remarks>Context: view, edit, embed</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.MediaItem.Post">
+            <summary>
+            The id for the associated post of the resource.
+            </summary>
             <remarks>Context: view, edit</remarks>
         </member>
         <member name="P:WordPressPCL.Models.MediaItem.SourceUrl">
@@ -3574,18 +3577,6 @@
             </summary>
             <remarks>Context: edit</remarks>
         </member>
-        <member name="Pte">
-            <summary>
-            Registration date for the user.
-            </summary>
-            <remarks>Context: edit</remarks>
-        </member>
-        <member name="P:WordPressPCL.Models.User.Roles">
-            <summary>
-            Roles assigned to the user.
-            </summary>
-            <remarks>Context: edit</remarks>
-        </member>
         <member name="P:WordPressPCL.Models.User.Password">
             <summary>
             Password for the user (never included).
@@ -3682,6 +3673,16 @@
             One of: id, include, name, slug, term_group, description, count</remarks>
         </member>
         <member name="P:WordPressPCL.Utility.CategoriesQueryBuilder.Slugs">
+            <summary>
+            Limit result set to users with a specific slug.
+            </summary>
+        </member>
+        <member name="P:WordPressPCL.Utility.CategoriesQueryBuilder.HideEmpty">
+            <summary>
+            Whether to hide terms not assigned to any posts.
+            </summary>
+        </member>
+        <membeessPCL.Utility.CategoriesQueryBuilder.Slugs">
             <summary>
             Limit result set to users with a specific slug.
             </summary>
@@ -4263,17 +4264,7 @@
         </member>
         <member name="P:WordPressPCL.Utility.TagsQueryBuilder.HideEmpty">
             <summary>
-            Whether to hide terms not assigned to any posts.
-            </summary>
-        </member>
-        <member name="P:WordPressPCL.Utility.TagsQueryBuilder.Post">
-            <summary>
-            Limit result set to terms assigned to a specific post.
-            </summary>
-        </member>
-        <member name="T:WordPressPCL.Utility.TaxonomiesQueryBuilder">
-            <summary>
-            Taxonomies Query Builder class to construct queries with valid parameters
+            Whether to hide terms not assigned to any potruct queries with valid parameters
             </summary>
         </member>
         <member name="P:WordPressPCL.Utility.TaxonomiesQueryBuilder.Type">
@@ -4457,16 +4448,6 @@
         <member name="F:WordPressPCL.WordPressClient.ItemClothings">
             <summary>
             ItemClothings client interaction object
-            </summary>
-        </member>
-        <member name="F:WordPressPCL.WordPressClient.ItemBeautyServices">
-            <summary>
-            ItemBeautyServices client interaction object
-            </summary>
-        </member>
-        <member name="F:WordPressPCL.WordPressClient.ItemTypeOfMusicians">
-            <summary>
-            ItemTypeOfMusicians client interactiobject
             </summary>
         </member>
         <member name="F:WordPressPCL.WordPressClient.ItemBeautyServices">

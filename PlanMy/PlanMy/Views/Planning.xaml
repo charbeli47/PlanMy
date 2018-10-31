@@ -53,7 +53,7 @@
                                 <Label x:Name="numbertotaltasks" TextColor="black">20</Label>
                                 <Label Margin="0,0,25,0" TextColor="black">tasks</Label>
                             </StackLayout>
-                            <ProgressBar x:Name="progress" Progress="0" Margin="15,0,15,0" HeightRequest="30"/>
+                            <ProgressBar x:Name="progress" Progress="0" Margin="15,0,15,0" HeightRequest="40"/>
                             <StackLayout Orientation="Horizontal" HeightRequest="1" BackgroundColor="gray"></StackLayout>
                             <StackLayout x:Name="Menu2">
                                 <Grid>
@@ -162,24 +162,23 @@
                                         <Image Source="estimateda.png" HorizontalOptions="Center"></Image>
                                         <Label HorizontalOptions="Center">ESTIMATED</Label>
                                         <Label HorizontalOptions="Center" Margin="0,-5,0,0">AMOUNT</Label>
-                                        <Label HorizontalOptions="Center" Margin="0,5,0,0">$ 250 000</Label>
-                                        <Label HorizontalOptions="Center" TextColor="Red" Margin="0,5,0,0">edit</Label>
+                                        <Label x:Name="estimatedlabel" HorizontalOptions="Center" Margin="0,5,0,0"></Label>
+                                   
 
                                     </StackLayout>
                                     <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="1" BackgroundColor="White">
                                         <Image Source="actuala.png" HorizontalOptions="Center"></Image>
                                         <Label HorizontalOptions="Center">ACTUAL</Label>
                                         <Label HorizontalOptions="Center" Margin="0,-5,0,0">AMOUNT</Label>
-                                        <Label HorizontalOptions="Center" Margin="0,5,0,0">$ 80 000</Label>
+                                        <Label x:Name="actuallabel" HorizontalOptions="Center" Margin="0,5,0,0"></Label>
 
                                     </StackLayout>
                                     <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="2" BackgroundColor="White">
                                         <Image Source="finalcost.png" HorizontalOptions="Center"></Image>
-                                        <Label HorizontalOptions="Center">FINAL</Label>
-                                        <Label HorizontalOptions="Center" Margin="0,-5,0,0">COST</Label>
-                                        <Label HorizontalOptions="Center" Margin="0,5,0,0">$ 300 000</Label>
-                                        <Label HorizontalOptions="Center" TextColor="black" FontSize="10" Margin="0,5,0,0">Paid: $ 200 000</Label>
-                                        <Label HorizontalOptions="Center" TextColor="black" FontSize="10" Margin="0,-5,0,0">Remaining: $ 100 000</Label>
+                                        <Label HorizontalOptions="Center">PAID</Label>
+                                        <Label HorizontalOptions="Center" Margin="0,-5,0,0">AMOUNT</Label>
+                                        <Label x:Name="paidlabel" HorizontalOptions="Center" Margin="0,5,0,0"></Label>
+                                        <Label x:Name="remaininglabel" HorizontalOptions="Center" TextColor="black" FontSize="10" Margin="0,-5,0,0"></Label>
 
                                     </StackLayout>
 
@@ -188,10 +187,10 @@
                                 <StackLayout Orientation="Horizontal" HeightRequest="1" BackgroundColor="LightGray"></StackLayout>
 
                                 <StackLayout Orientation="Vertical">
-                                    <Button BackgroundColor="Transparent" Image="plus.png" HorizontalOptions="End"></Button>
+                                    <Button x:Name="addbudget" BackgroundColor="Transparent" Image="plus.png" HorizontalOptions="End"></Button>
                                 </StackLayout>
                                 <StackLayout Orientation="Horizontal" HeightRequest="5" BackgroundColor="LightGray"></StackLayout>
-                                <StackLayout Orientation="Vertical" x:Name="content">
+                                <StackLayout x:Name="budgetstack" Orientation="Vertical">
 
                                 </StackLayout>
                             </StackLayout>

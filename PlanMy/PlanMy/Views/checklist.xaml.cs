@@ -15,14 +15,18 @@ namespace PlanMy
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class checklist : ContentPage
 	{
-		public checklist(todoobj task)
+		public checklist(todoobj task,string catname)
 		{
 			InitializeComponent();
 			// for testing purposes ///
 			// fill the data///
-
+			backarrow.Clicked += async (object sender, EventArgs e) =>
+			{
+				Navigation.PopModalAsync();
+			};
+			NavigationPage.SetHasNavigationBar(this, false);
 			title.Text = task.todo_title;
-			category.Text = task.todo_category.ToString();
+			category.Text = catname;
 			description.Text = task.todo_details;
 			DateTime dateTodo = DateTime.Parse(task.todo_date);
 			string monthName = dateTodo.ToString("MMM", CultureInfo.InvariantCulture);
@@ -52,7 +56,7 @@ namespace PlanMy
 					//jsonResponselogin res = JsonConvert.DeserializeObject<jsonResponselogin>(response);
 
 					//lbl1.Text = res.code + " " + res.status + " " + res.message;
-
+					Navigation.PushModalAsync(new Planning());
 				}
 			};
 
@@ -62,7 +66,7 @@ namespace PlanMy
 			edittask.Clicked += async (object sender, EventArgs e) =>
 			{
 
-				Navigation.PushAsync(new newtask(true, task));
+				Navigation.PushModalAsync(new newtask(true, task));
 			};
 
 			pendingbut.Clicked += async (object sender, EventArgs e) =>

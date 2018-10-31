@@ -16,11 +16,14 @@ namespace PlanMy
 	public partial class newtask : ContentPage
 	{
 		public IEnumerable<WordPressPCL.Models.ItemCategory> cats;
+	
 		List<string> catnames = new List<string>();
 		List<int> catids = new List<int>();
 		public newtask (bool isedit,todoobj task)
 		{
 			InitializeComponent ();
+			NavigationPage.SetHasNavigationBar(this, false);
+			Loadcats(isedit,task);
 			if (isedit == true && task!=null)
 			{
 				priorityPicker.IsVisible = true;
@@ -28,12 +31,17 @@ namespace PlanMy
 				Pagetitle.Text = "EDIT TASK";
 				titleoftask.Text = task.todo_title;
 				detailstask.Text = task.todo_details;
-				
-			
+				if (task.is_priority.ToString() == "0")
+				{
+					priorityPicker.SelectedIndex = 1;
+				}
+				else
+				{
+					priorityPicker.SelectedIndex = 0;
+				}
 					}
 
-			NavigationPage.SetHasNavigationBar(this, false);
-			Loadcats();
+		
 		
 			
 
@@ -63,7 +71,7 @@ namespace PlanMy
 
 
 
-		public async void Loadcats()
+		public async void Loadcats(bool isedit,todoobj task)
 		{
 
 			WordpressService service = new WordpressService();
@@ -73,6 +81,22 @@ namespace PlanMy
 
 
 			catPicker.ItemsSource = cats.ToList();
+			var catepicker = catPicker.ItemsSource;
+			int selectedindex = 0;
+			int i = 0;
+			if (isedit == true)
+			{
+				
+				foreach(WordPressPCL.Models.ItemCategory item in catepicker)
+				{
+					if (item.Id.ToString() == task.todo_category.ToString())
+					{
+						selectedindex = i;
+					}
+					i++;
+				}
+				catPicker.SelectedIndex = selectedindex;
+			}
 
 		}
 
@@ -90,7 +114,7 @@ namespace PlanMy
 			new KeyValuePair<string, string>("todo_date",Datepickertask.Date.ToString("yyyy-MM-dd")),
 			new KeyValuePair<string,string>("todo_read","0"),
 			new KeyValuePair<string, string>("todo_category",catt.Id.ToString()),
-			new KeyValuePair<string, string>("is_priority","no")
+			new KeyValuePair<string, string>("is_priority",priorityPicker.SelectedItem.ToString())
 		});
 
 				var request = await cl.PostAsync("https://www.planmy.me/maizonpub-api/todolist.php?action=insert", formcontent);
@@ -110,10 +134,10 @@ namespace PlanMy
 				var formcontent = new FormUrlEncodedContent(new[]
 				{
 			new KeyValuePair<string,string>("todo_id",task.todo_id),
-			new KeyValuePair<string, string>("todo_title",task.todo_title),
-				new KeyValuePair<string,string>("todo_details",task.todo_details),
-			new KeyValuePair<string, string>("todo_date",task.todo_date),
-			new KeyValuePair<string,string>("todo_read","0"),
+			new KeyValuePair<string, string>("todo_title",titleoftask.Text),
+				new KeyValuePair<string,string>("todo_details",detailstask.Text),
+			new KeyValuePair<string, string>("todo_date",Datepickertask.Date.ToString("yyyy-MM-dd")),
+			new KeyValuePair<string,string>("todo_read",task.todo_read),
 			new KeyValuePair<string, string>("todo_category",catt.Id.ToString()),
 			new KeyValuePair<string, string>("is_priority",priorityPicker.SelectedItem.ToString())
 		});

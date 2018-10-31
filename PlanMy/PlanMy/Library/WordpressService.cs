@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WordPressPCL;
@@ -16,8 +17,12 @@ namespace PlanMy.Library
         {
             _client = new WordPressClient(Statics.WordpressUrl);
         }
-
-        public async Task<IEnumerable<Post>> GetLatestPostsAsync(int page = 0, int perPage = 20)
+		// a method to chek whetehr an object contains nul values or not//
+		public bool ArePropertiesNotNull<T>(T obj)
+		{
+			return typeof(T).GetProperties().All(propertyInfo => propertyInfo.GetValue(obj) != null);
+		}
+		public async Task<IEnumerable<Post>> GetLatestPostsAsync(int page = 0, int perPage = 20)
         {
             page++;
 

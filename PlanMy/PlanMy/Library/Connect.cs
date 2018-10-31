@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -30,10 +31,7 @@ namespace PlanMy.Library
 			}
 			catch(Exception ex)
 			{
-				string response = await client.GetStringAsync(new System.Uri(url));
-				string responseBody = response;
-
-				return responseBody;
+				return " ";
 			}
 			
         }
@@ -112,6 +110,6 @@ namespace PlanMy.Library
             }
             catch { }
         }
-
-    }
+		
+	}
 }

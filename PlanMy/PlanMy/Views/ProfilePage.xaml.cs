@@ -3,7 +3,7 @@ using PlanMy.Library;
 using PlanMy.Models;
 using PlanMy.ViewModels;
 using System;
-using System.Threading;
+
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

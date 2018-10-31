@@ -16,7 +16,7 @@ namespace PlanMy.Views
 		public MainPage ()
 		{
 			InitializeComponent ();
-            On<Android>().SetToolbarPlacement(ToolbarPlacement.Bottom);
+            On<Xamarin.Forms.PlatformConfiguration.Android>().SetToolbarPlacement(ToolbarPlacement.Bottom);
             LoadPage();
 		}
         public async void LoadPage()

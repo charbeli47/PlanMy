@@ -20,52 +20,60 @@
                                         <ColumnDefinition Width="2*" />
 
                                     </Grid.ColumnDefinitions>
-                                    <Image Source="blackarrow.png" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"  />
+                                    <Button Image="blackarrow.png" x:Name="backarrow" WidthRequest="35" HeightRequest="35" BackgroundColor="Transparent" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"  />
                                     <Label x:Name="Pagetitle" TextColor="Black" FontSize = "22" Text="NEW EXPENSE" Grid.Row="0" Grid.Column="1" />
                                 </Grid>
                             </StackLayout>
                         </Frame>
                     </StackLayout>
-                    <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">CATEGORY</Label>
-                    <models:Pickerarrow x:Name="catPicker" 
+               
+                        <Button x:Name="Deleteexpenselabel" BackgroundColor="Transparent" IsVisible="False"  FontSize="12" Text="Delete"  TextColor="Red" Margin="0,10,15,0" HorizontalOptions="End"></Button>
+                        <Label  FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">CATEGORY</Label>
+                        <models:Pickerarrow x:Name="catPicker" 
               HeightRequest="40" 
               Image="arrowdown"
-              
+              ItemDisplayBinding="{Binding category_name}"
                 Margin="15,0,15,0"
-                Title="Category"
+                Title="Categorie"
                 HorizontalOptions="Fill">
-                        <models:Pickerarrow.Items>
-                            <x:String>cat1
-                            </x:String>
-                            <x:String>cat2</x:String>
-                            <x:String>cat3</x:String>
-                        </models:Pickerarrow.Items>
-                    </models:Pickerarrow>
 
-                    <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">DESCRIPTION</Label>
-                    <models:nolineentry Placeholder="Name your expense" Margin="15,0,15,0" ></models:nolineentry>
+                        </models:Pickerarrow>
+                        <models:nolineentry x:Name="expendnewname" Placeholder="Name your category" Margin="15,0,15,0" IsVisible="False" ></models:nolineentry>
+                        <Button BackgroundColor="Transparent" Text="Add a new category" x:Name="addnewcat" HorizontalOptions="Center" TextColor="Red" Margin="0,5,0,0"></Button>
+                        <Button BackgroundColor="Transparent" Text="Choose From categorys" x:Name="choosefromcat" HorizontalOptions="Center" TextColor="Red" Margin="0,5,0,0" IsVisible="False"></Button>
+                        <Button x:Name="butaddcat" IsVisible="False" BackgroundColor="Transparent" Image="savechanges.png" Margin="15,0,15,0"></Button>
 
-                    <StackLayout Orientation="Horizontal">
-                       
+
+                    <StackLayout x:Name="expensecontent">
+                            <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">DESCRIPTION</Label>
+                            <models:nolineentry x:Name="expenddescription" Placeholder="Name your expense" Margin="15,0,15,0" ></models:nolineentry>
+
+                            <StackLayout Orientation="Horizontal">
+
+
+                                <StackLayout Orientation="Vertical">
+                                    <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">ESTIMATED COST</Label>
+                                    <models:nolineentry x:Name="expendestimatedcost" WidthRequest="150" Placeholder="0" Margin="15,0,15,0" ></models:nolineentry>
+                                </StackLayout>
+
+                                <StackLayout Orientation="Vertical">
+                                    <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="0,25,15,0">ACTUAL COST</Label>
+                                    <models:nolineentry x:Name="expendactualcost" WidthRequest="150" Placeholder="0" Margin="0,0,15,0" ></models:nolineentry>
+                                </StackLayout>
+                            </StackLayout>
                             <StackLayout Orientation="Vertical" HorizontalOptions="StartAndExpand" >
                                 <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">PAID COST</Label>
-                                <models:nolineentry WidthRequest="150" Placeholder="0" Margin="15,0,15,0" ></models:nolineentry>
+                                <models:nolineentry x:Name="expendpaidcost" WidthRequest="150" Placeholder="0" Margin="15,0,15,0" ></models:nolineentry>
 
                             </StackLayout>
-                            <StackLayout Orientation="Vertical">
-                                <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="0,25,15,0">FINAL COST</Label>
-                            <models:nolineentry WidthRequest="150" Placeholder="0" Margin="0,0,15,0" ></models:nolineentry>
 
-                            </StackLayout>
-                       
+                            <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">NOTES</Label>
+                            <models:nolineentry x:Name="expendnotes" Placeholder="Description of the task" Margin="15,0,15,0" HeightRequest="120"></models:nolineentry>
 
-                       
-                    </StackLayout>
-
-                    <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">NOTES</Label>
-                    <models:nolineentry Placeholder="Description of the task" Margin="15,0,15,0" HeightRequest="120"></models:nolineentry>
-
-                    <Button x:Name="Savechanges" BackgroundColor="Transparent" Image="savechanges.png" Margin="15,0,15,0"></Button>
+                            <Button x:Name="Savechanges" BackgroundColor="Transparent" Image="savechanges.png" Margin="15,0,15,0"></Button>
+                        </StackLayout>
+                 
+                   
                 </StackLayout>
             </ScrollView>
         </StackLayout>
