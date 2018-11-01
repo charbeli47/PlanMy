@@ -20,6 +20,7 @@ namespace PlanMy.Views
 	public partial class Planning : ContentPage
 	{
 		public IEnumerable<WordPressPCL.Models.ItemCategory> cats;
+
 		public List<WordPressPCL.Models.ItemCategory> categories=new List<WordPressPCL.Models.ItemCategory>();
 		List<todoobj> specifiedobj = new List<todoobj>();
 
@@ -133,6 +134,8 @@ namespace PlanMy.Views
 			// get expenses in budget///
 			
 			getexpenses();
+
+			getguests();
 
 			allbut.Clicked += (object sender, EventArgs e) =>
             {
@@ -812,6 +815,75 @@ namespace PlanMy.Views
 
 		}
 		//fin functions for budget///
+		public async void getguests()
+		{
+			Connect con = new Connect();
+			string todostring = await con.DownloadData("https://planmy.me/maizonpub-api/guestlist.php", "action=get&userid=169");
+			List<guest> listofguests = JsonConvert.DeserializeObject<List<guest>>(todostring);
+
+			foreach(guest g in listofguests)
+			{
+				string status = "";
+				if(g.RSVP=="Not Invited" || g.RSVP == "Declined")
+				{
+					status = "notattending.png";
+				}
+				if (g.RSVP == "No Response")
+				{
+					status = "pending2.png";
+				}
+				if (g.RSVP == "Accepted")
+				{
+					status = "attending.png";
+				}
+
+				StackLayout grow = createguestrow(g.guest_name,status);
+				gueststack.Children.Add(grow);
+			}
+			
+			
+		}
+
+		public StackLayout createguestrow(string guestname, string status)
+		{
+			StackLayout vlayout = new StackLayout();
+			vlayout.Orientation = StackOrientation.Vertical;
+			vlayout.IsVisible = true;
+
+			StackLayout line = new StackLayout();
+			line.Orientation = StackOrientation.Horizontal;
+			line.HeightRequest = 1;
+			line.BackgroundColor = Color.LightGray;
+			line.HorizontalOptions = LayoutOptions.Fill;
+			vlayout.Children.Add(line);
+
+			StackLayout rowlayout = new StackLayout();
+			rowlayout.Orientation = StackOrientation.Horizontal;
+			rowlayout.Margin = new Thickness(15, 0, 15, 0);
+
+			Label nameg = new Label();
+			nameg.Text = guestname;
+			nameg.FontSize = 16;
+			nameg.TextColor = Color.Black;
+			nameg.HorizontalOptions = LayoutOptions.StartAndExpand;
+			rowlayout.Children.Add(nameg);
+
+			Image img = new Image();
+			img.Source = status;
+			img.HorizontalOptions = LayoutOptions.End;
+			img.VerticalOptions = LayoutOptions.Center;
+			rowlayout.Children.Add(img);
+
+			vlayout.Children.Add(rowlayout);
+
+			StackLayout line2 = new StackLayout();
+			line2.Orientation = StackOrientation.Horizontal;
+			line2.HeightRequest = 1;
+			line2.BackgroundColor = Color.LightGray;
+			line2.HorizontalOptions = LayoutOptions.Fill;
+			vlayout.Children.Add(line);
+			return vlayout;
+		}
 
 
 	}

@@ -109,7 +109,7 @@
                                         <StackLayout Orientation="Horizontal">
                                             <Button x:Name="addguestbut" BackgroundColor="Transparent" Image="addguest.png"></Button>
                                         </StackLayout>
-                                        <ListView x:Name="guestList">
+                                        <!--<ListView x:Name="guestList">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <ViewCell>
@@ -127,9 +127,10 @@
                                                     </ViewCell>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
-                                        </ListView>
+                                        </ListView>-->
                                     </StackLayout>
-
+                                    <StackLayout Orientation="Vertical" x:Name="gueststack">
+                                    </StackLayout>
                                     <StackLayout Orientation="Vertical" x:Name="seatcharc" IsVisible="False">
                                         <StackLayout Orientation="Horizontal">
                                             <Button x:Name="addtablebut" BackgroundColor="Transparent" Image="addtable.png" Margin="15,0,0,0" ></Button>
