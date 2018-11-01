@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:PlanMy.Models"
              x:Class="PlanMy.Views.newguest">
     <ContentPage.Content>
         <StackLayout>
@@ -17,11 +18,66 @@
                                 <ColumnDefinition Width="2*" />
 
                             </Grid.ColumnDefinitions>
-                            <Image Source="blackarrow.png" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"  />
+                            <Button Image="blackarrow.png" BackgroundColor="Transparent" x:Name="backarrow" WidthRequest="35" HeightRequest="35" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"  />
                             <Label x:Name="Pagetitle" TextColor="Black" FontSize = "22" Text="NEW GUEST" Grid.Row="0" Grid.Column="1" />
                         </Grid>
                     </StackLayout>
                 </Frame>
+            </StackLayout>
+            <StackLayout x:Name="content">
+                <Button x:Name="deleteguestbut" IsVisible="False" Text="Delete" BackgroundColor="Transparent" HorizontalOptions="End" TextColor="Red"></Button>
+                <models:nolineentry x:Name="guestname" Placeholder="Full name" Margin="15,0,15,0"></models:nolineentry>
+                <models:Pickerarrow x:Name="RspPicker" 
+              HeightRequest="40"
+                                                                WidthRequest="200"
+              Image="arrowdown"
+              ItemDisplayBinding="{Binding Name}"
+                Margin="15,30,15,0"
+                Title="Guest Status"
+                HorizontalOptions="FillAndExpand">
+                    <models:Pickerarrow.Items>
+                        <x:String>Accepted</x:String>
+                        <x:String>Declined</x:String>
+                        <x:String>No Response</x:String>
+                        <x:String>Not Invited</x:String>
+                    </models:Pickerarrow.Items>
+
+                </models:Pickerarrow>
+                <models:Pickerarrow x:Name="SidePicker" 
+              HeightRequest="40"
+                                                                WidthRequest="200"
+              Image="arrowdown"
+              ItemDisplayBinding="{Binding Name}"
+                Margin="15,0,15,30"
+                Title="Side"
+                HorizontalOptions="FillAndExpand">
+                    <models:Pickerarrow.Items>
+                        <x:String>Bridesmaids</x:String>
+                        <x:String>Brides Friends</x:String>
+                        <x:String>Brides Family</x:String>
+                        <x:String>Brides Family Friends</x:String>
+                        <x:String>Brides Coworkers</x:String>
+                        <x:String>Groomsmen</x:String>
+                        <x:String>Grooms Friends</x:String>
+                        <x:String>Grooms Family</x:String>
+                        <x:String>Grooms Family Friends</x:String>
+                        <x:String>Grooms Coworkers</x:String>
+                        <x:String>Bride an Grooom Friends</x:String>
+                        <x:String>Partner 1</x:String>
+                        <x:String>Partner 2</x:String>
+                    </models:Pickerarrow.Items>
+
+                </models:Pickerarrow>
+
+                <models:nolineentry x:Name="guestemail" Placeholder="Email" Margin="15,0,15,0"></models:nolineentry>
+
+                <models:nolineentry x:Name="guestphone" Placeholder="Phone" Margin="15,0,15,0"></models:nolineentry>
+
+                <models:nolineentry x:Name="guestaddress" Placeholder="Address" Margin="15,0,15,30"></models:nolineentry>
+                <Label HorizontalOptions="Center" TextColor="Black" Font="14px" FontAttributes="Bold">Import from contacts list</Label>
+                <Button x:Name="Savechanges" BackgroundColor="Transparent" Image="savechanges.png" Margin="15,0,15,0"></Button>
+
+
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

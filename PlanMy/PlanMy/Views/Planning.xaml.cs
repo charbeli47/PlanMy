@@ -23,6 +23,7 @@ namespace PlanMy.Views
 
 		public List<WordPressPCL.Models.ItemCategory> categories=new List<WordPressPCL.Models.ItemCategory>();
 		List<todoobj> specifiedobj = new List<todoobj>();
+		List<guest> listofguests = new List<guest>();
 
 		public Planning()
         {
@@ -83,15 +84,15 @@ namespace PlanMy.Views
 			};
 		
 
-			// addtablebut.Clicked += (object sender, EventArgs e) =>
-			//{
-			//  popupaddtable.IsVisible = true;
-			//};
+		 addtablebut.Clicked += async (object sender, EventArgs e) =>
+		{
+			await Navigation.PushModalAsync(new newtable(false, null));
+		};
 
-			//addguestbut.Clicked += (object sender, EventArgs e) =>
-			//{
-			//  popupguest.IsVisible = true;
-			//};
+		addguestbut.Clicked += async (object sender, EventArgs e) =>
+			{
+				await Navigation.PushModalAsync(new newguest(false, null));
+			};
 			//closepopuptable.Clicked += (object sender, EventArgs e) =>
 			//{
 			//  popupaddtable.IsVisible = false;
@@ -106,6 +107,8 @@ namespace PlanMy.Views
 				seatchart.Image = "seatingchart.png";
 				allguestc.IsVisible = true;
 				seatcharc.IsVisible = false;
+				gueststack.IsVisible = true;
+				seatstack.IsVisible = false;
 			};
 			seatchart.Clicked += (object sender, EventArgs e) =>
 			{
@@ -113,6 +116,8 @@ namespace PlanMy.Views
 				seatchart.Image = "bseatingchart.png";
 				allguestc.IsVisible = false;
 				seatcharc.IsVisible = true;
+				gueststack.IsVisible = false;
+				seatstack.IsVisible = true;
 			};
 
 			newtask.Clicked += async (object sender, EventArgs e) =>
@@ -136,6 +141,11 @@ namespace PlanMy.Views
 			getexpenses();
 
 			getguests();
+			// on picker rsp change//
+			RspPicker.SelectedIndexChanged += this.myPickerSelectedIndexChanged;
+			gettables();
+			
+
 
 			allbut.Clicked += (object sender, EventArgs e) =>
             {
@@ -819,12 +829,13 @@ namespace PlanMy.Views
 		{
 			Connect con = new Connect();
 			string todostring = await con.DownloadData("https://planmy.me/maizonpub-api/guestlist.php", "action=get&userid=169");
-			List<guest> listofguests = JsonConvert.DeserializeObject<List<guest>>(todostring);
+		listofguests = JsonConvert.DeserializeObject<List<guest>>(todostring);
 
-			foreach(guest g in listofguests)
+			foreach (guest g in listofguests)
 			{
+				 
 				string status = "";
-				if(g.RSVP=="Not Invited" || g.RSVP == "Declined")
+				if (g.RSVP == "Not Invited" || g.RSVP == "Declined")
 				{
 					status = "notattending.png";
 				}
@@ -837,13 +848,53 @@ namespace PlanMy.Views
 					status = "attending.png";
 				}
 
-				StackLayout grow = createguestrow(g.guest_name,status);
+				StackLayout grow = createguestrow(g.guest_name, status);
+				grow.GestureRecognizers.Add(new TapGestureRecognizer
+				{
+					Command = new Command(async () => {	
+						await Navigation.PushModalAsync(new newguest(true,g));
+					}),
+				});
 				gueststack.Children.Add(grow);
-			}
 			
+			}
+
 			
 		}
+		public void myPickerSelectedIndexChanged(object sender, EventArgs e)
+		{
+			gueststack.Children.Clear();
+			string statusguest = RspPicker.SelectedItem.ToString();
+			foreach(guest gt in listofguests)
+			{
+				if (gt.RSVP == statusguest)
 
+				{
+					string status = "";
+					if (gt.RSVP == "Not Invited" || gt.RSVP == "Declined")
+					{
+						status = "notattending.png";
+					}
+					if (gt.RSVP == "No Response")
+					{
+						status = "pending2.png";
+					}
+					if (gt.RSVP == "Accepted")
+					{
+						status = "attending.png";
+					}
+					StackLayout rowg = createguestrow(gt.guest_name, status);
+					rowg.GestureRecognizers.Add(new TapGestureRecognizer
+					{
+						Command = new Command(async () => {
+							await Navigation.PushModalAsync(new newguest(true, gt));
+						}),
+					});
+					gueststack.Children.Add(rowg);
+				}
+			}
+
+		}
 		public StackLayout createguestrow(string guestname, string status)
 		{
 			StackLayout vlayout = new StackLayout();
@@ -886,6 +937,171 @@ namespace PlanMy.Views
 		}
 
 
+		public async void gettables()
+		{
+			Connect con = new Connect();
+			string todostring = await con.DownloadData("https://planmy.me/maizonpub-api/tables.php", "action=get&userid=169");
+			List<table> listoftables = JsonConvert.DeserializeObject<List<table>>(todostring);
+
+			foreach(table t in listoftables)
+			{
+			
+				string rowstring = await con.DownloadData("https://planmy.me/maizonpub-api/guestlist.php", "action=getbytable&userid=169&tableId="+t.seating_id);
+				List<guestbytable> listofguesttable = JsonConvert.DeserializeObject<List<guestbytable>>(rowstring);
+				StackLayout tablerow = createtableguestrow(t.tableName, listofguesttable.Count.ToString());
+				foreach (guestbytable gt in listofguesttable)
+				{
+					string status = "";
+					if (gt.RSVP == "Not Invited" || gt.RSVP == "Declined")
+					{
+						status = "notattending.png";
+					}
+					if (gt.RSVP == "No Response")
+					{
+						status = "pending2.png";
+					}
+					if (gt.RSVP == "Accepted")
+					{
+						status = "attending.png";
+					}
+
+					StackLayout guest = createguestrowintable(gt.guest_name, status);
+					tablerow.Children.Add(guest);
+				}
+
+				seatstack.Children.Add(tablerow);
+				seatstack.Children.Add(createseperatorbetweentables());
+			}
+		}
+		public StackLayout createtableguestrow(string namet, string numberguests)
+		{
+			StackLayout tablelayout = new StackLayout();
+			tablelayout.Orientation = StackOrientation.Vertical;
+
+			StackLayout rowlayout = new StackLayout();
+			rowlayout.Orientation = StackOrientation.Horizontal;
+			rowlayout.Margin = new Thickness(15, 0, 15, 0);
+
+			Image plusimg = new Image();
+			plusimg.Source = "plus.png";
+			plusimg.HorizontalOptions = LayoutOptions.Start;
+			plusimg.Margin = new Thickness(0, 0, 25, 0);
+			plusimg.VerticalOptions = LayoutOptions.Center;
+			rowlayout.Children.Add(plusimg);
+
+			StackLayout vlayout = new StackLayout();
+			vlayout.Orientation = StackOrientation.Vertical;
+
+			Label nametable = new Label();
+			nametable.Text = namet;
+			nametable.FontSize = 18;
+			nametable.TextColor = Color.Black;
+
+			Label numberg = new Label();
+			numberg.Text = numberguests + " guests";
+			numberg.FontSize = 12;
+			numberg.FontAttributes = FontAttributes.Italic;
+			numberg.TextColor = Color.Black;
+			numberg.Margin = new Thickness(0, -5, 0, 0);
+
+			vlayout.Children.Add(nametable);
+			vlayout.Children.Add(numberg);
+			vlayout.HorizontalOptions = LayoutOptions.FillAndExpand;
+			rowlayout.Children.Add(vlayout);
+
+
+			Button img = new Button();
+			img.Image = "downarrow.png";
+			img.HorizontalOptions = LayoutOptions.End;
+			img.VerticalOptions = LayoutOptions.Center;
+			img.BackgroundColor = Color.Transparent;
+			img.Clicked += (object sender, EventArgs e) =>
+			{
+				if (img.Image == "downarrow.png")
+				{
+					img.Image = "uparrow.png";
+					foreach (View v in tablelayout.Children)
+					{
+						v.IsVisible = true;
+					}
+				}
+				else
+				{
+					int i = 0;
+					img.Image = "downarrow.png";
+					foreach (View v in tablelayout.Children)
+					{
+						if (i == 0) { }
+						else
+						{
+							v.IsVisible = false;
+						}
+						i++;
+					}
+				}
+			};
+
+			rowlayout.Children.Add(img);
+
+
+
+
+			tablelayout.Children.Add(rowlayout);
+
+
+			return tablelayout;
+
+		}
+		
+		public StackLayout createguestrowintable(string guestname, string status)
+		{
+			StackLayout vlayout = new StackLayout();
+			vlayout.Orientation = StackOrientation.Vertical;
+			vlayout.IsVisible = false;
+
+			StackLayout line = new StackLayout();
+			line.Orientation = StackOrientation.Horizontal;
+			line.HeightRequest = 1;
+			line.BackgroundColor = Color.LightGray;
+			line.HorizontalOptions = LayoutOptions.Fill;
+			vlayout.Children.Add(line);
+
+			StackLayout rowlayout = new StackLayout();
+			rowlayout.Orientation = StackOrientation.Horizontal;
+			rowlayout.Margin = new Thickness(15, 0, 15, 0);
+
+			Image plusimg = new Image();
+			plusimg.Source = "guesttable.png";
+			plusimg.HorizontalOptions = LayoutOptions.Start;
+			plusimg.Margin = new Thickness(0, 0, 25, 0);
+			plusimg.VerticalOptions = LayoutOptions.Center;
+			rowlayout.Children.Add(plusimg);
+
+
+
+			Label nameg = new Label();
+			nameg.Text = guestname;
+			nameg.FontSize = 16;
+			nameg.TextColor = Color.Black;
+			nameg.HorizontalOptions = LayoutOptions.FillAndExpand;
+			rowlayout.Children.Add(nameg);
+
+			Image img = new Image();
+			img.Source = status;
+			img.HorizontalOptions = LayoutOptions.End;
+			img.VerticalOptions = LayoutOptions.Center;
+			rowlayout.Children.Add(img);
+
+			vlayout.Children.Add(rowlayout);
+
+			StackLayout line2 = new StackLayout();
+			line2.Orientation = StackOrientation.Horizontal;
+			line2.HeightRequest = 1;
+			line2.BackgroundColor = Color.LightGray;
+			line2.HorizontalOptions = LayoutOptions.Fill;
+			vlayout.Children.Add(line);
+			return vlayout;
+		}
 	}
 
 

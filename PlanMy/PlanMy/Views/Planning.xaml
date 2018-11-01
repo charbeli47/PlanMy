@@ -107,7 +107,24 @@
                                     </Grid>
                                     <StackLayout x:Name="allguestc" Orientation="Vertical" IsVisible="True">
                                         <StackLayout Orientation="Horizontal">
-                                            <Button x:Name="addguestbut" BackgroundColor="Transparent" Image="addguest.png"></Button>
+                                            <Button x:Name="addguestbut" HorizontalOptions="StartAndExpand" BackgroundColor="Transparent" Image="addguest.png"></Button>
+                                            <models:Pickerarrow x:Name="RspPicker" 
+              HeightRequest="20"
+                                                                WidthRequest="200"
+              Image="arrowdown"
+              ItemDisplayBinding="{Binding Name}"
+                Margin="0,0,15,0"
+                Title="Guest Status"
+                HorizontalOptions="End">
+                                                <models:Pickerarrow.Items>
+                                                    <x:String>Accepted</x:String>
+                                                    <x:String>Declined</x:String>
+                                                    <x:String>No Response</x:String>
+                                                    <x:String>Not Invited</x:String>
+                                                </models:Pickerarrow.Items>
+
+                                            </models:Pickerarrow>
+
                                         </StackLayout>
                                         <!--<ListView x:Name="guestList">
                                             <ListView.ItemTemplate>
@@ -134,6 +151,10 @@
                                     <StackLayout Orientation="Vertical" x:Name="seatcharc" IsVisible="False">
                                         <StackLayout Orientation="Horizontal">
                                             <Button x:Name="addtablebut" BackgroundColor="Transparent" Image="addtable.png" Margin="15,0,0,0" ></Button>
+                                           
+                                        </StackLayout>
+
+                                        <StackLayout Orientation="Vertical" x:Name="seatstack">
                                         </StackLayout>
                                     </StackLayout>
 
