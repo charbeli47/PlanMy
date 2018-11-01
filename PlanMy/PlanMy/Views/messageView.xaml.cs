@@ -19,19 +19,9 @@ namespace PlanMy.Views
         public messageView ()
 		{
 			InitializeComponent ();
-            listmsgs = new List<message>();
-            message msg = new message();
-            msg.title = "Candid Image";
-            msg.msg = "Hello thanks for ....";
-            msg.time = "-23h";
-            message msg2 = new message();
-            msg2.title = "Candid Image";
-            msg2.msg = "Hello thanks for ....";
-            msg2.time = "-23h";
-            listmsgs.Add(msg);
-            listmsgs.Add(msg2);
-            MessagesListView.ItemsSource = listmsgs;
-            
+            LoadPage();
+
+
         }
         async void LoadPage()
         {
@@ -48,8 +38,10 @@ namespace PlanMy.Views
             }
         }
 
-        private void MessagesListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        private async void MessagesListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
+            var vendor = (VendorItem)e.SelectedItem;
+            await Navigation.PushModalAsync(new MainChatPage(vendor));
 
         }
     }

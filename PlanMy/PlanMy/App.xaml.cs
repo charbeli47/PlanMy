@@ -2,6 +2,7 @@
 using Xamarin.Forms;
 using PlanMy.Views;
 using Xamarin.Forms.Xaml;
+using PlanMy.ViewModels;
 
 [assembly: XamlCompilation (XamlCompilationOptions.Compile)]
 namespace PlanMy
@@ -32,4 +33,21 @@ namespace PlanMy
 			// Handle when your app resumes
 		}
 	}
+    public static class ViewModelLocator
+    {
+        static MainChatViewModel chatVM;
+        public static MainChatViewModel MainChatViewModel
+        {
+            get
+            {
+                if (chatVM == null)
+                {
+                    chatVM = new MainChatViewModel(new VendorItem());
+                }
+                return chatVM;
+
+            }
+        }
+
+    }
 }

@@ -36,8 +36,7 @@ namespace PlanMy.Views
             if (!string.IsNullOrEmpty(usr))
             {
                 UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
-                string usrdetails = await con.DownloadData("https://www.planmy.me/maizonpub-api/users.php", "action=get&userid=" + cookie.user.id);
-                user = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigUser>(usrdetails);
+                user = cookie.configUsr;
                 if (!string.IsNullOrEmpty(user.event_img))
                 {
                     ProfileImg.Source = user.event_img;
@@ -73,14 +72,20 @@ namespace PlanMy.Views
             if(!string.IsNullOrEmpty(usr))
             {
                 UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
-                string guestsnbr = await con.DownloadData("https://www.planmy.me/maizonpub-api/guestlist.php", "userid=" + cookie.user.id + "&action=getcount");
-                guestsLabel.Text = guestsnbr.Replace("\"","");
-                string todorecord = await con.DownloadData("https://www.planmy.me/maizonpub-api/todolist.php", "todo_user=" + cookie.user.id + "&action=getcount");
-                tasksLabel.Text = todorecord.Replace("\"", "");
-                string wishlistnbr = await con.DownloadData("https://www.planmy.me/maizonpub-api/wishlist.php", "userid=" + cookie.user.id + "&action=getcount");
-                favouriteLabel.Text = wishlistnbr.Replace("\"", "");
-                string usrdetails = await con.DownloadData("https://www.planmy.me/maizonpub-api/users.php", "action=get&userid=" + cookie.user.id);
-                user = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigUser>(usrdetails);
+                string stats = await con.DownloadData("https://planmy.me/maizonpub-api/users.php", "action=getstats&userid=" + cookie.user.id);
+                var usrStats = Newtonsoft.Json.JsonConvert.DeserializeObject<UserStats>(stats);
+                guestsLabel.Text = usrStats.guestsCount.ToString();
+                tasksLabel.Text = usrStats.todosCount.ToString();
+                favouriteLabel.Text = usrStats.wishesCount.ToString(); ;
+                user = cookie.configUsr;
+                if(user==null)
+                {
+                    string usrdetails = await con.DownloadData("https://www.planmy.me/maizonpub-api/users.php", "action=get&userid=" + cookie.user.id);
+                    user = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigUser>(usrdetails);
+                    cookie.configUsr = user;
+                    string resp = Newtonsoft.Json.JsonConvert.SerializeObject(cookie);
+                    await con.SaveData("User", resp);
+                }
                 if (!string.IsNullOrEmpty(user.event_img))
                 {
                     ProfileImg.Source = user.event_img;

@@ -6,7 +6,7 @@
   <ContentView.Content>
         <StackLayout x:Name="Content" Margin="0,0,0,0">
 
-            <ListView x:Name="MessagesListView" HasUnevenRows="false" RowHeight="150" ItemTapped="MessagesListView_ItemTapped">
+            <ListView x:Name="MessagesListView" HasUnevenRows="false" RowHeight="60" ItemSelected="MessagesListView_ItemSelected">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -18,8 +18,8 @@
     Margin="25,0,15,0"/>
                                 <StackLayout Orientation="Horizontal">
 
-                                    <StackLayout Orientation="Vertical" Margin="0,0,0,0">
-                                        <Label Text="{Binding post_title}" TextColor="black" VerticalOptions="Center" FontSize="16" FontAttributes="Bold"  />
+                                    <StackLayout Orientation="Vertical" Margin="0,20,0,0">
+                                        <Label Text="{Binding post_title}" TextColor="black" VerticalOptions="Center" FontSize="16"  />
                                         <!--<StackLayout Orientation="Horizontal" Margin="0,0,0,0">
                                             <Label Text="Hello and thanks for ...." TextColor="Gray"  FontSize="16" FontAttributes="Italic"    />
                                             <Label Text="-23h" TextColor="Gray"  FontSize="16" Margin="30,0,0,30" FontAttributes="Italic"    />

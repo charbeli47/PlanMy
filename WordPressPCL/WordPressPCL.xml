@@ -439,14 +439,6 @@
             <param name="filename">Name of file in WP Media Library</param>
             <returns>Created media object</returns>
         </member>
-        <member name="M:WordPressPCL.Client.Media.Create(System.String,System.String)">
-            <summary>
-            Create Media entity with attachment
-            </summary>
-            <param name="filePath">Local Path to file</param>
-            <param name="filename">Name of file in WP Media Library</param>
-            <returns>Created media object</returns>
-        </member>
         <member name="M:WordPressPCL.Client.Media.Delete(System.Int32)">
             <summary>
             Delete Entity
@@ -1047,7 +1039,19 @@
             </summary>
             <remarks>Context: view, edit</remarks>
         </member>
-        <member name="P:Wo    <member name="M:WordPressPCL.Models.Category.#ctor">
+        <member name="P:WordPressPCL.Models.Category.Parent">
+            <summary>
+            The parent term ID.
+            </summary>
+            <remarks>Context: view, edit</remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Category.Meta">
+            <summary>
+            Meta fields.
+            </summary>
+            <remarks>Context: view, edit</remarks>
+        </member>
+        <member name="M:WordPressPCL.Models.Category.#ctor">
             <summary>
             Parameterless constructor
             </summary>
@@ -1143,17 +1147,6 @@
             </summary>
             <remarks>Context: view, edit, embed</remarks>
         </member>
-        <member name="P:WordPressPCL.Models.Comment.Status">
-            <summary>
-            State of the object.
-            </summary>
-            <remarks>Context: view, edit</remarks>
-        </member>
-        <member name="P:WordPressPCL.Models.Comment.Type">
-            <summary>
-            Type of Comment for the object.
-            </summary>
-            <remarks>Cmember>
         <member name="P:WordPressPCL.Models.Comment.Status">
             <summary>
             State of the object.
@@ -1396,7 +1389,19 @@
         </member>
         <member name="F:WordPressPCL.Models.UsersOrderBy.Include">
             <summary>
-      mber>
+            Order By Include
+            </summary>
+        </member>
+        <member name="F:WordPressPCL.Models.UsersOrderBy.RegisteredDate">
+            <summary>
+            Order By Registered Date
+            </summary>
+        </member>
+        <member name="F:WordPressPCL.Models.UsersOrderBy.Slug">
+            <summary>
+            Order By Slug
+            </summary>
+        </member>
         <member name="F:WordPressPCL.Models.UsersOrderBy.Email">
             <summary>
             Order By email
@@ -1508,19 +1513,6 @@
         <member name="F:WordPressPCL.Models.PagesOrderBy.Include">
             <summary>
             Order By Include
-            </summary>
-        </member>
-        <member name="F:WordPressPCL.Models.PagesOrderBy.Title">
-            <summary>
-            Order By Title
-            </summary>
-        </member>
-        <member name="F:WordPressPCL.Models.PagesOrderBy.Slug">
-            <summary>
-            Order By Slug
-            </summary>
-        </member>
-        <member name="F:WordPrlude
             </summary>
         </member>
         <member name="F:WordPressPCL.Models.PagesOrderBy.Title">
@@ -2115,7 +2107,20 @@
             </summary>
         </member>
         <member name="M:WordPressPCL.Models.ItemCategory.#ctor(System.String)">
-            <summry>
+            <summary>
+            Default constructor
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="T:WordPressPCL.Models.Links">
+            <summary>
+            Links helper class
+            </summary>
+        </member>
+        <member name="P:WordPressPCL.Models.Links.Self">
+            <summary>
+            Self link
+            </summary>
         </member>
         <member name="P:WordPressPCL.Models.Links.Collection">
             <summary>
@@ -4540,20 +4545,6 @@
             <returns>Result of checking</returns>
         </member>
         <member name="M:WordPressPCL.WordPressClient.SetJWToken(System.String)">
-            <summary>
-            Sets an exisitng JWToken
-            </summary>
-            <param name="token"></param>
-        </member>
-        <member name="M:WordPressPCL.WordPressClient.GetToken">
-            <summary>
-            Gets the JWToken from the client
-            </summary>
-            <returns></returns>
-        </member>
-    </members>
-</doc>
-ystem.String)">
             <summary>
             Sets an exisitng JWToken
             </summary>
