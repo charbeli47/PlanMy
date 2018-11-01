@@ -122,15 +122,20 @@ namespace PlanMy.Views
             //}
             //var fileContent = new ByteArrayContent(bitmapData);
             IsLoading = true;
-            var fileContent = new StreamContent(stream);
-            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
-            {
-                Name = "eventimg",
-                FileName = filename
-            };
-            
             MultipartFormDataContent multipartContent = new MultipartFormDataContent();
-            multipartContent.Add(fileContent);
+            if (stream != null)
+            {
+                var fileContent = new StreamContent(stream);
+                fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "eventimg",
+                    FileName = filename
+                };
+                multipartContent.Add(fileContent);
+            }
+
+            
+            
             //var body = new StringContent(json);
             //multipartContent.Add(body);
 
@@ -140,6 +145,18 @@ namespace PlanMy.Views
             IsLoading = false;
             if (response.IsSuccessStatusCode)
             {
+                Connect con = new Connect();
+                var usr = await con.GetData("User");
+                UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                var config = cookie.configUsr;
+                config.event_date = eventDate.Date.ToString("MM/dd/yyyy");
+                config.event_name = eventname.Text;
+                config.event_location = eventlocation.Text;
+                if (stream != null)
+                    config.event_img = "https://planmy.me/wp-content/uploads/events/" + filename;
+                cookie.configUsr = config;
+                var resp = Newtonsoft.Json.JsonConvert.SerializeObject(cookie);
+                await con.SaveData("User", resp);
                 string content = await response.Content.ReadAsStringAsync();
                 OperationCompleted?.Invoke(this, EventArgs.Empty);
                 await Navigation.PopModalAsync();

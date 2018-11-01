@@ -94,7 +94,9 @@
   <ItemGroup>
     <Compile Include="FacebookCallback.cs" />
     <Compile Include="FacebookLoginButtonRendererAndroid.cs" />
+    <Compile Include="Helpers\ListViewBottomEffect.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="MainApplication.cs" />
     <Compile Include="RateThisApp.cs" />
     <Compile Include="searchevententryrenderer.cs" />
     <Compile Include="nolineentryrenderer.cs" />

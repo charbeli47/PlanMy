@@ -40,9 +40,11 @@ namespace PlanMy.Views
                  FBRegisterResponse regResp = Newtonsoft.Json.JsonConvert.DeserializeObject<FBRegisterResponse>(resp);
                 if (regResp.success == true)
                 {
+                    string usrdetails = await con.DownloadData("https://www.planmy.me/maizonpub-api/users.php", "action=get&userid=" + regResp.User.user.id);
+                    var u = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigUser>(usrdetails);
+                    regResp.User.configUsr = u;
                     var uresp = Newtonsoft.Json.JsonConvert.SerializeObject(regResp.User);
                     await con.SaveData("User", uresp);
-
                     await Navigation.PopModalAsync();
                 }
                 
@@ -84,7 +86,11 @@ namespace PlanMy.Views
             if (cookie.status == "ok")
             {
                 Connect con = new Connect();
-                await con.SaveData("User", resp);
+                string usrdetails = await con.DownloadData("https://www.planmy.me/maizonpub-api/users.php", "action=get&userid=" + cookie.user.id);
+                var u = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigUser>(usrdetails);
+                cookie.configUsr = u;
+                var uresp = Newtonsoft.Json.JsonConvert.SerializeObject(cookie);
+                await con.SaveData("User", uresp);
                 con.DeleteData("FaceBookProfile");
                 await Navigation.PopModalAsync();
             }

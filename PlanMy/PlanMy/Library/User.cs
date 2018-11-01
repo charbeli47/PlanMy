@@ -10,6 +10,13 @@ namespace PlanMy.Library
         public string cookie { get; set; }
         public string cookie_name { get; set; }
         public AppUser user { get; set; }
+        public ConfigUser configUsr { get; set; }
+    }
+    public class UserStats
+    {
+        public int guestsCount { get; set; }
+        public int todosCount { get; set; }
+        public int wishesCount { get; set; }
     }
     public class AppUser
     {

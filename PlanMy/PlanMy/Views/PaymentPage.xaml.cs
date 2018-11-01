@@ -30,8 +30,7 @@ namespace PlanMy.Views
             WooCommerceNET.RestAPI rest = new WooCommerceNET.RestAPI("https://www.planmy.me/wp-json/wc/v2/", Statics.ConsumerKey, Statics.ConsumerSecret);
             wc = new WooCommerceNET.WooCommerce.v2.WCObject(rest);
             int userId = cookie.user.id;
-            string data = await con.DownloadData("https://www.planmy.me/maizonpub-api/users.php", "action=get&userid=" + userId);
-            var user = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigUser>(data);
+            var user = cookie.configUsr;
 
             decimal total = 0;
             List<OrderLineItem> items = new List<OrderLineItem>();
