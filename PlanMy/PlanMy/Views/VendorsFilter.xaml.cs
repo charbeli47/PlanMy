@@ -1,6 +1,7 @@
 ﻿using PlanMy.Library;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,20 +12,46 @@ using Xamarin.Forms.Xaml;
 namespace PlanMy.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class VendorsFilter : ContentPage
-	{
-        public VendorsFilter (int catid)
+	public partial class VendorsFilter : ContentPage, INotifyPropertyChanged
+    {
+        public event EventHandler<EventArgs> OperationCompleted;
+        public VendorsFilter (int catid, ref List<int> type, ref List<int> city, ref List<int> setting, ref List<int> cateringservicesInt, ref List<int> typeoffurnitureInt, ref List<int> clienteleInt, ref List<int> clothingInt, ref List<int> beautyservicesInt, ref List<int> typeofmusiciansInt, ref List<int> itemlocationInt, ref List<int> typeofserviceInt, ref List<int> capacityInt, ref List<int> honeymoonexperienceInt)
 		{
 			InitializeComponent ();
-            LoadSwitches(catid);
+            IsLoading = true;
+            BindingContext = this;
+            LoadSwitches(catid, type, city, setting, cateringservicesInt, typeoffurnitureInt, clienteleInt, clothingInt, beautyservicesInt, typeofmusiciansInt, itemlocationInt, typeofserviceInt, capacityInt, honeymoonexperienceInt);
         }
-        public async void LoadSwitches(int catid)
+        private bool isLoading;
+        public bool IsLoading
+        {
+            get
+            {
+                return this.isLoading;
+            }
+
+            set
+            {
+                this.isLoading = value;
+                RaisePropertyChanged("IsLoading");
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void RaisePropertyChanged(string propName)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propName));
+            }
+        }
+        public async void LoadSwitches(int catid, List<int> type, List<int> city, List<int> setting, List<int> cateringservicesInt, List<int> typeoffurnitureInt, List<int> clienteleInt, List<int> clothingInt, List<int> beautyservicesInt, List<int> typeofmusiciansInt, List<int> itemlocationInt, List<int> typeofserviceInt, List<int> capacityInt, List<int> honeymoonexperienceInt)
         {
             try
             {
-
+                IsLoading = true;
                 WordpressService ws = new WordpressService();
-                List<int> type = new List<int>(), city = new List<int>(), setting = new List<int>(), cateringservicesInt = new List<int>(), typeoffurnitureInt = new List<int>(), clienteleInt = new List<int>(), clothingInt = new List<int>(), beautyservicesInt = new List<int>(), typeofmusiciansInt = new List<int>(), itemlocationInt = new List<int>(), typeofserviceInt = new List<int>(), capacityInt = new List<int>(), honeymoonexperienceInt = new List<int>();
+                
                 switch (catid)
                 {
 
@@ -89,6 +116,7 @@ namespace PlanMy.Views
             {
 
             }
+            IsLoading = false;
         }
         private void AddTitle(string v)
         {
@@ -118,6 +146,8 @@ namespace PlanMy.Views
                     Label label = new Label();
                     label.Text = System.Net.WebUtility.HtmlDecode(row.Name);
                     Switch button = new Switch();
+                    if (par.Contains(row.Id))
+                        button.IsToggled = true;
                     button.Toggled += (s, e) =>
                     {
                         try
@@ -148,6 +178,12 @@ namespace PlanMy.Views
             {
 
             }
+        }
+
+        private async void filterBtn_Clicked(object sender, EventArgs e)
+        {
+            OperationCompleted?.Invoke(this, EventArgs.Empty);
+            await Navigation.PopModalAsync();
         }
     }
     

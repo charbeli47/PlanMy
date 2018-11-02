@@ -27,11 +27,11 @@ namespace PlanMy.Views
                 eventname.Text = user.event_name;
                 eventlocation.Text = user.event_location;
                 pickImg.Source = user.event_img;
-                pickImg.IsVisible = true;
+                pickImg.IsVisible = false;
                 eventDate.Date = DateTime.Parse(user.event_date);
             }
             //EventTypePicker.SelectedIndex = 0;
-            IsLoading = false;
+            IsLoading = true;
             BindingContext = this;
         }
 

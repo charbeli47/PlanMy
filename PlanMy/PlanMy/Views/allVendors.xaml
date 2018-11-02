@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PlanMy.Views.allVendors">
     <ContentPage.Content>
-        <ScrollView>
+        
         <StackLayout BackgroundColor="White">
-            <StackLayout x:Name="Header">
+            <StackLayout x:Name="Header" VerticalOptions="StartAndExpand" HeightRequest="100">
                 <Frame OutlineColor="Black" x:Name="Headerframe">
                     <StackLayout x:Name="Menu">
                         <Grid>
@@ -25,20 +25,25 @@
                     </StackLayout>
                 </Frame>
             </StackLayout>
+            <ScrollView Scrolled="ScrollView_Scrolled" x:Name="myScrollView" VerticalOptions="Fill" >
+                <StackLayout x:Name="Content" VerticalOptions="FillAndExpand" >
+                    <!--<StackLayout Orientation="Horizontal">
+                        <Label x:Name="NumberOfSupplieres" TextColor="Gray" FontSize = "16" Text="" FontAttributes="Italic" Margin="10,0,0,0" />
+                        <Label  TextColor="Gray" FontSize = "16" Text="supliers" FontAttributes="Italic"  />
 
-            <StackLayout x:Name="Content">
-                <StackLayout Orientation="Horizontal">
-                <Label x:Name="NumberOfSupplieres" TextColor="Gray" FontSize = "16" Text="" FontAttributes="Italic" Margin="10,0,0,0" />
-                    <Label  TextColor="Gray" FontSize = "16" Text="supliers" FontAttributes="Italic"  />
+                    </StackLayout>-->
+                    
+                    <StackLayout x:Name="list" HorizontalOptions="FillAndExpand"></StackLayout>
+                    <ActivityIndicator x:Name="actInd"
+ AbsoluteLayout.LayoutFlags="PositionProportional"
+ AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
+                                   Margin="0,50,0,0"
+ IsRunning="{Binding IsLoading}"
+ IsVisible="{Binding IsLoading}" />
 
                 </StackLayout>
-             
-                    <StackLayout x:Name="list" HorizontalOptions="FillAndExpand"></StackLayout>
-              
-
-            </StackLayout>
-
+            </ScrollView>
         </StackLayout>
-        </ScrollView>
+        
     </ContentPage.Content>
 </ContentPage>

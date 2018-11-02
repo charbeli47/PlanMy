@@ -115,6 +115,8 @@ namespace WordPressPCL.Utility
         public int[] ItemTypeOfMusicians { get; set; }
         [QueryText("itemcity")]
         public int[] ItemCity { get; set; }
+        [QueryText("itemlocation")]
+        public int[] ItemLocation { get; set; }
         /// <summary>
         /// Limit result set to all items except those that have the specified term assigned in the categories taxonomy.
         /// </summary>
