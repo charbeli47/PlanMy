@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -54,6 +55,10 @@ namespace PlanMy.Views
             WordpressService service = new WordpressService();
             //var vendors = service.GetItemCategoriesAsync();
             vendors = await service.GetItemCategoriesAsync();
+            foreach(var vendor in vendors)
+            {
+                vendor.Name = WebUtility.HtmlDecode(vendor.Name);
+            }
             VendorsListView.ItemsSource = vendors;
         }
     }

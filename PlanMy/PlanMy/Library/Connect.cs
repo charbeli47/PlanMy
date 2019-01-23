@@ -105,8 +105,9 @@ namespace PlanMy.Library
             {
                 IFolder rootFolder = FileSystem.Current.LocalStorage;
                 IFolder folder = await rootFolder.CreateFolderAsync("MySubFolder", CreationCollisionOption.OpenIfExists);
-                IFile file = await folder.CreateFileAsync(key + ".txt", CreationCollisionOption.ReplaceExisting);
-                await file.WriteAllTextAsync("");
+                IFile file = await folder.GetFileAsync(key + ".txt");
+                await file.DeleteAsync();
+                //await file.WriteAllTextAsync("");
             }
             catch { }
         }

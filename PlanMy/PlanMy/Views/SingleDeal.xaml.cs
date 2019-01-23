@@ -71,29 +71,34 @@ namespace PlanMy.Views
                 List<OrderLineItem> items = new List<OrderLineItem>();
                 var lineItem = new OrderLineItem { name = prod.name, price = prodprice, quantity = 1, product_id = prod.id, subtotal = prodprice, total = prodprice };
                 items.Add(lineItem);
-                string userdata = await con.GetData("User");
-                UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(userdata);
-                int userId = cookie.user.id;
-                string data = await con.DownloadData("http://planmy.me/maizonpub-api/users.php", "action=get&userid=" + userId);
-                var user = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigUser>(data);
-                var order = wc.Order;
-                OrderBilling billing = new OrderBilling { address_1 = user.user_weddingcity, address_2 = "", city = user.user_weddingcity, country = "LB", email = user.email, first_name = user.first_name, last_name = user.last_name, state = "", postcode = "", phone = "" };
-                try
+                var usr = await con.GetData("User");
+                UserCookie cookie = new UserCookie();
+                if (!string.IsNullOrEmpty(usr))
                 {
-                    Order o = new Order { line_items = items, total = prod.price, customer_id = cookie.user.id, status = "processing", billing = billing, payment_method = "cybsawm", payment_method_title = "CyberSource Secure Acceptance", set_paid = true };
-                    var addedOrder = await order.Add(o);
+                    cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                    int userId = cookie.user.id;
+                    string data = await con.DownloadData("http://planmy.me/maizonpub-api/users.php", "action=get&userid=" + userId);
+                    var user = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigUser>(data);
+                    var order = wc.Order;
+                    OrderBilling billing = new OrderBilling { address_1 = user.user_weddingcity, address_2 = "", city = user.user_weddingcity, country = "LB", email = user.email, first_name = user.first_name, last_name = user.last_name, state = "", postcode = "", phone = "" };
+                    try
+                    {
+                        Order o = new Order { line_items = items, total = prod.price, customer_id = cookie.user.id, status = "processing", billing = billing, payment_method = "cybsawm", payment_method_title = "CyberSource Secure Acceptance", set_paid = true };
+                        var addedOrder = await order.Add(o);
 
-                    await DisplayAlert("Success", "Thank you for selecting this offer.\r\n We sent you an email please check it.", "CLOSE");
-                    await Navigation.PopModalAsync(true);
-                }
-                catch (Exception ex)
-                {
-                    MessagingCenter.Subscribe<SingleDeal, string>(this, "Error",(s, arg) => {
-                        Navigation.PopModalAsync(true);
-                    });
-                    MessagingCenter.Send<SingleDeal, string>(this, "Error", "An error occured, please try again later.");
-                    await DisplayAlert("Error", "An error occured, please try again later.", "CLOSE");
+                        await DisplayAlert("Success", "Thank you for selecting this offer.\r\n We sent you an email please check it.", "CLOSE");
+                        await Navigation.PopModalAsync(true);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessagingCenter.Subscribe<SingleDeal, string>(this, "Error", (s, arg) =>
+                        {
+                            Navigation.PopModalAsync(true);
+                        });
+                        MessagingCenter.Send<SingleDeal, string>(this, "Error", "An error occured, please try again later.");
+                        await DisplayAlert("Error", "An error occured, please try again later.", "CLOSE");
 
+                    }
                 }
             }
         }

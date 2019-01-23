@@ -1,5 +1,9 @@
-﻿using System;
+﻿using PlanMy.Library;
+using Plugin.ContactService.Shared;
+using Plugin.Permissions.Abstractions;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -13,12 +17,13 @@ namespace PlanMy.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class newguest : ContentPage
 	{
-		public newguest (bool isedit,guest guestt)
+        public event EventHandler<EventArgs> OperationCompleted;
+        public newguest (bool isedit,guest guestt)
 		{
 			InitializeComponent ();
 			backarrow.Clicked += async (object sender, EventArgs e) =>
 			{
-				Navigation.PopModalAsync();
+				await Navigation.PopModalAsync();
 			};
 			if (isedit == true && guestt != null)
 
@@ -105,8 +110,8 @@ namespace PlanMy.Views
 		//function to add task//
 		public async void addguest()
 		{
-			
-			using (var cl = new HttpClient())
+            var usr = await GetUser();
+            using (var cl = new HttpClient())
 			{
 				var formcontent = new FormUrlEncodedContent(new[]
 				{
@@ -117,19 +122,30 @@ namespace PlanMy.Views
 			new KeyValuePair<string,string>("Phone",guestphone.Text),
 			new KeyValuePair<string, string>("Email",guestemail.Text),
 			new KeyValuePair<string, string>("RSVP",RspPicker.SelectedItem.ToString()),
-			new KeyValuePair<string, string>("userid","169")
+			new KeyValuePair<string, string>("userid",usr.user.id.ToString())
 		});
 
 				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/guestlist.php?action=insert", formcontent);
 				request.EnsureSuccessStatusCode();
 				var response = await request.Content.ReadAsStringAsync();
-				Navigation.PushModalAsync(new Planning());
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
 
 			}
 		}
-
-		//function to edit task//
-		public async void editguest(guest guestt)
+        public async Task<UserCookie> GetUser()
+        {
+            Connect con = new Connect();
+            var usr = await con.GetData("User");
+            UserCookie cookie = new UserCookie();
+            if (!string.IsNullOrEmpty(usr))
+            {
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+            }
+            return cookie;
+        }
+        //function to edit task//
+        public async void editguest(guest guestt)
 		{
 			
 			using (var cl = new HttpClient())
@@ -154,8 +170,8 @@ namespace PlanMy.Views
 				request.EnsureSuccessStatusCode();
 
 				var response = await request.Content.ReadAsStringAsync();
-
-				Navigation.PushModalAsync(new Planning());
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
 
 			}
 		}
@@ -179,11 +195,28 @@ namespace PlanMy.Views
 				request.EnsureSuccessStatusCode();
 
 				var response = await request.Content.ReadAsStringAsync();
-
-				Navigation.PushModalAsync(new Planning());
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
 
 			}
 		}
 
-	}
+        private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+            var perm = await Utils.CheckPermissions(Permission.Contacts);
+            if(perm ==PermissionStatus.Granted)
+            {
+                var ContactList = new ContactList();
+                ContactList.OperationCompleted += (s,ev)=> {
+                    var contact = ContactList.contact;
+                    guestname.Text = contact.Name;
+                    guestemail.Text = contact.Email;
+                    guestphone.Text = contact.Number;
+                };
+                await Navigation.PushModalAsync(ContactList);
+
+
+            }
+        }
+    }
 }

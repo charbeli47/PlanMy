@@ -25,8 +25,10 @@ namespace PlanMy.Views
         private async void LoadPage(List<BasketItem> lineItems)
         {
             Connect con = new Connect();
-            string userdata = await con.GetData("User");
-            UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(userdata);
+            var usr = await con.GetData("User");
+            UserCookie cookie = new UserCookie();
+            if (!string.IsNullOrEmpty(usr))
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
             WooCommerceNET.RestAPI rest = new WooCommerceNET.RestAPI("https://www.planmy.me/wp-json/wc/v2/", Statics.ConsumerKey, Statics.ConsumerSecret);
             wc = new WooCommerceNET.WooCommerce.v2.WCObject(rest);
             int userId = cookie.user.id;

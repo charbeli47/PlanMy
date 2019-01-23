@@ -10,9 +10,10 @@ namespace PlanMy
 	public class MapPage : ContentPage
 	{
 		Map map;
-		public MapPage()
+		public MapPage(double latitude, double longitude)
 		{
-			map = new Map
+            
+            map = new Map
 			{
 				IsShowingUser = true,
 				HeightRequest = 100,
@@ -20,7 +21,7 @@ namespace PlanMy
 				VerticalOptions = LayoutOptions.FillAndExpand
 			};
 			// You can use MapSpan.FromCenterAndRadius   
-			map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(37, -122), Distance.FromMiles(0.3)));
+			map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(latitude, longitude), Distance.FromMiles(0.3)));
 			// or create a new MapSpan object directly  
 			//map.MoveToRegion(new MapSpan(new Position(0, 0), 360, 360));  
 			// add the slider  
@@ -32,32 +33,7 @@ namespace PlanMy
 				if (map.VisibleRegion != null) map.MoveToRegion(new MapSpan(map.VisibleRegion.Center, latlongdegrees, latlongdegrees));
 			};
 			// create map style buttons  
-			var street = new Button
-			{
-				Text = "Street"
-			};
-			var hybrid = new Button
-			{
-				Text = "Hybrid"
-			};
-			var satellite = new Button
-			{
-				Text = "Satellite"
-			};
-			street.Clicked += HandleClicked;
-			hybrid.Clicked += HandleClicked;
-			satellite.Clicked += HandleClicked;
-			var segments = new StackLayout
-			{
-				Spacing = 30,
-				HorizontalOptions = LayoutOptions.CenterAndExpand,
-				Orientation = StackOrientation.Horizontal,
-				Children = {
-						street,
-						hybrid,
-						satellite
-					}
-			};
+			
 			// put the page together  
 			var stack = new StackLayout
 			{
@@ -65,7 +41,6 @@ namespace PlanMy
 			};
 			stack.Children.Add(map);
 			stack.Children.Add(slider);
-			stack.Children.Add(segments);
 			Content = stack;
 			// for debugging output only  
 			map.PropertyChanged += (sender, e) => {

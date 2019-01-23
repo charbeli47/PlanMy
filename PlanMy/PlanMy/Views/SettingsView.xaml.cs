@@ -26,16 +26,17 @@ namespace PlanMy.Views
             LoadPage();
             App.PostSuccessFacebookAction = async token =>
             {
+                Connect con = new Connect();
+                
                 var vm = BindingContext as FacebookViewModel;
-
+                
                 var requestUrl =
                 "https://graph.facebook.com/v3.1/me/?fields=name,picture,work,website,religion,location,locale,link,cover,age_range,birthday,devices,email,first_name,last_name,gender,hometown,is_verified,languages,photos&access_token="
                 + token;
 
                 var httpClient = new HttpClient();
 
-                var userJson = await httpClient.GetStringAsync(requestUrl);
-                Connect con = new Connect();                
+                var userJson = await httpClient.GetStringAsync(requestUrl);         
                 var facebookProfile = JsonConvert.DeserializeObject<FacebookProfile>(userJson);
                 requestUrl = "https://graph.facebook.com/me/picture?type=large&access_token=" + token;
                 facebookProfile.Picture.Data.Url = requestUrl;
@@ -79,6 +80,10 @@ namespace PlanMy.Views
             {
                 privateEventSwith.IsToggled = _profile.user.private_event == "true" || _profile.user.private_event == "True";
             }
+            else
+            {
+                helpBtn.IsVisible = false;
+            }
         }
 
         private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
@@ -90,7 +95,8 @@ namespace PlanMy.Views
 
         private void TapGestureRecognizer_Tapped_1(object sender, EventArgs e)
         {
-
+            VendorItem vendorItem = new VendorItem { post_author = "1", featured_media = "chatlogo.png", post_title = "Plan My" };
+            Navigation.PushModalAsync(new MainChatPage(vendorItem));
         }
 
         

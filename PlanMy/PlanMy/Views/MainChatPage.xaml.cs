@@ -18,7 +18,7 @@ namespace PlanMy.Views
         public MainChatPage(VendorItem vendor)
         {
             InitializeComponent();
-            Title = "Chatting with " + vendor.post_title;
+            Pagetitle.Text = "Chatting with " + vendor.post_title;
             LoadPage(vendor); 
             
 
@@ -44,6 +44,11 @@ namespace PlanMy.Views
         {
             MessagesListView.SelectedItem = null;
 
+        }
+
+        private void backarrow_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PopModalAsync();
         }
     }
 }

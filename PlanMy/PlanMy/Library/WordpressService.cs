@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using WordPressPCL;
@@ -50,6 +51,24 @@ namespace PlanMy.Library
             //posts = posts.Skip((page - 1) * perPage).Take(perPage);//.Where(x => ((Dictionary<string,string>)x.Meta)["featured_item"]=="on");
             return posts;
         }
+        public async Task<IEnumerable<Item>> GetFeaturedItemsByCategoryAsync(int categoryId, int page = 0, int perPage = 20)
+        {
+            page++;
+            int[] cats = new int[1];
+            cats[0] = categoryId;
+
+            var posts = await _client.Items.Query(new PostsQueryBuilder
+            {
+                Page = page,
+                PerPage = perPage,
+                Embed = true,
+                ItemCategories = cats,
+                OrderBy = PostsOrderBy.Id,
+                featured_item = true
+            });
+            //posts = posts.Skip((page - 1) * perPage).Take(perPage);//.Where(x => ((Dictionary<string,string>)x.Meta)["featured_item"]=="on");
+            return posts;
+        }
         public async Task<IEnumerable<Item>> GetItemsByCategoryAsync(int categoryId, int page = 0, int perPage = 10)
         {
             page++;
@@ -72,34 +91,64 @@ namespace PlanMy.Library
             //posts = posts.Skip((page - 1) * perPage).Take(perPage);//.Where(x => ((Dictionary<string,string>)x.Meta)["featured_item"]=="on");
             return posts;
         }
-        public async Task<IEnumerable<Item>> GetItemsByFilterAsync(int categoryId, int[] ItemTypes, int[] HoneymoonExperience, int[] TypeOfService, int[] Capacity, int[] ItemSetting, int[] ItemCateringServices, int[] ItemtypeOfFurniture, int[] ItemClientele, int[] ItemClothing, int[] ItemBeautyServices, int[] ItemTypeOfMusicians, int[] ItemCity,int[] ItemLocation, int page = 0, int perPage = 10)
+        public async Task<IEnumerable<Item>> GetItemsByFilterAsync(int categoryId, int[] ItemTypes, int[] HoneymoonExperience, int[] TypeOfService, int[] Capacity, int[] ItemSetting, int[] ItemCateringServices, int[] ItemtypeOfFurniture, int[] ItemClientele, int[] ItemClothing, int[] ItemBeautyServices, int[] ItemTypeOfMusicians, int[] ItemCity,int[] ItemLocation, int page = 0, int perPage = 3)
         {
             page++;
             int[] cats = new int[1];
             cats[0] = categoryId;
-            var posts = await _client.Items.Query(new PostsQueryBuilder
+            try
             {
-                Page = page,
-                PerPage = perPage,
-                Embed = true,
-                ItemCategories = cats,
-                ItemTypes = ItemTypes,
-                HoneymoonExperience = HoneymoonExperience,
-                TypeOfService = TypeOfService,
-                Capacity = Capacity,
-                ItemSetting = ItemSetting,
-                ItemCateringServices = ItemCateringServices,
-                ItemtypeOfFurniture = ItemtypeOfFurniture,
-                ItemClientele = ItemClientele,
-                ItemClothing = ItemClothing,
-                ItemBeautyServices = ItemBeautyServices,
-                ItemTypeOfMusicians = ItemTypeOfMusicians,
-                ItemCity = ItemCity,
-                ItemLocation = ItemLocation,
-                OrderBy = PostsOrderBy.Id
-            });
+                var posts = await _client.Items.Query(new PostsQueryBuilder
+                {
+                    Page = page,
+                    PerPage = perPage,
+                    Embed = true,
+                    ItemCategories = cats,
+                    ItemTypes = ItemTypes,
+                    HoneymoonExperience = HoneymoonExperience,
+                    TypeOfService = TypeOfService,
+                    Capacity = Capacity,
+                    ItemSetting = ItemSetting,
+                    ItemCateringServices = ItemCateringServices,
+                    ItemtypeOfFurniture = ItemtypeOfFurniture,
+                    ItemClientele = ItemClientele,
+                    ItemClothing = ItemClothing,
+                    ItemBeautyServices = ItemBeautyServices,
+                    ItemTypeOfMusicians = ItemTypeOfMusicians,
+                    ItemCity = ItemCity,
+                    ItemLocation = ItemLocation,
+                    OrderBy = PostsOrderBy.Id
+                });
+                //posts = posts.Skip((page - 1) * perPage).Take(perPage);//.Where(x => ((Dictionary<string,string>)x.Meta)["featured_item"]=="on");
+                return posts;
+            }
+            catch(Exception ex)
+            {
+                return new List<Item>().AsEnumerable();
+            }
+        }
+        public async Task<IEnumerable<MediaItem>> GetItemMedia(int itemId)
+        {
+            /*int[] parents = new int[1];
+            parents[0] = itemId;
+            try
+            {
+                var qb = new MediaQueryBuilder
+                {
+                    Parents = parents
+                };
+                var posts = await _client.Media.Query(qb);
+            
             //posts = posts.Skip((page - 1) * perPage).Take(perPage);//.Where(x => ((Dictionary<string,string>)x.Meta)["featured_item"]=="on");
-            return posts;
+                return posts;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }*/
+            WebClient client = new WebClient();
+            var resp = client.DownloadString("https://planmy.me/wp-json/wp/v2/media/?parent=" + itemId+"&per_page=50");
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<MediaItem>>(resp);
         }
         public async Task<IEnumerable<ItemCategory>> GetItemCategoriesAsync(int page = 0, int perPage = 50)
         {

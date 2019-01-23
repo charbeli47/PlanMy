@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using WordPressPCL.Models;
@@ -95,7 +96,12 @@ namespace WordPressPCL.Client
         {
             // default values
             // int page = 1, int per_page = 10, int offset = 0, Post.OrderBy orderby = Post.OrderBy.date
-            return _httpHelper.GetRequest<IEnumerable<Item>>($"{_defaultPath}{_methodPath}?search={searchTerm}", embed, useAuth);
+            var items =  _httpHelper.GetRequest<IEnumerable<Item>>($"{_defaultPath}{_methodPath}?search={searchTerm}", embed, useAuth);
+            if (items != null)
+                return items;
+            else
+                return new Task<IEnumerable<Item>>(null);
+                
         }
 
         /// <summary>

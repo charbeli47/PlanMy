@@ -18,16 +18,16 @@
             <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" x:Name="ContentStack">
                 <StackLayout x:Name="Header" HorizontalOptions="FillAndExpand" >
                     <Image Source="profileheader.png" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" x:Name="ProfileImg" HeightRequest="230" BackgroundColor="Gray" Scale="1.5"></Image>
-                    <Image Source="timerback.png" Margin="0,-30,0,0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"></Image>
+                    <StackLayout HeightRequest="80" BackgroundColor="#75d3c5" Margin="0,0,0,0" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"></StackLayout>
                     <StackLayout Margin="0,-270,0,0" >
                         <StackLayout Margin="30,0,30,0"  Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                             <models:searchevententry x:Name="searchevent" BackgroundColor="Transparent" Placeholder="Search for an event" FontAttributes="Italic" TextColor="White" HorizontalOptions="StartAndExpand" HeightRequest="40" WidthRequest="300" PlaceholderColor="White" />
-                            <Button x:Name="configBtn" Image="configBtn.png" HorizontalOptions="End" Clicked="configBtn_Clicked" BackgroundColor="Transparent" WidthRequest="50"/>
+                            <Button x:Name="configBtn" Image="configBtn.png" HorizontalOptions="End" Clicked="configBtn_Clicked" BackgroundColor="Transparent" IsVisible="False" WidthRequest="50"/>
                         </StackLayout>
                         <Image Source="header.png" HeightRequest="50" Margin="0,10,0,0"/>
                         <Button BorderColor="White" BorderWidth="1" BorderRadius="30" BackgroundColor="Transparent" TextColor="White" Margin="100,0,100,0" HeightRequest="35" Text="Start Planning" x:Name="StartPlanningBtn" Clicked="StartPlanningBtn_Clicked"/>
-                        <StackLayout HeightRequest="37" Margin="100,0,100,0" IsVisible="false" x:Name="planningstarted"></StackLayout> 
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,30,0,0">
+                        <StackLayout HeightRequest="37" Margin="100,0,100,0" IsVisible="false" x:Name="planningstarted"></StackLayout>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Margin="0,40,0,0">
                             <StackLayout>
                                 <Label x:Name="dayDisplay" TextColor="White" FontSize="20" HorizontalTextAlignment="Center">00</Label>
                                 <Label TextColor="White" FontSize="15" HorizontalTextAlignment="Center">days</Label>
@@ -92,7 +92,7 @@
                     <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="0,10,0,0" HeightRequest="20" BackgroundColor="#ebebeb"></StackLayout>
                     <StackLayout HorizontalOptions="FillAndExpand" Margin="0,10,0,0">
                         <Label Text="Recommended suppliers" FontAttributes="Bold" FontSize="15" Margin="10,0,0,0" HorizontalOptions="FillAndExpand"></Label>
-                        
+                        <WebView x:Name="preload" HeightRequest="144" HorizontalOptions="FillAndExpand"></WebView>
                         <ScrollView HorizontalOptions="FillAndExpand" HeightRequest="150" Orientation="Horizontal" HorizontalScrollBarVisibility="Never" IsEnabled="True" VerticalScrollBarVisibility="Never">
                             <StackLayout x:Name="favVendors" Orientation="Horizontal"></StackLayout>
                         </ScrollView>

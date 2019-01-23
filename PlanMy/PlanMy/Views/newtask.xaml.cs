@@ -16,8 +16,8 @@ namespace PlanMy
 	public partial class newtask : ContentPage
 	{
 		public IEnumerable<WordPressPCL.Models.ItemCategory> cats;
-	
-		List<string> catnames = new List<string>();
+        public event EventHandler<EventArgs> OperationCompleted;
+        List<string> catnames = new List<string>();
 		List<int> catids = new List<int>();
 		public newtask (bool isedit,todoobj task)
 		{
@@ -103,30 +103,42 @@ namespace PlanMy
 		//function to add task//
 		public async void addtask()
 		{
-			WordPressPCL.Models.ItemCategory catt = (WordPressPCL.Models.ItemCategory)catPicker.SelectedItem;
+            var usr = await GetUser();
+            WordPressPCL.Models.ItemCategory catt = (WordPressPCL.Models.ItemCategory)catPicker.SelectedItem;
 			using (var cl = new HttpClient())
 			{
 				var formcontent = new FormUrlEncodedContent(new[]
 				{
-			new KeyValuePair<string,string>("todo_user","169"),
+			new KeyValuePair<string,string>("todo_user",usr.user.id.ToString()),
 			new KeyValuePair<string, string>("todo_title",titleoftask.Text),
 				new KeyValuePair<string,string>("todo_details",detailstask.Text),
 			new KeyValuePair<string, string>("todo_date",Datepickertask.Date.ToString("yyyy-MM-dd")),
 			new KeyValuePair<string,string>("todo_read","0"),
 			new KeyValuePair<string, string>("todo_category",catt.Id.ToString()),
-			new KeyValuePair<string, string>("is_priority",priorityPicker.SelectedItem.ToString())
+			new KeyValuePair<string, string>("is_priority","no")
 		});
 
 				var request = await cl.PostAsync("https://www.planmy.me/maizonpub-api/todolist.php?action=insert", formcontent);
 				request.EnsureSuccessStatusCode();
 				var response = await request.Content.ReadAsStringAsync();
-				Navigation.PushModalAsync(new Planning());
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                Navigation.PopModalAsync();
 
 			}
 		}
-
-		//function to edit task//
-		public async void edittask(todoobj task)
+        public async Task<UserCookie> GetUser()
+        {
+            Connect con = new Connect();
+            var usr = await con.GetData("User");
+            UserCookie cookie = new UserCookie();
+            if (!string.IsNullOrEmpty(usr))
+            {
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+            }
+            return cookie;
+        }
+        //function to edit task//
+        public async void edittask(todoobj task)
 		{
 			WordPressPCL.Models.ItemCategory catt = (WordPressPCL.Models.ItemCategory)catPicker.SelectedItem;
 			using (var cl = new HttpClient())
@@ -148,8 +160,8 @@ namespace PlanMy
 				request.EnsureSuccessStatusCode();
 
 				var response = await request.Content.ReadAsStringAsync();
-
-				Navigation.PushModalAsync(new Planning());
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                Navigation.PopModalAsync();
 
 			}
 		}

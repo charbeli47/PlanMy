@@ -47,7 +47,6 @@ namespace PlanMy.Views
 			NavigationPage.SetHasNavigationBar(this, false);
 			backarrow.Clicked += async (object sender, EventArgs e) =>
 			{
-                OperationCompleted?.Invoke(this, EventArgs.Empty);
                 await Navigation.PopModalAsync();
 			};
 		
@@ -98,12 +97,13 @@ namespace PlanMy.Views
 		public async void addnewexpense()
 		{
 			expense expensecat = (expense)catPicker.SelectedItem;
+            var usr = await GetUser();
 			using (var cl = new HttpClient())
 			{
 				var formcontent = new FormUrlEncodedContent(new[]
 				{
 			new KeyValuePair<string,string>("category_id",expensecat.category_id.ToString()),
-			new KeyValuePair<string, string>("user_id","169"),
+			new KeyValuePair<string, string>("user_id",usr.user.id.ToString()),
 				new KeyValuePair<string,string>("name",expenddescription.Text),
 			new KeyValuePair<string, string>("estimate_cost",expendestimatedcost.Text),
 			new KeyValuePair<string,string>("actual_cost",expendactualcost.Text),
@@ -120,30 +120,44 @@ namespace PlanMy.Views
 			}
 		}
 		
-
+        public async Task<UserCookie> GetUser()
+        {
+            Connect con = new Connect();
+            var usr = await con.GetData("User");
+            UserCookie cookie = new UserCookie();
+            if (!string.IsNullOrEmpty(usr))
+            {
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+            }
+            return cookie;
+        }
 		public async void getcatsexpenses(bool isedit,expenseforcat ec)
 		{
 			Connect con = new Connect();
-			string todostring = await con.DownloadData("http://planmy.me/maizonpub-api/budget_category.php", "action=get&category_user_id=169");
-			List<expense> listofcats = JsonConvert.DeserializeObject<List<expense>>(todostring);
-			catPicker.ItemsSource = listofcats;
+            var usr = await GetUser();
+            if (usr.user != null)
+            {
+                string todostring = await con.DownloadData("http://planmy.me/maizonpub-api/budget_category.php", "action=get&category_user_id=" + usr.user.id);
+                List<expense> listofcats = JsonConvert.DeserializeObject<List<expense>>(todostring);
+                catPicker.ItemsSource = listofcats;
 
-			int selectedindex = 0;
-			int i = 0;
-			if (isedit == true)
-			{
+                int selectedindex = 0;
+                int i = 0;
+                if (isedit == true)
+                {
 
-				foreach (expense item in listofcats)
-				{
-					if (item.category_id.ToString() == ec.budget_list_category_id.ToString())
-					{
-						selectedindex = i;
-					}
-					i++;
-				}
-				catPicker.SelectedIndex = selectedindex;
-				catPicker.IsEnabled = false;
-			}
+                    foreach (expense item in listofcats)
+                    {
+                        if (item.category_id.ToString() == ec.budget_list_category_id.ToString())
+                        {
+                            selectedindex = i;
+                        }
+                        i++;
+                    }
+                    catPicker.SelectedIndex = selectedindex;
+                    catPicker.IsEnabled = false;
+                }
+            }
 		}
 
 		public async void updateexpense(expenseforcat expense)
@@ -192,11 +206,12 @@ namespace PlanMy.Views
 		public async void addnewexpensecat()
 		{
 			expense expensecat = (expense)catPicker.SelectedItem;
+            var usr = await GetUser();
 			using (var cl = new HttpClient())
 			{
 				var formcontent = new FormUrlEncodedContent(new[]
 				{
-			new KeyValuePair<string,string>("category_user_id","169"),
+			new KeyValuePair<string,string>("category_user_id",usr.user.id.ToString()),
 			new KeyValuePair<string, string>("category_name",expendnewname.Text),
 			
 

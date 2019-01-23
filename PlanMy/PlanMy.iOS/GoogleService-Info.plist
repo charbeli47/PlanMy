@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>854567217365-24jqj8s18lkd5re281av61gscalp7c8e.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.854567217365-24jqj8s18lkd5re281av61gscalp7c8e</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBDvKf_DtK9i87zv95PqmwKGZEDnOuDsWA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>854567217365</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.maizonpub.planmy</string>
+	<key>PROJECT_ID</key>
+	<string>planmy-976b3</string>
+	<key>STORAGE_BUCKET</key>
+	<string>planmy-976b3.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:854567217365:ios:23f512dee79bc548</string>
+	<key>DATABASE_URL</key>
+	<string>https://planmy-976b3.firebaseio.com</string>
+</dict>
+</plist>

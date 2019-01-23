@@ -439,14 +439,6 @@
             <param name="filename">Name of file in WP Media Library</param>
             <returns>Created media object</returns>
         </member>
-        <member name="M:WordPressPCL.Client.Media.Create(System.String,System.String)">
-            <summary>
-            Create Media entity with attachment
-            </summary>
-            <param name="filePath">Local Path to file</param>
-            <param name="filename">Name of file in WP Media Library</param>
-            <returns>Created media object</returns>
-        </member>
         <member name="M:WordPressPCL.Client.Media.Delete(System.Int32)">
             <summary>
             Delete Entity
@@ -674,7 +666,23 @@
             </summary>
             <param name="embed">Include embed info</param>
             <param name="useAuth">Send request with authenication header</param>
-       est with authenication header</param>
+            <returns>List of all result</returns>
+        </member>
+        <member name="M:WordPressPCL.Client.PostStatuses.GetByID(System.Object,System.Boolean,System.Boolean)">
+            <summary>
+            Get Entity by Id
+            </summary>
+            <param name="ID">ID</param>
+            <param name="embed">include embed info</param>
+            <param name="useAuth">Send requ     <returns>List of all result</returns>
+        </member>
+        <member name="M:WordPressPCL.Client.PostStatuses.GetByID(System.Object,System.Boolean,System.Boolean)">
+            <summary>
+            Get Entity by Id
+            </summary>
+            <param name="ID">ID</param>
+            <param name="embed">include embed info</param>
+            <param name="useAuth">Send request with authenication header</param>
             <returns>Entity by Id</returns>
         </member>
         <member name="T:WordPressPCL.Client.PostTypes">
@@ -1039,19 +1047,7 @@
             </summary>
             <remarks>Context: view, edit</remarks>
         </member>
-        <member name="P:WordPressPCL.Models.Category.Parent">
-            <summary>
-            The parent term ID.
-            </summary>
-            <remarks>Context: view, edit</remarks>
-        </member>
-        <member name="P:WordPressPCL.Models.Category.Meta">
-            <summary>
-            Meta fields.
-            </summary>
-            <remarks>Context: view, edit</remarks>
-        </member>
-        <member name="M:WordPressPCL.Models.Category.#ctor">
+        <member name="P:Wo    <member name="M:WordPressPCL.Models.Category.#ctor">
             <summary>
             Parameterless constructor
             </summary>
@@ -1147,17 +1143,6 @@
             </summary>
             <remarks>Context: view, edit, embed</remarks>
         </member>
-        <member name="P:WordPressPCL.Models.Comment.Status">
-            <summary>
-            State of the object.
-            </summary>
-            <remarks>Context: view, edit</remarks>
-        </member>
-        <member name="P:WordPressPCL.Models.Comment.Type">
-            <summary>
-            Type of Comment for the object.
-            </summary>
-            <remarks>Cmember>
         <member name="P:WordPressPCL.Models.Comment.Status">
             <summary>
             State of the object.
@@ -1651,7 +1636,19 @@
             Video
             </summary>
         </member>
-                Type attribution for the term.
+        <member name="F:WordPressPCL.Models.MediaQueryType.Audio">
+            <summary>
+            Audio
+            </summary>
+        </member>
+        <member name="F:WordPressPCL.Models.MediaQueryType.Application">
+            <summary>
+            Application
+            </summary>
+        </member>
+        <member name="T:WordPressPCL.Models.TermTaxonomy">
+            <summary>
+            Type attribution for the term.
             </summary>
         </member>
         <member name="F:WordPressPCL.Models.TermTaxonomy.Category">
@@ -2905,15 +2902,6 @@
             Whether to include posts in the edit listing for their post type.
             </summary>
             <remarks>Context: edit</remarks>
-        </member>ith this resource should be publicly-queryable.
-            </summary>
-            <remarks>Context: edit</remarks>
-        </member>
-        <member name="P:WordPressPCL.Models.PostStatus.ShowInList">
-            <summary>
-            Whether to include posts in the edit listing for their post type.
-            </summary>
-            <remarks>Context: edit</remarks>
         </member>
         <member name="P:WordPressPCL.Models.PostStatus.Slug">
             <summary>
@@ -3014,7 +3002,15 @@
             <summary>
             Site description.
             </summary>
-        </mot become active until confirmed.
+        </member>
+        <member name="P:WordPressPCL.Models.Settings.Url">
+            <summary>
+            Site URL.
+            </summary>
+        </member>
+        <member name="P:WordPressPCL.Models.Settings.Email">
+            <summary>
+            This address is used for admin purposes. If you change this we will send you an email at your new address to confirm it. The new address will not become active until confirmed.
             </summary>
         </member>
         <member name="P:WordPressPCL.Models.Settings.Timezone">
@@ -3117,13 +3113,6 @@
             Constructor with same fields for Raw end Rendered
             </summary>
             <param name="Content">Text for Raw and rendered Content</param>
-        </member>
-        <member name="M:WordPressPCL.Models.Content.#ctor(System.String,System.String)">
-            <summary>
-            Constructor with Raw and Rendered content text fields
-            </summary>
-            <param name="ContentRaw">Raw HTML content text</param>
-            <param name="ContentRendered">Rendered contentent">Text for Raw and rendered Content</param>
         </member>
         <member name="M:WordPressPCL.Models.Content.#ctor(System.String,System.String)">
             <summary>
@@ -3456,7 +3445,20 @@
             This is the base class for all terms, like categories and tags
             </summary>
         </member>
-        <member name="Pmarks>Context: view, embed, edit</remarks>
+        <member name="P:WordPressPCL.Models.Term.Link">
+            <summary>
+            URL of the term.
+            </summary>
+            <remarks>
+            Read only
+            Context: view, embed, edit
+            </remarks>
+        </member>
+        <member name="P:WordPressPCL.Models.Term.Name">
+            <summary>
+            HTML title for the term.
+            </summary>
+            <remarks>Context: view, embed, edit</remarks>
         </member>
         <member name="P:WordPressPCL.Models.Term.Slug">
             <summary>
@@ -3860,16 +3862,6 @@
             </summary>
         </member>
         <member name="P:WordPressPCL.Utility.MediaQueryBuilder.AuthorsExclude">
-            <summary>
-            Ensure result set excludes posts assigned to specific authors.
-            </summary>
-        </member>
-        <member name="P:WordPressPCL.Utility.MediaQueryBuilder.Before">
-            <summary>
-            Limit response to posts published before a given date
-            </summary>
-        </member>
-        <mey.MediaQueryBuilder.AuthorsExclude">
             <summary>
             Ensure result set excludes posts assigned to specific authors.
             </summary>
@@ -4549,6 +4541,20 @@
             <returns>Result of checking</returns>
         </member>
         <member name="M:WordPressPCL.WordPressClient.SetJWToken(System.String)">
+            <summary>
+            Sets an exisitng JWToken
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="M:WordPressPCL.WordPressClient.GetToken">
+            <summary>
+            Gets the JWToken from the client
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
+ystem.String)">
             <summary>
             Sets an exisitng JWToken
             </summary>

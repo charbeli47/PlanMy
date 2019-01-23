@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:PlanMy.Models"
+             x:Class="PlanMy.Views.GuestView">
+  <ContentView.Content>
+        <StackLayout HorizontalOptions="FillAndExpand">
+            <AbsoluteLayout Padding="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+
+                <StackLayout BackgroundColor="White" AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+
+                    <Grid RowSpacing="0" ColumnSpacing="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+
+
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="allguest" BackgroundColor="Transparent" Image="ballguest.png" Grid.Row="0" Grid.Column="0"  />
+                        <Button x:Name="seatchart" BackgroundColor="Transparent"  Image="seatingchart.png" Grid.Row="0" Grid.Column="1"   />
+                    </Grid>
+                    <StackLayout x:Name="allguestc" Orientation="Vertical" IsVisible="True">
+                        <StackLayout Orientation="Horizontal">
+                            <Button x:Name="addguestbut" HorizontalOptions="StartAndExpand" BackgroundColor="Transparent" Image="addguest.png"></Button>
+                            <models:Pickerarrow x:Name="RspPicker" 
+              HeightRequest="20"
+                                                                WidthRequest="200"
+              Image="arrowdown"
+              ItemDisplayBinding="{Binding Name}"
+                Margin="0,0,15,0"
+                Title="Guest Status"
+                HorizontalOptions="End">
+                                <models:Pickerarrow.Items>
+                                    <x:String>Accepted</x:String>
+                                    <x:String>Declined</x:String>
+                                    <x:String>No Response</x:String>
+                                    <x:String>Not Invited</x:String>
+                                </models:Pickerarrow.Items>
+
+                            </models:Pickerarrow>
+
+                        </StackLayout>
+                        <!--<ListView x:Name="guestList">
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <ViewCell>
+
+                                                        <StackLayout Orientation="Horizontal">
+
+
+                                                            <Label Text="{Binding name}" Margin="15,0,0,0"  TextColor="Black" FontAttributes="Bold" FontSize="16" VerticalOptions="Center" HorizontalOptions="StartAndExpand"   />
+                                                            <Image Source="{Binding status}" HeightRequest="20" Margin="0,0,15,0" WidthRequest="20" VerticalOptions="Center" HorizontalOptions="EndAndExpand"   />
+
+
+
+                                                        </StackLayout>
+
+                                                    </ViewCell>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>-->
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" x:Name="gueststack">
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" x:Name="seatcharc" IsVisible="False">
+                        <StackLayout Orientation="Horizontal">
+                            <Button x:Name="addtablebut" BackgroundColor="Transparent" Image="addtable.png" Margin="15,0,0,0" ></Button>
+
+                        </StackLayout>
+
+                        <StackLayout Orientation="Vertical" x:Name="seatstack">
+                        </StackLayout>
+                    </StackLayout>
+
+                </StackLayout>
+                <!--Popup Area-->
+
+
+            </AbsoluteLayout>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

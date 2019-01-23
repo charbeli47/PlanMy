@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:PlanMy.Models"
+             x:Class="PlanMy.Views.AddGuestToTable">
+    <ContentPage.Content>
+        <StackLayout BackgroundColor="White">
+            <StackLayout x:Name="Header">
+                <Frame OutlineColor="Black">
+                    <StackLayout x:Name="Menutitle">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="backarrow" Image="blackarrow.png"  BackgroundColor="Transparent" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start" WidthRequest="35" HeightRequest="35"  />
+                            <Label x:Name="Pagetitle" TextColor="Black" FontSize = "22" Text="NEW TABLE" Grid.Row="0" Grid.Column="1" />
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+            <StackLayout x:Name="Content">
+                <Button x:Name="deletebut" IsVisible="False" Text="Delete" BackgroundColor="Transparent" HorizontalOptions="End" TextColor="Red"></Button>
+                <Label FontSize="20" FontAttributes="Bold" TextColor="Black" Margin="15,25,15,0">Assign Guests</Label>
+                <models:Pickerarrow x:Name="guestlist" ItemDisplayBinding="{Binding guest_name}" Title="List of guests" Margin="15,0,15,0"></models:Pickerarrow>
+                <Button x:Name="Savechanges" BackgroundColor="Transparent" Image="savechanges.png" Margin="15,0,15,0"></Button>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

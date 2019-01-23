@@ -127,7 +127,11 @@ namespace WordPressPCL.Client
         /// <returns>List of filtered result</returns>
         public Task<IEnumerable<TClass>> Query(QClass queryBuilder, bool useAuth = false)
         {
-            return _httpHelper.GetRequest<IEnumerable<TClass>>($"{_defaultPath}{_methodPath}{queryBuilder.BuildQueryURL()}", false, useAuth);
+            var ret =  _httpHelper.GetRequest<IEnumerable<TClass>>($"{_defaultPath}{_methodPath}{queryBuilder.BuildQueryURL()}", false, useAuth);
+            if (ret != null)
+                return ret;
+            else
+                return new Task<IEnumerable<TClass>>(null);
         }
 
         /// <summary>

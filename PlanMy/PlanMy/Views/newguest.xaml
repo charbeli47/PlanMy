@@ -74,7 +74,10 @@
                 <models:nolineentry x:Name="guestphone" Placeholder="Phone" Margin="15,0,15,0"></models:nolineentry>
 
                 <models:nolineentry x:Name="guestaddress" Placeholder="Address" Margin="15,0,15,30"></models:nolineentry>
-                <Label HorizontalOptions="Center" TextColor="Black" Font="14px" FontAttributes="Bold">Import from contacts list</Label>
+                <Label HorizontalOptions="Center" TextColor="Black" Font="14px" FontAttributes="Bold" Text="Import from contacts list">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                    </Label.GestureRecognizers></Label>
                 <Button x:Name="Savechanges" BackgroundColor="Transparent" Image="savechanges.png" Margin="15,0,15,0"></Button>
 
 

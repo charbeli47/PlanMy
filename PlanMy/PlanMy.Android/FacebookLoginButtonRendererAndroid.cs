@@ -6,49 +6,66 @@ using Xamarin.Facebook.Login;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using PlanMy;
-using PlanMy.Library;
+using PlanMy.LibFacebook;
 using PlanMy.Droid;
 using Object = Java.Lang.Object;
 using View = Android.Views.View;
 using Xamarin.Facebook.Login.Widget;
 using Xamarin.Facebook.Share;
 
-[assembly: ExportRenderer(typeof(FacebookLoginButton), typeof(FacebookLoginButtonRendererAndroid))]
+[assembly: ExportRenderer(typeof(FacebookLoginButton), typeof(FacebookLoginButtonRenderer))]
 namespace PlanMy.Droid
 {
-    public class FacebookLoginButtonRendererAndroid : ViewRenderer<Button, LoginButton>
+    public class FacebookLoginButtonRenderer : ViewRenderer
     {
-        private static Activity _activity;
-
-        protected override void OnElementChanged(ElementChangedEventArgs<Button> e)
+        Context ctx;
+        bool disposed;
+        public FacebookLoginButtonRenderer(Context ctx) : base(ctx)
         {
-
-            base.OnElementChanged(e);
-
-            _activity = this.Context as MainActivity;
-            var loginButton = new LoginButton(Context);
-            var facebookCallback = new FacebookCallback<LoginResult>
+            this.ctx = ctx;
+        }
+        protected override void OnElementChanged(ElementChangedEventArgs<Xamarin.Forms.View> e)
+        {
+            if (Control == null)
             {
-                HandleSuccess = shareResult => {
-                    App.PostSuccessFacebookAction?.Invoke(shareResult.AccessToken.Token);
-                }
-        ,
-                HandleCancel = () => {
-                    Console.WriteLine("HelloFacebook: Canceled");
-                },
-                HandleError = shareError => {
-                    Console.WriteLine("HelloFacebook: Error: {0}", shareError);
-                }
-            };
+                var fbLoginBtnView = e.NewElement as FacebookLoginButton;
+                var fbLoginbBtnCtrl = new Xamarin.Facebook.Login.Widget.LoginButton(ctx)
+                {
+                    LoginBehavior = LoginBehavior.NativeWithFallback
+                };
 
-            loginButton.RegisterCallback(MainActivity.CallbackManager, facebookCallback);
-            //loginButton.SetBackgroundColor(new Android.Graphics.Color(255, 255, 255, 0));
-            //loginButton.Text = "";
-            //loginButton.SetWidth(44);
-            //loginButton.SetHeight(43);
-            //loginButton.SetTextColor(new Android.Graphics.Color(59, 89, 151));
-           // loginButton.SetBackgroundResource(Resource.Drawable.fb);
-            base.SetNativeControl(loginButton);
+                fbLoginbBtnCtrl.SetReadPermissions(fbLoginBtnView.Permissions);
+                fbLoginbBtnCtrl.RegisterCallback(MainActivity.CallbackManager, new MyFacebookCallback(this.Element as FacebookLoginButton));
+
+                SetNativeControl(fbLoginbBtnCtrl);
+            }
+        }
+
+
+
+        class MyFacebookCallback : Java.Lang.Object, IFacebookCallback
+        {
+            FacebookLoginButton view;
+
+            public MyFacebookCallback(FacebookLoginButton view)
+            {
+                this.view = view;
+            }
+
+            public void OnCancel() =>
+                view.OnCancel?.Execute(null);
+
+            public void OnError(FacebookException fbException) =>
+                view.OnError?.Execute(fbException.Message);
+
+            public void OnSuccess(Java.Lang.Object result)
+            {
+                view.OnSuccess?.Execute(((LoginResult)result).AccessToken.Token);
+                
+            }
+            
+            
+
         }
     }
 }

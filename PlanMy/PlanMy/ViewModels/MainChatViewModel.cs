@@ -41,7 +41,9 @@ namespace PlanMy.ViewModels
             {
                 Connect con = new Connect();
                 var usr = await con.GetData("User");
-                UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                UserCookie cookie = new UserCookie();
+                if(!string.IsNullOrEmpty(usr))
+                    cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
                 string msg = OutGoingText;
                 var message = new Message
                 {
@@ -95,24 +97,27 @@ namespace PlanMy.ViewModels
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
-            string json = await con.DownloadData("https://www.planmy.me/maizonpub-api/chat.php", "action=get&my_id=" + cookie.user.id + "&partner_id=" + vendor.post_author);
-            var items = Newtonsoft.Json.JsonConvert.DeserializeObject<List<WeddexChat>>(json);
-            
-            foreach (var item in items)
+            UserCookie cookie = new UserCookie();
+            if (!string.IsNullOrEmpty(usr))
             {
-                if (item.type == "Incoming")
-                    Messages.Add(new Message { Text = item.message, IsIncoming = true, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = vendor.featured_media});
-                else
-                    Messages.Add(new Message { Text = item.message, IsIncoming = false  , MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = cookie.configUsr.event_img  });
-            }
-            Xamarin.Forms.Device.StartTimer(new TimeSpan(0, 0, 1), ()=>
-            {
-                GetNewChats(con, vendor, cookie);
-                
-                return true;
-            });
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                string json = await con.DownloadData("https://www.planmy.me/maizonpub-api/chat.php", "action=get&my_id=" + cookie.user.id + "&partner_id=" + vendor.post_author);
+                var items = Newtonsoft.Json.JsonConvert.DeserializeObject<List<WeddexChat>>(json);
 
+                foreach (var item in items)
+                {
+                    if (item.type == "Incoming")
+                        Messages.Add(new Message { Text = item.message, IsIncoming = true, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = vendor.featured_media });
+                    else
+                        Messages.Add(new Message { Text = item.message, IsIncoming = false, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = cookie.configUsr.event_img });
+                }
+                Xamarin.Forms.Device.StartTimer(new TimeSpan(0, 0, 1), () =>
+                {
+                    GetNewChats(con, vendor, cookie);
+
+                    return true;
+                });
+            }
 
         }
 

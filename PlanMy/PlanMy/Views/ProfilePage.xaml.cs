@@ -20,6 +20,10 @@ namespace PlanMy.Views
 			InitializeComponent ();
             
             NavigationPage.SetHasNavigationBar(this, false);
+            HtmlWebViewSource load = new HtmlWebViewSource();
+            load.Html = "<html style='width:100%;height:100%'><body style='background-image:url(loadingreviews.gif);background-position:center;background-repeat:no-repeat;width:100%;height:100%;background-size:cover' ></body></html>";
+            load.BaseUrl = DependencyService.Get<IBaseUrl>().Get();
+            preload.Source = load;
             LoadFavVendors();
             searchevent.SearchButtonPressed += Searchevent_SearchButtonPressed;
         }
@@ -29,7 +33,7 @@ namespace PlanMy.Views
             var search = searchevent.Text;
             Navigation.PushAsync(new ListEvents(search));
         }
-        async void LoadData()
+        public async void LoadData()
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
@@ -65,20 +69,15 @@ namespace PlanMy.Views
                 }
             }
         }
-        async void LoadFavVendors()
+        public async void LoadFavVendors()
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
             if(!string.IsNullOrEmpty(usr))
             {
                 UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
-                string stats = await con.DownloadData("https://planmy.me/maizonpub-api/users.php", "action=getstats&userid=" + cookie.user.id);
-                var usrStats = Newtonsoft.Json.JsonConvert.DeserializeObject<UserStats>(stats);
-                guestsLabel.Text = usrStats.guestsCount.ToString();
-                tasksLabel.Text = usrStats.todosCount.ToString();
-                favouriteLabel.Text = usrStats.wishesCount.ToString(); ;
                 user = cookie.configUsr;
-                if(user==null)
+                if (user == null)
                 {
                     string usrdetails = await con.DownloadData("https://www.planmy.me/maizonpub-api/users.php", "action=get&userid=" + cookie.user.id);
                     user = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigUser>(usrdetails);
@@ -109,9 +108,17 @@ namespace PlanMy.Views
                         }
                         else
                             return false;
-                        
+
                     });
                 }
+                string stats = await con.DownloadData("https://planmy.me/maizonpub-api/users.php", "action=getstats&userid=" + cookie.user.id);
+                var usrStats = Newtonsoft.Json.JsonConvert.DeserializeObject<UserStats>(stats);
+                guestsLabel.Text = usrStats.guestsCount.ToString();
+                tasksLabel.Text = usrStats.todosCount.ToString();
+                favouriteLabel.Text = usrStats.wishesCount.ToString(); ;
+                
+                
+                configBtn.IsVisible = true;
             }
             /*var fbp = await con.GetData("FaceBookProfile");
             if (!string.IsNullOrEmpty(fbp))
@@ -122,6 +129,7 @@ namespace PlanMy.Views
             }*/
             WordpressService service = new WordpressService();
             var featuredItems = await service.GetFeaturedItemsAsync();
+            preload.IsVisible = false;
             //WooCommerceNET.RestAPI rest = new WooCommerceNET.RestAPI(Statics.WooApi, Statics.ConsumerKey, Statics.ConsumerSecret);
             //WooCommerceNET.WooCommerce.v2.WCObject wc = new WooCommerceNET.WooCommerce.v2.WCObject(rest);
             //var p = wc.Product;
@@ -139,7 +147,7 @@ namespace PlanMy.Views
                 recognizer.Tapped += (sender2, args) =>
                 {
                     //(MainPage as ContentPage).Content = this.Content;
-                    Navigation.PushAsync(new selectedvendor(item.Title.Rendered, item),true);
+                    Navigation.PushModalAsync(new selectedvendor(item.Title.Rendered, item),true);
                 };
                 img.GestureRecognizers.Add(recognizer);
                 favVendors.Children.Add(img);
@@ -153,8 +161,9 @@ namespace PlanMy.Views
             settingsView = new SettingsView(this);
             
             settingsVisible = true;
-            settingsView.Margin = new Thickness(0, -Bounds.Height - 30, 0, 0);
-            settingsView.HeightRequest = Bounds.Height;
+            var bheight = App.Current.MainPage.Height;
+            settingsView.Margin = new Thickness(0, -bheight, 0, 0);
+            settingsView.HeightRequest = bheight;
             ContentStack.Children.Add(settingsView);
 
         }

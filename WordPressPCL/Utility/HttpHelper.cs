@@ -88,14 +88,15 @@ namespace WordPressPCL.Utility
                 {
                     Debug.WriteLine(responseString);
                     var badrequest = JsonConvert.DeserializeObject<BadRequest>(responseString);
-                    throw new WPException(badrequest.Message, badrequest);
+                    //throw new WPException(badrequest.Message, badrequest);
+                    return JsonConvert.DeserializeObject<TClass>(responseString);
                 }
             }
-            catch (WPException) { throw; }
+            //catch (WPException) { /*throw;*/ }
             catch (Exception ex)
             {
                 Debug.WriteLine("exception thrown: " + ex.Message);
-                throw;
+                throw ex;
             }
         }
 
@@ -135,11 +136,11 @@ namespace WordPressPCL.Utility
                     throw new WPException(badrequest.Message, badrequest);
                 }
             }
-            catch (WPException) { throw; }
+            //catch (WPException) { /*throw;*/ }
             catch (Exception ex)
             {
                 Debug.WriteLine("exception thrown: " + ex.Message);
-                throw;
+                throw ex;
             }
         }
 
@@ -174,11 +175,11 @@ namespace WordPressPCL.Utility
                     throw new WPException(badrequest.Message, badrequest);
                 }
             }
-            catch (WPException) { throw; }
+            //catch (WPException) { /*throw;*/ }
             catch (Exception ex)
             {
                 Debug.WriteLine("exception thrown: " + ex.Message);
-                throw;
+                throw ex;
             }
         }
     }

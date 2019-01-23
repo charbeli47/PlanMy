@@ -14,13 +14,13 @@ namespace PlanMy.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Login : ContentPage
 	{
-		public Login ()
+        public event EventHandler<EventArgs> OperationCompleted;
+        public Login ()
 		{
 			InitializeComponent ();
             App.PostSuccessFacebookAction = async token =>
             {
                 var vm = BindingContext as FacebookViewModel;
-
                 var requestUrl =
                 "https://graph.facebook.com/v3.1/me/?fields=name,picture,work,website,religion,location,locale,link,cover,age_range,birthday,devices,email,first_name,last_name,gender,hometown,is_verified,languages,photos&access_token="
                 + token;
@@ -45,7 +45,9 @@ namespace PlanMy.Views
                     regResp.User.configUsr = u;
                     var uresp = Newtonsoft.Json.JsonConvert.SerializeObject(regResp.User);
                     await con.SaveData("User", uresp);
+                    OperationCompleted?.Invoke(this, EventArgs.Empty);
                     await Navigation.PopModalAsync();
+
                 }
                 
                 //you can use this token to authenticate to the server here
@@ -69,7 +71,12 @@ namespace PlanMy.Views
         }
         private async void SignUpLink_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new SignUp());
+            var signUp = new SignUp();
+            signUp.OperationCompleted += async (s, ev) => {
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
+            };
+            await Navigation.PushModalAsync(signUp);
         }
 
         private async void SkipBtn_Clicked(object sender, EventArgs e)
@@ -92,6 +99,7 @@ namespace PlanMy.Views
                 var uresp = Newtonsoft.Json.JsonConvert.SerializeObject(cookie);
                 await con.SaveData("User", uresp);
                 con.DeleteData("FaceBookProfile");
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
                 await Navigation.PopModalAsync();
             }
             else

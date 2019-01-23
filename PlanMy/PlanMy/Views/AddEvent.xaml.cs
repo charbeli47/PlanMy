@@ -1,9 +1,11 @@
-﻿using PlanMy.Library;
+﻿using PCLStorage;
+using PlanMy.Library;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -31,7 +33,7 @@ namespace PlanMy.Views
                 eventDate.Date = DateTime.Parse(user.event_date);
             }
             //EventTypePicker.SelectedIndex = 0;
-            IsLoading = true;
+            IsLoading = false;
             BindingContext = this;
         }
 
@@ -67,7 +69,9 @@ namespace PlanMy.Views
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+            UserCookie cookie = new UserCookie();
+            if (!string.IsNullOrEmpty(usr))
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
             string data = "action=updateevent&userid=" + cookie.user.id+ "&eventname=" + eventname.Text+ "&eventdate=" + eventDate.Date.ToString("MM/dd/yyyy")+ "&eventlocation="+eventlocation.Text;
             string filename = Guid.NewGuid().ToString()+".jpg";
             //var stream = GetStream(content);
@@ -147,13 +151,16 @@ namespace PlanMy.Views
             {
                 Connect con = new Connect();
                 var usr = await con.GetData("User");
-                UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                UserCookie cookie = new UserCookie();
+                if (!string.IsNullOrEmpty(usr))
+                    cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
                 var config = cookie.configUsr;
                 config.event_date = eventDate.Date.ToString("MM/dd/yyyy");
                 config.event_name = eventname.Text;
                 config.event_location = eventlocation.Text;
                 if (stream != null)
-                    config.event_img = "https://planmy.me/wp-content/uploads/events/" + filename;
+                    config.event_img = await DownLoadFile("https://planmy.me/wp-content/uploads/events/" + filename, filename);
+                
                 cookie.configUsr = config;
                 var resp = Newtonsoft.Json.JsonConvert.SerializeObject(cookie);
                 await con.SaveData("User", resp);
@@ -163,6 +170,18 @@ namespace PlanMy.Views
                 return true;
             }
             return false;
+        }
+
+        private async Task<string> DownLoadFile(string link, string filename)
+        {
+            IsLoading = true;
+            WebClient downclient = new WebClient();
+            IFolder rootFolder = FileSystem.Current.LocalStorage;
+            IFolder folder = await rootFolder.CreateFolderAsync("EventImg", CreationCollisionOption.OpenIfExists);
+            string path = folder.Path + "/" + filename;
+            downclient.DownloadFile(link, path);
+            IsLoading = false;
+            return path;
         }
     }
 }

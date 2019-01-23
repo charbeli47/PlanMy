@@ -23,28 +23,58 @@ namespace PlanMy.Views
 		public IEnumerable<WordPressPCL.Models.Item> selectedpost;
         protected int _catid;
         protected int page;
+        protected bool again = true;
         public List<int> type = new List<int>(), city = new List<int>(), setting = new List<int>(), cateringservicesInt = new List<int>(), typeoffurnitureInt = new List<int>(), clienteleInt = new List<int>(), clothingInt = new List<int>(), beautyservicesInt = new List<int>(), typeofmusiciansInt = new List<int>(), itemlocationInt = new List<int>(), typeofserviceInt = new List<int>(), capacityInt = new List<int>(), honeymoonexperienceInt = new List<int>();
 
-        private void ScrollView_Scrolled(object sender, ScrolledEventArgs e)
+        private void list_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            if (e.ScrollY >= myScrollView.ContentSize.Height - myScrollView.Height - 30)
+            BindingItem post = e.SelectedItem as BindingItem;
+            ((ListView)sender).SelectedItem = null;
+            if (post == null)
+                return;
+            Navigation.PushModalAsync(new selectedvendor(post.Title, post.item));
+        }
+
+        private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+            Connect con = new Connect();
+            var usr = await GetUser();
+            if (usr.user != null)
             {
-                try
+                Image img = (Image)sender;
+                FileImageSource source = img.Source as FileImageSource;
+                if (source.File == "fav.png")
                 {
-                    LoadMore();
+                    img.Source = "favselected.png";
+                    await con.DownloadData("http://planmy.me/maizonpub-api/wishlist.php", "action=insert&userid=" + usr.user.id + "&itemid=" + img.TabIndex);
                 }
-                catch { }
+                else
+                {
+                    img.Source = "fav.png";
+                    await con.DownloadData("http://planmy.me/maizonpub-api/wishlist.php", "action=delete&userid=" + usr.user.id + "&itemid=" + img.TabIndex);
+                }
+            }
+            else
+            {
+                await DisplayAlert("Not Logged in", "You need to login to use this feature", "OK");
             }
         }
 
-        private void list_ItemAppearing(object sender, ItemVisibilityEventArgs e)
+        protected List<BindingItem> bindings = new List<BindingItem>();
+        
+
+        private async void list_ItemAppearing(object sender, ItemVisibilityEventArgs e)
         {
-            //var itemTypeObject = e.Item as Item;
-            //IEnumerable<Item> i = (IEnumerable<Item>)list.ItemsSource;
-            //if (i.ToList().Last() == itemTypeObject)
-            //{
-            //    page++;
-            //}
+            var itemTypeObject = e.Item as BindingItem;
+            List<BindingItem> i = (List<BindingItem>)list.ItemsSource;
+            if (i.Last() == itemTypeObject)
+            {
+                morevendors.IsVisible = true;
+                if (again)
+                    again = await LoadMore();
+                else
+                    morevendors.IsVisible = false;
+            }
         }
 
         public allVendors (int catid,string catname)
@@ -62,7 +92,6 @@ namespace PlanMy.Views
 			Pagetitle.Text = catname;
 			selectedcatname = catname;
             page = 0;
-            myScrollView.HeightRequest = Application.Current.MainPage.Height - 100;
 
             LoadPage(catid, new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>());	
 		}
@@ -89,15 +118,48 @@ namespace PlanMy.Views
                 PropertyChanged(this, new PropertyChangedEventArgs(propName));
             }
         }
-        public async void LoadMore()
+        public async Task<UserCookie> GetUser()
+        {
+            Connect con = new Connect();
+            var usr = await con.GetData("User");
+            UserCookie cookie = new UserCookie();
+            if (!string.IsNullOrEmpty(usr))
+            {
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+            }
+            return cookie;
+        }
+        public async Task<bool> LoadMore()
         {
             page++;
             WordpressService service = new WordpressService();
             specificvendors = await service.GetItemsByFilterAsync(_catid, type.ToArray(), honeymoonexperienceInt.ToArray(), typeofserviceInt.ToArray(), capacityInt.ToArray(), setting.ToArray(), cateringservicesInt.ToArray(), typeoffurnitureInt.ToArray(), clienteleInt.ToArray(), clothingInt.ToArray(), beautyservicesInt.ToArray(), typeofmusiciansInt.ToArray(), city.ToArray(), itemlocationInt.ToArray(),page);
             //NumberOfSupplieres.Text = specificvendors.Count().ToString();
+            var user = await GetUser();
             foreach (var post in specificvendors)
             {
-                Image img = new Image();
+                string favImg = "fav.png";
+                if (user.user != null)
+                {
+                    Connect con = new Connect();
+                    var s = await con.DownloadData("http://planmy.me/maizonpub-api/wishlist.php", "action=getsingle&userid=" + user.user.id + "&itemid=" + post.Id);
+                    if (s == "1")
+                    {
+                        favImg = "favselected.png";
+                    }
+                    else
+                    {
+                        favImg = "fav.png";
+                    }
+
+                }
+                string rendered = WebUtility.HtmlDecode(Regex.Replace(post.Content.Rendered, "<.*?>", ""));
+                rendered = rendered.Length > 100 ? rendered.Substring(0, 100) + "more..." : rendered;
+                string title = WebUtility.HtmlDecode(post.Title.Rendered);
+                string src = post.Embedded.WpFeaturedmedia != null ? post.Embedded.WpFeaturedmedia.ToList()[0].SourceUrl : "";
+                BindingItem binding = new BindingItem { Desc = rendered, Title = title, item = post, Src = src, FavImg = favImg, Id = post.Id };
+                bindings.Add(binding);
+                /*Image img = new Image();
                 try
                 {
                     img.Source = post.Embedded.WpFeaturedmedia.ToList()[0].SourceUrl.Replace("https://", "http://");
@@ -136,63 +198,98 @@ namespace PlanMy.Views
                 list.Children.Add(but);
                 //selectedpost = (IEnumerable<WordPressPCL.Models.Post>)post;
                 but.Clicked += (s, e) => { Navigation.PushModalAsync(new selectedvendor(selectedcatname, post)); };
-
+                */
             }
+            morevendors.IsVisible = false;
+            if (specificvendors.Count() > 0)
+            {
+                list.ItemsSource = new List<BindingItem>();
+                list.ItemsSource = bindings;
+                return true;
+            }
+            else
+            {
+                
+                return false;
+            }
+            
         }
         public async void LoadPage(int catid, List<int> type, List<int> city, List<int> setting, List<int> cateringservicesInt, List<int> typeoffurnitureInt, List<int> clienteleInt, List<int> clothingInt, List<int> beautyservicesInt, List<int> typeofmusiciansInt, List<int> itemlocationInt, List<int> typeofserviceInt, List<int> capacityInt, List<int> honeymoonexperienceInt)
 		{
+            bindings = new List<BindingItem>();
             IsLoading = true;
-            list.Children.Clear();
             try
             {
                 WordpressService service = new WordpressService();
                 specificvendors = await service.GetItemsByFilterAsync(catid, type.ToArray(), honeymoonexperienceInt.ToArray(), typeofserviceInt.ToArray(), capacityInt.ToArray(), setting.ToArray(), cateringservicesInt.ToArray(), typeoffurnitureInt.ToArray(), clienteleInt.ToArray(), clothingInt.ToArray(), beautyservicesInt.ToArray(), typeofmusiciansInt.ToArray(), city.ToArray(), itemlocationInt.ToArray(), page);
                 //NumberOfSupplieres.Text = specificvendors.Count().ToString();
+                var user = await GetUser();
                 foreach (var post in specificvendors)
                 {
-                    Image img = new Image();
-                    try
+                    string favImg = "fav.png";
+                    if (user.user != null)
                     {
-                        img.Source = post.Embedded.WpFeaturedmedia.ToList()[0].SourceUrl.Replace("https://", "http://");
-                    }
-                    catch(Exception ex)
-                    {
+                        Connect con = new Connect();
+                        var s = await con.DownloadData("http://planmy.me/maizonpub-api/wishlist.php", "action=getsingle&userid=" + user.user.id + "&itemid=" + post.Id);
+                        if (s == "1")
+                        {
+                            favImg = "favselected.png";
+                        }
+                        else
+                        {
+                            favImg = "fav.png";
+                        }
 
                     }
-                    img.HorizontalOptions = LayoutOptions.FillAndExpand;
-                    list.Margin = new Thickness(0, 15, 0, 0);
-                    list.Children.Add(img);
+                    //Image img = new Image();
+                    //try
+                    //{
+                    //    img.Source = post.Embedded.WpFeaturedmedia.ToList()[0].SourceUrl.Replace("https://", "http://");
+                    //}
+                    //catch(Exception ex)
+                    //{
 
-                    Frame combo = new Frame();
-                    combo.BackgroundColor = Color.Red;
-                    combo.CornerRadius = 10;
-                    combo.Margin = new Thickness(15, -50, 0, 0);
-                    combo.HeightRequest = 10;
-                    combo.WidthRequest = 100;
-                    Label title = new Label();
-                    title.Text = post.Title.Rendered;
-                    title.FontAttributes = FontAttributes.Bold;
-                    title.Margin = new Thickness(10, 0, 10, 0);
-                    list.Children.Add(title);
-                    Label description = new Label();
-                    description.Margin = new Thickness(10, 0, 10, 0);
+                    //}
+                    //img.HorizontalOptions = LayoutOptions.FillAndExpand;
+                    //list.Margin = new Thickness(0, 15, 0, 0);
+                    //list.Children.Add(img);
+
+                    //Frame combo = new Frame();
+                    //combo.BackgroundColor = Color.Red;
+                    //combo.CornerRadius = 10;
+                    //combo.Margin = new Thickness(15, -50, 0, 0);
+                    //combo.HeightRequest = 10;
+                    //combo.WidthRequest = 100;
+                    //Label title = new Label();
+                    //title.Text = post.Title.Rendered;
+                    //title.FontAttributes = FontAttributes.Bold;
+                    //title.Margin = new Thickness(10, 0, 10, 0);
+                    //list.Children.Add(title);
+                    //Label description = new Label();
+                    //description.Margin = new Thickness(10, 0, 10, 0);
+                    //string rendered = WebUtility.HtmlDecode(Regex.Replace(post.Content.Rendered, "<.*?>", ""));
+                    //description.Text = rendered.Length > 100 ? rendered.Substring(0, 100) + "more..." : rendered;
+                    //list.Children.Add(description);
+                    //Button but = new Button();
+                    //but.Image = "moreinformation.png";
+                    //but.HorizontalOptions = LayoutOptions.End;
+                    //but.Margin = 0;
+                    //but.Padding = 0;
+                    //but.BorderColor = Color.Transparent;
+                    //but.BackgroundColor = Color.Transparent;
+                    //but.Margin = new Thickness(0, 0, 10, 0);
+                    //list.Children.Add(but);
+                    //Headerframe.HeightRequest = 40;
+                    ////selectedpost = (IEnumerable<WordPressPCL.Models.Post>)post;
+                    //but.Clicked += (s, e) => { Navigation.PushModalAsync(new selectedvendor(selectedcatname, post)); };
                     string rendered = WebUtility.HtmlDecode(Regex.Replace(post.Content.Rendered, "<.*?>", ""));
-                    description.Text = rendered.Length > 100 ? rendered.Substring(0, 100) + "more..." : rendered;
-                    list.Children.Add(description);
-                    Button but = new Button();
-                    but.Image = "moreinformation.png";
-                    but.HorizontalOptions = LayoutOptions.End;
-                    but.Margin = 0;
-                    but.Padding = 0;
-                    but.BorderColor = Color.Transparent;
-                    but.BackgroundColor = Color.Transparent;
-                    but.Margin = new Thickness(0, 0, 10, 0);
-                    list.Children.Add(but);
-                    Headerframe.HeightRequest = 40;
-                    //selectedpost = (IEnumerable<WordPressPCL.Models.Post>)post;
-                    but.Clicked += (s, e) => { Navigation.PushModalAsync(new selectedvendor(selectedcatname, post)); };
-
+                    rendered = rendered.Length > 100 ? rendered.Substring(0, 100) + "more..." : rendered;
+                    string title = WebUtility.HtmlDecode(post.Title.Rendered);
+                    string src = post.Embedded.WpFeaturedmedia!=null? post.Embedded.WpFeaturedmedia.ToList()[0].SourceUrl:"";
+                    BindingItem binding = new BindingItem { Desc = rendered, Title = title, item = post, Src = src, FavImg = favImg, Id = post.Id  };
+                    bindings.Add(binding);
                 }
+                list.ItemsSource = bindings;
             }
             catch(Exception ex)
             {
@@ -210,10 +307,20 @@ namespace PlanMy.Views
 
         private void FilterPage_OperationCompleted(object sender, EventArgs e)
         {
+            list.ItemsSource = new List<BindingItem>();
+            page = 0;
             LoadPage(_catid, type, city, setting, cateringservicesInt, typeoffurnitureInt, clienteleInt, clothingInt, beautyservicesInt, typeofmusiciansInt, itemlocationInt, typeofserviceInt, capacityInt, honeymoonexperienceInt);
         }
     }
-
+    public class BindingItem
+    {
+        public int Id { get; set; }
+        public string Src { get; set; }
+        public string Title { get; set; }
+        public string Desc { get; set; }
+        public string FavImg { get; set; }
+        public WordPressPCL.Models.Item item { get; set; }
+    }
 
 
 }

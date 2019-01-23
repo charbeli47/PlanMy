@@ -25,24 +25,40 @@
                     </StackLayout>
                 </Frame>
             </StackLayout>
-            <ScrollView Scrolled="ScrollView_Scrolled" x:Name="myScrollView" VerticalOptions="Fill" >
-                <StackLayout x:Name="Content" VerticalOptions="FillAndExpand" >
+            
                     <!--<StackLayout Orientation="Horizontal">
                         <Label x:Name="NumberOfSupplieres" TextColor="Gray" FontSize = "16" Text="" FontAttributes="Italic" Margin="10,0,0,0" />
                         <Label  TextColor="Gray" FontSize = "16" Text="supliers" FontAttributes="Italic"  />
 
                     </StackLayout>-->
-                    
-                    <StackLayout x:Name="list" HorizontalOptions="FillAndExpand"></StackLayout>
                     <ActivityIndicator x:Name="actInd"
  AbsoluteLayout.LayoutFlags="PositionProportional"
  AbsoluteLayout.LayoutBounds="0.5,0.5,-1,-1"
                                    Margin="0,50,0,0"
  IsRunning="{Binding IsLoading}"
  IsVisible="{Binding IsLoading}" />
-
-                </StackLayout>
-            </ScrollView>
+            <ListView VerticalOptions="FillAndExpand" x:Name="list" HorizontalOptions="FillAndExpand" RowHeight="300" ItemAppearing="list_ItemAppearing" SeparatorVisibility="None" ItemSelected="list_ItemSelected" HasUnevenRows="false">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout>
+                                        <Image Source="{Binding Src}" HorizontalOptions="FillAndExpand" HeightRequest="100"></Image>
+                                <Image HorizontalOptions="EndAndExpand" x:Name="favImg" TabIndex="{Binding Id}" Source="{Binding FavImg}" WidthRequest="35" Margin="0,-90,10,0">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                                    </Image.GestureRecognizers>
+                                </Image>
+                                <Label Text="{Binding Title}" FontAttributes="Bold" Margin="10, 90, 10, 0"></Label>
+                                        <Label Text="{Binding Desc}" Margin="10, 0, 10, 0"></Label>
+                                        <Image Source="moreinformation.png" HorizontalOptions="EndAndExpand" Margin="0, 0, 10, 0"></Image>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+            <StackLayout BackgroundColor="#ececec" HeightRequest="30" HorizontalOptions="FillAndExpand" IsVisible="False" x:Name="morevendors">
+                <Label TextColor="Black" HorizontalOptions="CenterAndExpand" Text="Loading more suppliers..." FontSize="16"></Label> 
+            </StackLayout>      
         </StackLayout>
         
     </ContentPage.Content>

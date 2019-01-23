@@ -15,5 +15,5 @@ public class todoobj
 	public string todo_details { get; set; }
 	public string todo_read { get; set; }
 	public object is_priority { get; set; }
-	public object todo_category { get; set; }
+	public string todo_category { get; set; }
 }

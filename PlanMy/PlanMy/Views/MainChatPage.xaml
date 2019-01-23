@@ -13,14 +13,33 @@
 			<local:MyDataTemplateSelector x:Key="MessageTemplateSelector"/>
 		</ResourceDictionary>
 	</ContentPage.Resources>
-	<Grid RowSpacing="0" ColumnSpacing="0">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*" />
-			<RowDefinition Height="Auto" />
-		</Grid.RowDefinitions>
-		
-		<!--Messages in Row 0 -->
-		<ListView 
+    <StackLayout>
+        <StackLayout x:Name="Header">
+            <Frame OutlineColor="Black"  x:Name="Headerframe">
+                <StackLayout x:Name="Menu">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="35" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="backarrow"  BackgroundColor="Transparent" HeightRequest="35" Image="arrow.png" Clicked="backarrow_Clicked" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"  />
+                        <Label x:Name="Pagetitle" TextColor="Black" FontSize="18" HorizontalOptions="CenterAndExpand" Text="VENDORS" Grid.Row="0" Grid.Column="1" />
+                    </Grid>
+                </StackLayout>
+            </Frame>
+        </StackLayout>
+        <Grid RowSpacing="0" ColumnSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!--Messages in Row 0 -->
+            <ListView 
 			x:Name="MessagesListView" 
 			ItemTemplate="{StaticResource MessageTemplateSelector}" 
 			ItemsSource="{Binding Messages}" 
@@ -28,17 +47,18 @@
 			ItemSelected="MyListView_OnItemSelected" 
 			ItemTapped="MyListView_OnItemTapped" 
 			SeparatorVisibility="None" />
-		
-		<!-- Entry and Send button in Row 1 -->
-		<StackLayout Orientation="Horizontal" Grid.Row="1" Padding="10" BackgroundColor="#EFEFEF">
-			<Entry 
+
+            <!-- Entry and Send button in Row 1 -->
+            <StackLayout Orientation="Horizontal" Grid.Row="1" Padding="10" BackgroundColor="#EFEFEF">
+                <Entry 
 			    HorizontalOptions="FillAndExpand" 
 				HeightRequest="25" 
 				Placeholder="Message" 
 				Text="{Binding OutGoingText}"/>
-			<Button 
+                <Button 
 				Text="Send" 
 				Command="{Binding SendCommand}"/>
-		</StackLayout>
-	</Grid>
+            </StackLayout>
+        </Grid>
+    </StackLayout>
 </ContentPage>

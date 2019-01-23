@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanMy.Views.ContactList">
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout x:Name="Header">
+                <Frame OutlineColor="Black">
+                    <StackLayout x:Name="Menutitle">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="2*" />
+
+                            </Grid.ColumnDefinitions>
+                            <Button Image="blackarrow.png" BackgroundColor="Transparent" x:Name="backarrow" Clicked="backarrow_Clicked" WidthRequest="35" HeightRequest="35" Grid.Row="0" Grid.Column="0" HorizontalOptions="Start"  />
+                            <Label x:Name="Pagetitle" TextColor="Black" FontSize = "22" Text="CONTACTS LIST" Grid.Row="0" Grid.Column="1" />
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+            <ListView 
+        x:Name="lstContacts"
+        ItemsSource="{Binding .}" ItemSelected="lstContacts_ItemSelected">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Margin="10,0,0,0">
+                                <Label Text="{Binding Name}"/>
+                                <Label Text="{Binding Email}"/>
+                                <Label Text="{Binding Number}"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

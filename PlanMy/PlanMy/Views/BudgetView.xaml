@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PlanMy.Views.BudgetView">
+  <ContentView.Content>
+        <ScrollView HorizontalOptions="FillAndExpand">
+            <StackLayout BackgroundColor="White">
+
+                <Grid ColumnSpacing="1" RowSpacing="1" BackgroundColor="LightGray">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="0" BackgroundColor="White">
+                        <Image Source="estimateda.png" HorizontalOptions="Center"></Image>
+                        <Label HorizontalOptions="Center">ESTIMATED</Label>
+                        <Label HorizontalOptions="Center" Margin="0,-5,0,0">AMOUNT</Label>
+                        <Label x:Name="estimatedlabel" HorizontalOptions="Center" Margin="0,5,0,0"></Label>
+
+
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="1" BackgroundColor="White">
+                        <Image Source="actuala.png" HorizontalOptions="Center"></Image>
+                        <Label HorizontalOptions="Center">ACTUAL</Label>
+                        <Label HorizontalOptions="Center" Margin="0,-5,0,0">AMOUNT</Label>
+                        <Label x:Name="actuallabel" HorizontalOptions="Center" Margin="0,5,0,0"></Label>
+
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" Grid.Row="0" Grid.Column="2" BackgroundColor="White">
+                        <Image Source="finalcost.png" HorizontalOptions="Center"></Image>
+                        <Label HorizontalOptions="Center">PAID</Label>
+                        <Label HorizontalOptions="Center" Margin="0,-5,0,0">AMOUNT</Label>
+                        <Label x:Name="paidlabel" HorizontalOptions="Center" Margin="0,5,0,0"></Label>
+                        <Label x:Name="remaininglabel" HorizontalOptions="Center" TextColor="black" FontSize="10" Margin="0,-5,0,0"></Label>
+
+                    </StackLayout>
+
+
+                </Grid>
+                <StackLayout Orientation="Horizontal" HeightRequest="1" BackgroundColor="LightGray"></StackLayout>
+
+                <StackLayout Orientation="Vertical">
+                    <Button x:Name="addbudget" BackgroundColor="Transparent" Image="plus.png" HorizontalOptions="End"></Button>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" HeightRequest="5" BackgroundColor="LightGray"></StackLayout>
+                <StackLayout x:Name="budgetstack" Orientation="Vertical">
+
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentView.Content>
+</ContentView>

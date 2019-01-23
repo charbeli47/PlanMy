@@ -1,12 +1,14 @@
-﻿using PlanMy.Views;
+﻿using PlanMy.Library;
+using PlanMy.Views;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-
+using WordPressPCL.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -72,7 +74,7 @@ namespace PlanMy
 				await Navigation.PushModalAsync(new newtask(true, task));
 			};
 
-			pendingbut.Clicked += async (object sender, EventArgs e) =>
+			pendingbut.Clicked += (object sender, EventArgs e) =>
 			{
 
 				edittaskstatus(task,"1");
@@ -84,28 +86,45 @@ namespace PlanMy
 	{
 		Command = new Command(() => { Navigation.PushModalAsync(new Vendors());})
 	});
-			for(int i = 0; i < 6; i++)
-			{
-				if (i == 0) {
-					StackLayout firststack = createsupplierverticalstack("Elie Saab", "champagne.png");
-					firststack.Margin = new Thickness(15, 0, 0, 0);
-					Suppliersstack.Children.Add(firststack);
-						}
-				else
-				{
-					Suppliersstack.Children.Add(createsupplierverticalstack("Elie Saab", "champagne.png"));
-				}
-			}
 			
+            
 
-		}
-		public StackLayout createsupplierverticalstack(string nametxt,string imgurl)
+        }
+        public async void LoadRecommendedSuppliers(todoobj task)
+        {
+            string cat = task.todo_category;
+            WordpressService service = new WordpressService();
+            int categoryId = int.Parse(cat);
+            var featuredItems = await service.GetFeaturedItemsByCategoryAsync(categoryId);
+            for (int i = 0; i < featuredItems.Count(); i++)
+            {
+                var item = featuredItems.ToList()[i];
+                if (i == 0)
+                {
+                    StackLayout firststack = createsupplierverticalstack(item, WebUtility.HtmlDecode(item.Title.Rendered), item.featured_img);
+                    firststack.Margin = new Thickness(15, 0, 0, 0);
+                    Suppliersstack.Children.Add(firststack);
+                }
+                else
+                {
+                    Suppliersstack.Children.Add(createsupplierverticalstack(item, WebUtility.HtmlDecode(item.Title.Rendered), item.featured_img));
+                }
+            }
+        }
+		public StackLayout createsupplierverticalstack(Item item, string nametxt,string imgurl)
 		{
 			StackLayout stack = new StackLayout();
 			stack.Orientation = StackOrientation.Vertical;
 			Image img = new Image();
 			img.Source = imgurl;
-			Label name = new Label();
+            TapGestureRecognizer recognizer = new TapGestureRecognizer();
+            recognizer.Tapped += (sender2, args) =>
+            {
+                //(MainPage as ContentPage).Content = this.Content;
+                Navigation.PushModalAsync(new selectedvendor(item.Title.Rendered, item), true);
+            };
+            img.GestureRecognizers.Add(recognizer);
+            Label name = new Label();
 			name.Text = nametxt;
 			stack.Children.Add(img);
 			stack.Children.Add(name);
