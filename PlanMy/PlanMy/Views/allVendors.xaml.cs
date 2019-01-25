@@ -17,10 +17,10 @@ namespace PlanMy.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class allVendors : ContentPage, INotifyPropertyChanged
     {
-		
-		public IEnumerable<WordPressPCL.Models.Item> specificvendors;
-		public string selectedcatname;
-		public IEnumerable<WordPressPCL.Models.Item> selectedpost;
+
+        //commit from charbel public IEnumerable<WordPressPCL.Models.Item> specificvendors;
+        public string selectedcatname;
+        //commit from charbel public IEnumerable<WordPressPCL.Models.Item> selectedpost;
         protected int _catid;
         protected int page;
         protected bool again = true;
@@ -32,7 +32,7 @@ namespace PlanMy.Views
             ((ListView)sender).SelectedItem = null;
             if (post == null)
                 return;
-            Navigation.PushModalAsync(new selectedvendor(post.Title, post.item));
+            //commit from charbel Navigation.PushModalAsync(new selectedvendor(post.Title, post.item));
         }
 
         private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
@@ -131,7 +131,7 @@ namespace PlanMy.Views
         }
         public async Task<bool> LoadMore()
         {
-            page++;
+            /*commit from charbel page++;
             WordpressService service = new WordpressService();
             specificvendors = await service.GetItemsByFilterAsync(_catid, type.ToArray(), honeymoonexperienceInt.ToArray(), typeofserviceInt.ToArray(), capacityInt.ToArray(), setting.ToArray(), cateringservicesInt.ToArray(), typeoffurnitureInt.ToArray(), clienteleInt.ToArray(), clothingInt.ToArray(), beautyservicesInt.ToArray(), typeofmusiciansInt.ToArray(), city.ToArray(), itemlocationInt.ToArray(),page);
             //NumberOfSupplieres.Text = specificvendors.Count().ToString();
@@ -159,48 +159,9 @@ namespace PlanMy.Views
                 string src = post.Embedded.WpFeaturedmedia != null ? post.Embedded.WpFeaturedmedia.ToList()[0].SourceUrl : "";
                 BindingItem binding = new BindingItem { Desc = rendered, Title = title, item = post, Src = src, FavImg = favImg, Id = post.Id };
                 bindings.Add(binding);
-                /*Image img = new Image();
-                try
-                {
-                    img.Source = post.Embedded.WpFeaturedmedia.ToList()[0].SourceUrl.Replace("https://", "http://");
-                }
-                catch (Exception ex)
-                {
-
-                }
-                img.HorizontalOptions = LayoutOptions.FillAndExpand;
-                list.Children.Add(img);
-
-                Frame combo = new Frame();
-                combo.BackgroundColor = Color.Red;
-                combo.CornerRadius = 10;
-                combo.Margin = new Thickness(15, -50, 0, 0);
-                combo.HeightRequest = 10;
-                combo.WidthRequest = 100;
-                Label title = new Label();
-                title.Text = post.Title.Rendered;
-                title.FontAttributes = FontAttributes.Bold;
-                title.Margin = new Thickness(10, 0, 10, 0);
-                list.Children.Add(title);
-                Label description = new Label();
-                description.Margin = new Thickness(10, 0, 10, 0);
-                string rendered = WebUtility.HtmlDecode(Regex.Replace(post.Content.Rendered, "<.*?>", ""));
-                description.Text = rendered.Length > 100 ? rendered.Substring(0, 100) + "more..." : rendered;
-                list.Children.Add(description);
-                Button but = new Button();
-                but.Image = "moreinformation.png";
-                but.HorizontalOptions = LayoutOptions.End;
-                but.Margin = 0;
-                but.Padding = 0;
-                but.BorderColor = Color.Transparent;
-                but.BackgroundColor = Color.Transparent;
-                but.Margin = new Thickness(0, 0, 10, 0);
-                list.Children.Add(but);
-                //selectedpost = (IEnumerable<WordPressPCL.Models.Post>)post;
-                but.Clicked += (s, e) => { Navigation.PushModalAsync(new selectedvendor(selectedcatname, post)); };
-                */
-            }
-            morevendors.IsVisible = false;
+                
+        }
+        morevendors.IsVisible = false;
             if (specificvendors.Count() > 0)
             {
                 list.ItemsSource = new List<BindingItem>();
@@ -211,12 +172,12 @@ namespace PlanMy.Views
             {
                 
                 return false;
-            }
-            
+            }*/
+            return false;
         }
         public async void LoadPage(int catid, List<int> type, List<int> city, List<int> setting, List<int> cateringservicesInt, List<int> typeoffurnitureInt, List<int> clienteleInt, List<int> clothingInt, List<int> beautyservicesInt, List<int> typeofmusiciansInt, List<int> itemlocationInt, List<int> typeofserviceInt, List<int> capacityInt, List<int> honeymoonexperienceInt)
 		{
-            bindings = new List<BindingItem>();
+            /*commit from charbel bindings = new List<BindingItem>();
             IsLoading = true;
             try
             {
@@ -296,6 +257,7 @@ namespace PlanMy.Views
 
             }
             IsLoading = false;
+            */
         }
 
         private void filterBtn_Clicked(object sender, EventArgs e)
@@ -319,7 +281,7 @@ namespace PlanMy.Views
         public string Title { get; set; }
         public string Desc { get; set; }
         public string FavImg { get; set; }
-        public WordPressPCL.Models.Item item { get; set; }
+        //commit from charbel public WordPressPCL.Models.Item item { get; set; }
     }
 
 

@@ -15,7 +15,7 @@ namespace PlanMy
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class newtask : ContentPage
 	{
-		public IEnumerable<WordPressPCL.Models.ItemCategory> cats;
+		public IEnumerable<VendorCategory> cats;
         public event EventHandler<EventArgs> OperationCompleted;
         List<string> catnames = new List<string>();
 		List<int> catids = new List<int>();
@@ -74,7 +74,7 @@ namespace PlanMy
 		public async void Loadcats(bool isedit,todoobj task)
 		{
 
-			WordpressService service = new WordpressService();
+            /*commit from charbel WordpressService service = new WordpressService();
 			//var vendors = service.GetItemCategoriesAsync();
 			cats = await service.GetItemCategoriesAsync();
 			//VendorsListView.ItemsSource = vendors;
@@ -96,14 +96,14 @@ namespace PlanMy
 					i++;
 				}
 				catPicker.SelectedIndex = selectedindex;
-			}
+			}*/
 
-		}
+        }
 
-		//function to add task//
-		public async void addtask()
+        //function to add task//
+        public async void addtask()
 		{
-            var usr = await GetUser();
+            /*commit from charbel var usr = await GetUser();
             WordPressPCL.Models.ItemCategory catt = (WordPressPCL.Models.ItemCategory)catPicker.SelectedItem;
 			using (var cl = new HttpClient())
 			{
@@ -124,8 +124,8 @@ namespace PlanMy
                 OperationCompleted?.Invoke(this, EventArgs.Empty);
                 Navigation.PopModalAsync();
 
-			}
-		}
+			}*/
+        }
         public async Task<UserCookie> GetUser()
         {
             Connect con = new Connect();
@@ -140,7 +140,7 @@ namespace PlanMy
         //function to edit task//
         public async void edittask(todoobj task)
 		{
-			WordPressPCL.Models.ItemCategory catt = (WordPressPCL.Models.ItemCategory)catPicker.SelectedItem;
+			/*commit from charbel WordPressPCL.Models.ItemCategory catt = (WordPressPCL.Models.ItemCategory)catPicker.SelectedItem;
 			using (var cl = new HttpClient())
 			{
 				var formcontent = new FormUrlEncodedContent(new[]
@@ -163,7 +163,7 @@ namespace PlanMy
                 OperationCompleted?.Invoke(this, EventArgs.Empty);
                 Navigation.PopModalAsync();
 
-			}
+			}*/
 		}
 	}
 }

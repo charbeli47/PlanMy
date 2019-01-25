@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WooCommerceNET.WooCommerce.v2;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,7 +13,6 @@ namespace PlanMy.Views
 	public partial class PaymentPage : ContentPage
 	{
         protected Order addedOrder;
-        protected WooCommerceNET.WooCommerce.v2.WCObject wc;
         protected bool paid = false;
         public PaymentPage (List<BasketItem> lineItems)
 		{
@@ -24,11 +22,11 @@ namespace PlanMy.Views
 
         private async void LoadPage(List<BasketItem> lineItems)
         {
-            Connect con = new Connect();
+            /*commit from charbel Connect con = new Connect();
             var usr = await con.GetData("User");
-            UserCookie cookie = new UserCookie();
+            Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
-                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
             WooCommerceNET.RestAPI rest = new WooCommerceNET.RestAPI("https://www.planmy.me/wp-json/wc/v2/", Statics.ConsumerKey, Statics.ConsumerSecret);
             wc = new WooCommerceNET.WooCommerce.v2.WCObject(rest);
             int userId = cookie.user.id;
@@ -52,15 +50,12 @@ namespace PlanMy.Views
                 link = string.Format(link, addedOrder.number, addedOrder.billing.first_name, addedOrder.billing.last_name, addedOrder.billing.phone, addedOrder.billing.email, addedOrder.billing.address_1, addedOrder.billing.city, addedOrder.billing.country, addedOrder.total);
                 paymentWebView.Source = link;
                 paymentWebView.Navigated += PaymentWebView_Navigated;
-                /*paymentWebView.LoadRequest(new NSUrlRequest(NSUrl.FromString(link)));
-                paymentWebView.ShouldStartLoad = myHandler;
-                paymentWebView.LoadFinished += PaymentWebView_LoadFinished;*/
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Failure", "An error occured, please try again later.", "CLOSE");
                 await Navigation.PopModalAsync();
-            }
+            }*/
         }
 
         private void PaymentWebView_Navigated(object sender, WebNavigatedEventArgs e)
@@ -87,14 +82,14 @@ namespace PlanMy.Views
 
         async void ProcessOrder()
         {
-            var order = wc.Order;
+           /*commit from charbel var order = wc.Order;
             addedOrder.status = "processing";
             addedOrder.set_paid = true;
             addedOrder = await order.Update((int)addedOrder.id, addedOrder);
             paid = true;
 
             new BasketItem().Clear();
-            await Navigation.PopModalAsync();
+            await Navigation.PopModalAsync();*/
         }
 
         private async void backarrow_Clicked(object sender, EventArgs e)

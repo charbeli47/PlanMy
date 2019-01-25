@@ -7,13 +7,14 @@ using Xamarin.Forms;
 
 using PlanMy.Models;
 using PlanMy.Services;
+using PlanMy.Library;
 
 namespace PlanMy.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
         public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>() ?? new MockDataStore();
-        public IDataStore<WooCommerceNET.WooCommerce.v2.Product> ProductsDataStore => DependencyService.Get<IDataStore<WooCommerceNET.WooCommerce.v2.Product>>();
+        public IDataStore<Offers> ProductsDataStore => DependencyService.Get<IDataStore<Offers>>();
         bool isBusy = false;
         public bool IsBusy
         {

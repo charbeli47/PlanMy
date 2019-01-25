@@ -5,7 +5,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WooCommerceNET.WooCommerce.v2;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,14 +14,14 @@ namespace PlanMy.Views
 	public partial class SingleDeal : ContentPage
 	{
         ObservableCollection<FileImageSource> imageSources = new ObservableCollection<FileImageSource>();
-        Product prod;
+        Offers prod;
         public SingleDeal (deals item)
 		{
 			InitializeComponent ();
             prod = item.product;
             Pagetitle.Text = item.title;
             
-            carouselView.ItemsSource = item.product.images;
+            carouselView.ItemsSource = item.product.OffersGalleries;
             HtmlWebViewSource source = new HtmlWebViewSource();
             source.Html = item.desc;
             desc.Source = source;
@@ -36,7 +35,7 @@ namespace PlanMy.Views
 
         private async void Button_Clicked(object sender, EventArgs e)
         {
-            Connect con = new Connect();
+            /*commit from charbel Connect con = new Connect();
             BasketItem b = new BasketItem();
             List<BasketItem> lineItems = await b.Get();
             WooCommerceNET.RestAPI rest = new WooCommerceNET.RestAPI("https://planmy.me/wp-json/wc/v2", Statics.ConsumerKey, Statics.ConsumerSecret);
@@ -101,6 +100,7 @@ namespace PlanMy.Views
                     }
                 }
             }
+            */
         }
     }
 }

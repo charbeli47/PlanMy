@@ -11,6 +11,7 @@ namespace PlanMy.Library
         public static string ConsumerSecret = "cs_ef60f8c258b76d6e0ec332c2434aa8dfb94cac82";
         public static string WooApi = "https://planmy.me/wp-json/wc/v2";
         public static string FacebookAppId = "532964057117673";
+        public static string apiLink = "http://test.planmy.me/api/";
     }
 
 }

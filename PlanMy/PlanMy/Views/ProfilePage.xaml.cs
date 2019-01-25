@@ -127,8 +127,7 @@ namespace PlanMy.Views
                 ProfileImg.Source = facebookProfile.Picture.Data.Url;
                 ProfileImg.WidthRequest = Bounds.Width;
             }*/
-            WordpressService service = new WordpressService();
-            var featuredItems = await service.GetFeaturedItemsAsync();
+            /*commit from charbel var featuredItems = await service.GetFeaturedItemsAsync();
             preload.IsVisible = false;
             //WooCommerceNET.RestAPI rest = new WooCommerceNET.RestAPI(Statics.WooApi, Statics.ConsumerKey, Statics.ConsumerSecret);
             //WooCommerceNET.WooCommerce.v2.WCObject wc = new WooCommerceNET.WooCommerce.v2.WCObject(rest);
@@ -140,10 +139,7 @@ namespace PlanMy.Views
                 
                 img.Source = item.featured_img;
                 img.Margin = new Thickness(10, 0, 0, 0);
-                /*img.Clicked += (s, e) => {
-                    Navigation.PushAsync(new selectedvendor(item.Title.Rendered,item));
-                };*/
-                TapGestureRecognizer recognizer = new TapGestureRecognizer();
+            TapGestureRecognizer recognizer = new TapGestureRecognizer();
                 recognizer.Tapped += (sender2, args) =>
                 {
                     //(MainPage as ContentPage).Content = this.Content;
@@ -151,7 +147,7 @@ namespace PlanMy.Views
                 };
                 img.GestureRecognizers.Add(recognizer);
                 favVendors.Children.Add(img);
-            }
+            }*/
             
         }
         

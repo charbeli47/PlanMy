@@ -33,7 +33,7 @@ namespace PlanMy.Views
                 var datas = await con.DownloadData("https://planmy.me/maizonpub-api/chat.php", "action=getvendors&my_id=" + cookie.user.id);
                 List<VendorItem> vendors = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorItem>>(datas);
                 foreach (var vendor in vendors)
-                    vendor.post_title = WebUtility.HtmlDecode(vendor.post_title);
+                    vendor.Title = WebUtility.HtmlDecode(vendor.Title);
                 MessagesListView.ItemsSource = vendors;
             }
         }

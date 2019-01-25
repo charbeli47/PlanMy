@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using WordPressPCL.Models;
 
 namespace PlanMy.Library
 {
@@ -12,13 +11,13 @@ namespace PlanMy.Library
             return Regex.Replace(text, @"<(.|\n)*?>", string.Empty);
         }
 
-        public static string WrapContent(Post post)
+        public static string WrapContent(Blog post)
         {
             var sb = new StringBuilder();
-            var content = post.Content.Rendered;
+            var content = post.HtmlDescription;
 
             // remove first img from post if there's one
-            if (post.Embedded.WpFeaturedmedia != null)
+            if (post.Image != null)
             {
                 content = Regex.Replace(content, "^<img.*?", "");
                 content = Regex.Replace(content, "^<p><img.*?</p>", "");
@@ -32,19 +31,18 @@ namespace PlanMy.Library
             sb.Append("</head><body>");
 
             sb.Append(FeaturedImage(post));
-            sb.Append($"<h1>{post.Title.Rendered}</h1>");
-
-            var authors = new List<User>(post.Embedded.Author);
-            sb.Append($"<p id=\"postmeta\">{authors[0].Name} | {post.Date}</p>");
+            sb.Append($"<h1>{post.Title}</h1>");
+            
+            sb.Append($"<p id=\"postmeta\">admin | {post.PostDate}</p>");
             sb.Append(content);
             sb.Append("</body></html>");
 
             return sb.ToString();
         }
 
-        public static string FeaturedImage(Post post)
+        public static string FeaturedImage(Blog post)
         {
-            if (post.Embedded.WpFeaturedmedia == null)
+            /*commit from charbel if (post.Embedded.WpFeaturedmedia == null)
                 return string.Empty;
 
             var images = new List<MediaItem>(post.Embedded.WpFeaturedmedia);
@@ -62,7 +60,8 @@ namespace PlanMy.Library
             sb.Append("\" ");
             sb.Append($"sizes =\"(max-width: {img.MediaDetails.Width}px) 100vw, {img.MediaDetails.Width}px\" />");
 
-            return sb.ToString();
+            return sb.ToString();*/
+            return "";
         }
     }
 }

@@ -15,7 +15,7 @@ namespace PlanMy.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Vendors : ContentPage
 	{
-		public IEnumerable<WordPressPCL.Models.ItemCategory> vendors;
+		public IEnumerable<VendorCategory> vendors;
 		public List<message> listmsgs;
 
 		public Vendors ()

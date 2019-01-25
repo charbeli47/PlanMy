@@ -185,18 +185,18 @@ namespace PlanMy.iOS
                     int userId = cookie.user.id;
                     if (senderId == 1)
                     {
-                        VendorItem vendorItem = new VendorItem { post_author = "1", featured_media = "chatlogo.png", post_title = "Plan My" };
+                        /*commit from charbelVendorItem vendorItem = new VendorItem { post_author = "1", featured_media = "chatlogo.png", post_title = "Plan My" };
                         var mainPage = new MainChatPage(vendorItem);
 
-                        _app.MainPage = mainPage;
-                        
+                        _app.MainPage = mainPage;*/
+
                     }
                     else if (senderId != 0)
                     {
-                        VendorItem vendorItem = new VendorItem { post_author = senderId.ToString(), featured_media = "chatlogo.png", post_title = "Plan My Supplier" };
+                        /*commit from charbelVendorItem vendorItem = new VendorItem { post_author = senderId.ToString(), featured_media = "chatlogo.png", post_title = "Plan My Supplier" };
                         var mainPage = new MainChatPage(vendorItem);
                         MainPage indexpage = (MainPage)_app.MainPage;
-                        await indexpage.Navigation.PushModalAsync(mainPage);
+                        await indexpage.Navigation.PushModalAsync(mainPage);*/
                     }
                 }
             }
@@ -215,7 +215,7 @@ namespace PlanMy.iOS
              debugAlert(title, body);
          }*/
 
-        private void connectFCM()
+                        private void connectFCM()
         {
             try
             {
@@ -249,8 +249,8 @@ namespace PlanMy.iOS
             {
 
                 Connect con = new Connect();
-                
-                var user = await con.GetData("User");
+
+                /*commit from charbel var user = await con.GetData("User");
                 if (user != "")
                 {
 
@@ -270,6 +270,7 @@ namespace PlanMy.iOS
                         _app.MainPage = mainPage;
                     }
                 }
+                */
             }
         }
 

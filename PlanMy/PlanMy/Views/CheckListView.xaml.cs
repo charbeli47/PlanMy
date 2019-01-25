@@ -15,8 +15,8 @@ namespace PlanMy.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class CheckListView : ContentView
 	{
-        public List<WordPressPCL.Models.ItemCategory> categories = new List<WordPressPCL.Models.ItemCategory>();
-        public IEnumerable<WordPressPCL.Models.ItemCategory> cats;
+        public List<VendorCategory> categories = new List<VendorCategory>();
+        public IEnumerable<VendorCategory> cats;
         List<todoobj> specifiedobj = new List<todoobj>();
         public CheckListView()
 		{
@@ -287,7 +287,7 @@ namespace PlanMy.Views
         }
         public async void gettasks()
         {
-            var usr = await GetUser();
+            /*commit from charbel var usr = await GetUser();
             donestack.Children.Clear();
             todostack.Children.Clear();
             checkList.Children.Clear();
@@ -469,7 +469,7 @@ namespace PlanMy.Views
 
 
                 }
-            }
+            }*/
 
         }
     }

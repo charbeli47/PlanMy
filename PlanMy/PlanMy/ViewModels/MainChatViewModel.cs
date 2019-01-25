@@ -60,9 +60,9 @@ namespace PlanMy.ViewModels
 
                 OutGoingText = string.Empty;
                 
-                string json = await con.DownloadData("https://www.planmy.me/maizonpub-api/chat.php", "action=insert&sender_id=" + cookie.user.id + "&receiver_id=" + vendor.post_author + "&message=" + msg);
+                string json = await con.DownloadData("https://www.planmy.me/maizonpub-api/chat.php", "action=insert&sender_id=" + cookie.user.id + "&receiver_id=" + vendor.UserId + "&message=" + msg);
 
-                await con.DownloadData("https://planmy.me/maizonpub-api/add_device.php", "action=sendpush&body=" + msg + "&title=New message from User on PlanMy app&userid=" + vendor.post_author);
+                await con.DownloadData("https://planmy.me/maizonpub-api/add_device.php", "action=sendpush&body=" + msg + "&title=New message from User on PlanMy app&userid=" + vendor.UserId);
             });
 
 
@@ -101,13 +101,13 @@ namespace PlanMy.ViewModels
             if (!string.IsNullOrEmpty(usr))
             {
                 cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
-                string json = await con.DownloadData("https://www.planmy.me/maizonpub-api/chat.php", "action=get&my_id=" + cookie.user.id + "&partner_id=" + vendor.post_author);
+                string json = await con.DownloadData("https://www.planmy.me/maizonpub-api/chat.php", "action=get&my_id=" + cookie.user.id + "&partner_id=" + vendor.UserId);
                 var items = Newtonsoft.Json.JsonConvert.DeserializeObject<List<WeddexChat>>(json);
 
                 foreach (var item in items)
                 {
                     if (item.type == "Incoming")
-                        Messages.Add(new Message { Text = item.message, IsIncoming = true, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = vendor.featured_media });
+                        Messages.Add(new Message { Text = item.message, IsIncoming = true, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = vendor.Thumb });
                     else
                         Messages.Add(new Message { Text = item.message, IsIncoming = false, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = cookie.configUsr.event_img });
                 }
@@ -123,14 +123,14 @@ namespace PlanMy.ViewModels
 
         private async void GetNewChats(Connect con, VendorItem vendor, UserCookie cookie)
         {
-            string postData = "action=getnew&my_id=" + cookie.user.id + "&partner_id=" + vendor.post_author;
+            string postData = "action=getnew&my_id=" + cookie.user.id + "&partner_id=" + vendor.UserId;
             string jdata = await con.DownloadData("https://www.planmy.me/maizonpub-api/chat.php", postData);
             var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<WeddexChat>>(jdata);
 
             foreach (var item in datas)
             {
                 if (item.type == "Incoming")
-                    Messages.Add(new Message { Text = item.message, IsIncoming = true, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = vendor.featured_media });
+                    Messages.Add(new Message { Text = item.message, IsIncoming = true, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = vendor.Thumb });
                 else
                     Messages.Add(new Message { Text = item.message, IsIncoming = false, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = cookie.configUsr.event_img });
             }

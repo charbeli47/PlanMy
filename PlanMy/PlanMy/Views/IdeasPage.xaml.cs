@@ -16,13 +16,13 @@ namespace PlanMy.Views
 	public partial class IdeasPage : ContentPage
 	{
 
-		public IEnumerable<WordPressPCL.Models.Post> latestpostsblog;
+		public IEnumerable<Blog> latestpostsblog;
 		public ObservableCollection<Models.blogpost> listposts;
 		//public Models.blogpost lasttappeditem;
 		//public System.Windows.Input.ICommand TappedCommand { get; set; }
 		public IdeasPage ()
 		{
-			InitializeComponent ();
+            /*commit from charbel InitializeComponent ();
 			NavigationPage.SetHasNavigationBar(this, false);
 
 
@@ -73,17 +73,17 @@ namespace PlanMy.Views
 				((ListView)sender).SelectedItem = null;
 				//var newpage = new allVendors(selectedvendor.Id,selectedvendor.Name);
 				Navigation.PushModalAsync(new selectedidea(selectedpost.html));
-			};
-		}
+			};*/
+        }
 
-		//public void gotosingleidea()
-		//{
-			/// okkay hon baddde rouh 3al next page////
-			/// 
-			//Navigation.PushModalAsync(new selectedidea(lasttappeditem.html));
+        //public void gotosingleidea()
+        //{
+        /// okkay hon baddde rouh 3al next page////
+        /// 
+        //Navigation.PushModalAsync(new selectedidea(lasttappeditem.html));
 
-	///	}
-	}
+        ///	}
+    }
 
 	
 

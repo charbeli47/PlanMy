@@ -42,7 +42,7 @@ namespace PlanMy
             {
                 if (chatVM == null)
                 {
-                    chatVM = new MainChatViewModel(new VendorItem());
+                    chatVM = new MainChatViewModel(new Library.VendorItem());
                 }
                 return chatVM;
 

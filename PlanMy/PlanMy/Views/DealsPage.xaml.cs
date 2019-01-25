@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using WooCommerceNET.WooCommerce.v2;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -92,7 +91,7 @@ namespace PlanMy.Views
         public int? id { get; set; }
 		public string img { get; set; }
 		public string title { get; set; }
-        public Product product { get; set; }
+        public Offers product { get; set; }
 		public string desc { get; set; }
 	}
     public class Views

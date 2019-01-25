@@ -28,10 +28,10 @@ namespace PlanMy.Views
             foreach(var line in lineItems)
             {
                 var rendered = new RenderedItem();
-                rendered.title = line.Product.name;
-                rendered.description = line.Product.description;
-                rendered.img = line.Product.images[0].src;
-                rendered.price = line.Product.price;
+                rendered.title = line.Product.Title;
+                rendered.description = line.Product.Description;
+                rendered.img = line.Product.OffersGalleries[0].Image;
+                rendered.price = line.Product.Price;
                 items.Add(rendered);
             }
             BasketListView.ItemsSource = items;

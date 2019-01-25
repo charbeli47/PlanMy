@@ -1,10 +1,10 @@
-﻿using System;
+﻿using PlanMy.Library;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using WordPressPCL.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
@@ -15,10 +15,10 @@ namespace PlanMy.Views
     public partial class VendorMap : ContentPage
     {
         Map map;
-        public VendorMap(Item vendor, double latitude, double longitude)
+        public VendorMap(VendorItem vendor, double latitude, double longitude)
         {
             InitializeComponent();
-            Pagetitle.Text = WebUtility.HtmlDecode(vendor.Title.Rendered) + "'s location";
+            Pagetitle.Text = WebUtility.HtmlDecode(vendor.Title) + "'s location";
             map = new Map
             {
                 IsShowingUser = true,

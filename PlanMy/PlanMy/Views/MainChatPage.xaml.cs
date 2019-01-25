@@ -18,7 +18,7 @@ namespace PlanMy.Views
         public MainChatPage(VendorItem vendor)
         {
             InitializeComponent();
-            Pagetitle.Text = "Chatting with " + vendor.post_title;
+            Pagetitle.Text = "Chatting with " + vendor.User.FirstName;
             LoadPage(vendor); 
             
 

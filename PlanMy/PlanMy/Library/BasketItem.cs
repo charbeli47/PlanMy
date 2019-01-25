@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using WooCommerceNET.WooCommerce.v2;
 
 namespace PlanMy.Library
 {
     public class BasketItem
     {
-        public Product Product { get; set; }
-        public OrderLineItem OrderItem { get; set; }
+        public Offers Product { get; set; }
+        public BasketItem OrderItem { get; set; }
         public async Task<string> Save(List<BasketItem> items)
         {
             Connect con = new Connect();

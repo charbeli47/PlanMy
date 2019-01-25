@@ -8,7 +8,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using WordPressPCL.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -92,7 +91,7 @@ namespace PlanMy
         }
         public async void LoadRecommendedSuppliers(todoobj task)
         {
-            string cat = task.todo_category;
+            /*commit from charbel string cat = task.todo_category;
             WordpressService service = new WordpressService();
             int categoryId = int.Parse(cat);
             var featuredItems = await service.GetFeaturedItemsByCategoryAsync(categoryId);
@@ -109,9 +108,9 @@ namespace PlanMy
                 {
                     Suppliersstack.Children.Add(createsupplierverticalstack(item, WebUtility.HtmlDecode(item.Title.Rendered), item.featured_img));
                 }
-            }
+            }*/
         }
-		public StackLayout createsupplierverticalstack(Item item, string nametxt,string imgurl)
+		public StackLayout createsupplierverticalstack(VendorItem item, string nametxt,string imgurl)
 		{
 			StackLayout stack = new StackLayout();
 			stack.Orientation = StackOrientation.Vertical;
@@ -121,7 +120,7 @@ namespace PlanMy
             recognizer.Tapped += (sender2, args) =>
             {
                 //(MainPage as ContentPage).Content = this.Content;
-                Navigation.PushModalAsync(new selectedvendor(item.Title.Rendered, item), true);
+                //commit from charbelNavigation.PushModalAsync(new selectedvendor(item.Title, item), true);
             };
             img.GestureRecognizers.Add(recognizer);
             Label name = new Label();

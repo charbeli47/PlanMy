@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WordPressPCL.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -47,7 +46,7 @@ namespace PlanMy.Views
         }
         public async void LoadSwitches(int catid, List<int> type, List<int> city, List<int> setting, List<int> cateringservicesInt, List<int> typeoffurnitureInt, List<int> clienteleInt, List<int> clothingInt, List<int> beautyservicesInt, List<int> typeofmusiciansInt, List<int> itemlocationInt, List<int> typeofserviceInt, List<int> capacityInt, List<int> honeymoonexperienceInt)
         {
-            try
+           /* try
             {
                 IsLoading = true;
                 WordpressService ws = new WordpressService();
@@ -116,7 +115,7 @@ namespace PlanMy.Views
             {
 
             }
-            IsLoading = false;
+            IsLoading = false;*/
         }
         private void AddTitle(string v)
         {
@@ -135,7 +134,7 @@ namespace PlanMy.Views
 
             }
         }
-        private void AddSwitches(IEnumerable<ItemCategory> types, List<int> par)
+        /*commit from charbelprivate void AddSwitches(IEnumerable<ItemCategory> types, List<int> par)
         {
             try
             {
@@ -179,7 +178,7 @@ namespace PlanMy.Views
 
             }
         }
-
+        */
         private async void filterBtn_Clicked(object sender, EventArgs e)
         {
             OperationCompleted?.Invoke(this, EventArgs.Empty);

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using WooCommerceNET.WooCommerce.v2;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,7 +13,7 @@ namespace PlanMy.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class BundlesView : ContentView
 	{
-		public BundlesView ()
+        /*commit from charbel public BundlesView ()
 		{
 			InitializeComponent ();
             LoadPage();
@@ -58,11 +57,11 @@ namespace PlanMy.Views
                 bundles.Add(deal);
             }
             bundlesList.FlowItemsSource = bundles;
-        }
+        }*/
         private void dealsList_FlowItemTapped(object sender, ItemTappedEventArgs e)
         {
-            var item = (deals)e.Item;
-            Navigation.PushModalAsync(new SingleDeal(item));
+           /* var item = (deals)e.Item;
+            Navigation.PushModalAsync(new SingleDeal(item));*/
         }
     }
 }
