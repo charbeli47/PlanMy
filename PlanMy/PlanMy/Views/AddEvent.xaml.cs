@@ -69,10 +69,10 @@ namespace PlanMy.Views
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            UserCookie cookie = new UserCookie();
+            Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
-                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
-            string data = "action=updateevent&userid=" + cookie.user.id+ "&eventname=" + eventname.Text+ "&eventdate=" + eventDate.Date.ToString("MM/dd/yyyy")+ "&eventlocation="+eventlocation.Text;
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
+            string data = "userid=" + cookie.id+ "&eventname=" + eventname.Text+ "&eventdate=" + eventDate.Date.ToString("MM/dd/yyyy")+ "&eventlocation="+eventlocation.Text;
             string filename = Guid.NewGuid().ToString()+".jpg";
             //var stream = GetStream(content);
             bool uploaded = await Upload(stream, filename, data);
@@ -144,7 +144,7 @@ namespace PlanMy.Views
             //multipartContent.Add(body);
 
             HttpClient httpClient = new HttpClient();
-            HttpResponseMessage response = await httpClient.PostAsync("https://www.planmy.me/maizonpub-api/users.php?"+data, multipartContent);
+            HttpResponseMessage response = await httpClient.PostAsync(Statics.apiLink+"UpdateEvent?"+data, multipartContent);
             response.EnsureSuccessStatusCode();
             IsLoading = false;
             if (response.IsSuccessStatusCode)
