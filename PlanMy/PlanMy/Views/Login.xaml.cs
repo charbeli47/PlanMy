@@ -2,6 +2,7 @@
 using PlanMy.Library;
 using PlanMy.Models;
 using PlanMy.ViewModels;
+using SendBird;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -46,7 +47,15 @@ namespace PlanMy.Views
                     var uresp = Newtonsoft.Json.JsonConvert.SerializeObject(regResp.User);
                     await con.SaveData("User", uresp);
                     OperationCompleted?.Invoke(this, EventArgs.Empty);
-                    await Navigation.PopModalAsync();
+					SendBirdClient.Connect(regResp.User.user.id.ToString(), (User user, SendBirdException ee) =>
+					{
+						if (ee != null)
+						{
+							// Error
+							return;
+						}
+					});
+					await Navigation.PopModalAsync();
 
                 }
                 
@@ -100,7 +109,18 @@ namespace PlanMy.Views
                 await con.SaveData("User", uresp);
                 con.DeleteData("FaceBookProfile");
                 OperationCompleted?.Invoke(this, EventArgs.Empty);
-                await Navigation.PopModalAsync();
+				/// added by youssef//
+				SendBirdClient.Connect(cookie.user.id.ToString(), (User user, SendBirdException ee) =>
+				{
+					if (ee != null)
+					{
+						// Error
+						return;
+					}
+				});
+
+
+				await Navigation.PopModalAsync();
             }
             else
             {

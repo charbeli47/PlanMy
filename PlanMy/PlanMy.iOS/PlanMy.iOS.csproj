@@ -147,6 +147,9 @@
     <PackageReference Include="Syncfusion.Xamarin.SfRating">
       <Version>16.3.0.21</Version>
     </PackageReference>
+    <PackageReference Include="Xam.Plugin.SendBird">
+      <Version>1.0.1</Version>
+    </PackageReference>
     <PackageReference Include="Xam.Plugins.Forms.ImageCircle">
       <Version>3.0.0.5</Version>
     </PackageReference>

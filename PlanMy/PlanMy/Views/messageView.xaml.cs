@@ -19,7 +19,7 @@ namespace PlanMy.Views
         public messageView ()
 		{
 			InitializeComponent ();
-            LoadPage();
+            //LoadPage();
 
 
         }

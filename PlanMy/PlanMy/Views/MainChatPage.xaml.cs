@@ -1,5 +1,6 @@
 ﻿using PlanMy.Library;
 using PlanMy.ViewModels;
+using SendBird;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,10 @@ namespace PlanMy.Views
         public MainChatPage(VendorItem vendor)
         {
             InitializeComponent();
-            Pagetitle.Text = "Chatting with " + vendor.User.FirstName;
-            LoadPage(vendor); 
+			//Pagetitle.Text = "Chatting with " + vendor.User.FirstName;
+
+			
+			LoadPage(vendor); 
             
 
         }

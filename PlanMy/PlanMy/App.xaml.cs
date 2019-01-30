@@ -3,6 +3,7 @@ using Xamarin.Forms;
 using PlanMy.Views;
 using Xamarin.Forms.Xaml;
 using PlanMy.ViewModels;
+using SendBird;
 
 [assembly: XamlCompilation (XamlCompilationOptions.Compile)]
 namespace PlanMy
@@ -13,6 +14,7 @@ namespace PlanMy
 		public App ()
 		{
 			InitializeComponent();
+			SendBirdClient.Init("ED8B418E - BFCD - 4283 - 8075 - AD97675C6B4C");
 
 
 			MainPage = new MainPage();
