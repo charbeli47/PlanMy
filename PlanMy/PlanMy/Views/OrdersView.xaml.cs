@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,19 +21,16 @@ namespace PlanMy.Views
         }
         async void LoadPage()
         {
-            /*commit from charbel Connect con = new Connect();
+            Connect con = new Connect();
              var usr = await con.GetData("User");
-             UserCookie cookie = new UserCookie();
+             Users cookie = new Users();
              if (!string.IsNullOrEmpty(usr))
              {
-                 cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
-                 WooCommerceNET.RestAPI rest = new WooCommerceNET.RestAPI("https://planmy.me/wp-json/wc/v2/", Statics.ConsumerKey, Statics.ConsumerSecret);
-                 WooCommerceNET.WooCommerce.v2.WCObject wc = new WooCommerceNET.WooCommerce.v2.WCObject(rest);
-                 int userId = cookie.user.id;
-                 var dic = new Dictionary<string, string>();
-                 dic.Add("customer", userId.ToString());
-                 var orders = await wc.Order.GetAll(dic);
-                 orders = orders.Where(x => x.status == "completed" || x.status == "processing").ToList();
+                 cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
+                WebClient client = new WebClient();
+                string resp = client.DownloadString(Statics.apiLink + "Orders?UserId=" + cookie.Id);
+                var orders = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Order>>(resp);
+                 orders = orders.Where(x => x.OrderStatus == OrderStatus.Completed || x.OrderStatus == OrderStatus.Processing).ToList();
                  List<BasketItem> basket = new List<BasketItem>();
                  int itemsCount = 0;
                  List<RenderedItem> items = new List<RenderedItem>();
@@ -40,20 +38,21 @@ namespace PlanMy.Views
 
                  foreach (var order in orders)
                  {
-                     foreach (var item in order.line_items)
+                     foreach (var item in order.BasketItems)
                      {
-                         var prod = await wc.Product.Get((int)item.product_id);
+                        var r = client.DownloadString(Statics.apiLink + "Offers/" + item.OffersId);
+                        var prod = Newtonsoft.Json.JsonConvert.DeserializeObject<Offers>(r);
                          var rendered = new RenderedItem();
-                         rendered.title = prod.name;
-                         rendered.description = prod.description;
-                         rendered.img = prod.images[0].src;
-                         rendered.price = prod.price;
+                         rendered.title = prod.Title;
+                         rendered.description = prod.Description;
+                         rendered.img = Statics.MediaLink + prod.Image;
+                         rendered.price = (prod.SalePrice != null || prod.SalePrice != 0) ? prod.SalePrice : prod.Price;
                          items.Add(rendered);
                      }
-                     itemsCount += order.line_items.Count;
+                     itemsCount += order.BasketItems.Count;
                  }
                  BasketListView.ItemsSource = items;
-             }*/
+             }
         }
         private void BasketListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {

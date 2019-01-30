@@ -1,4 +1,5 @@
-﻿using PlanMy.Views;
+﻿using PlanMy.Library;
+using PlanMy.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +16,10 @@ namespace PlanMy
 	public partial class Categorieexpense : ContentPage
 	{
         public event EventHandler<EventArgs> OperationCompleted;
-        public Categorieexpense (expense category)
+        public Categorieexpense (BudgetCategory category)
 		{
 			InitializeComponent ();
-			expendcatname.Text = category.category_name;
+			expendcatname.Text = category.Title;
 			Deleteexpenselabel.Clicked += async (object sender, EventArgs e) =>
 			{
 				deleteexpensecat(category);
@@ -36,44 +37,21 @@ namespace PlanMy
 			};
 		}
 
-		public async void deleteexpensecat(expense category)
+		public async void deleteexpensecat(BudgetCategory category)
 		{
-			
-			using (var cl = new HttpClient())
-			{
-				var formcontent = new FormUrlEncodedContent(new[]
-				{
-			new KeyValuePair<string,string>("category_id",category.category_id)
-
-		});
-
-				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/budget_category.php?action=delete", formcontent);
-				request.EnsureSuccessStatusCode();
-				var response = await request.Content.ReadAsStringAsync();
-                OperationCompleted?.Invoke(this, EventArgs.Empty);
-                await Navigation.PopModalAsync();
-
-			}
+            Connect con = new Connect();
+            con.DeleteFromServer(Statics.apiLink + "BudgetCategories/" + category.Id);
+            OperationCompleted?.Invoke(this, EventArgs.Empty);
+            await Navigation.PopModalAsync();
 		}
-		public async void updateexpensecat(expense category)
+		public async void updateexpensecat(BudgetCategory category)
 		{
-
-			using (var cl = new HttpClient())
-			{
-				var formcontent = new FormUrlEncodedContent(new[]
-				{
-			new KeyValuePair<string,string>("category_id",category.category_id),
-				new KeyValuePair<string,string>("category_name",expendcatname.Text)
-
-		});
-
-				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/budget_category.php?action=update", formcontent);
-				request.EnsureSuccessStatusCode();
-				var response = await request.Content.ReadAsStringAsync();
-                OperationCompleted?.Invoke(this, EventArgs.Empty);
-                await Navigation.PopModalAsync();
-
-			}
+            category.Title = expendcatname.Text;
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(category);
+            Connect con = new Connect();
+            con.PutToServer(Statics.apiLink, json);
+            OperationCompleted?.Invoke(this, EventArgs.Empty);
+            await Navigation.PopModalAsync();
 		}
 
 	}

@@ -1,4 +1,4 @@
-﻿using PlanMy.Library;
+﻿ using PlanMy.Library;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +15,11 @@ namespace PlanMy.Views
 	public partial class AddGuestToTable : ContentPage
 	{
         public event EventHandler<EventArgs> OperationCompleted;
-        public AddGuestToTable(table tab)
+        public AddGuestToTable(GuestListTables tab)
 		{
 			InitializeComponent();
             
-            LoadPage(tab);
+            LoadPage();
             
 			backarrow.Clicked += async (object sender, EventArgs e) =>
 			{
@@ -35,33 +35,36 @@ namespace PlanMy.Views
                 }
                 else
                 {
-                    var guest = (guest)guestlist.SelectedItem;
+                    var guest = (GuestList)guestlist.SelectedItem;
                     Connect con = new Connect();
-                    string resp = await con.DownloadData("https://planmy.me/maizonpub-api/guestlist.php", "action=addtotable&list_id=" + guest.list_id + "&seating_id=" + tab.seating_id);
+                    string link = Statics.apiLink + "GuestLists/" + guest.Id;
+                    guest.GuestListTables = tab;
+                    string json = Newtonsoft.Json.JsonConvert.SerializeObject(guest);
+                    con.PostToServer(link, json);
                     OperationCompleted?.Invoke(this, EventArgs.Empty);
-                    await DisplayAlert("SUCCESS", "Guest added to table " + tab.tableName, "OK");
+                    await DisplayAlert("SUCCESS", "Guest added to table " + tab.Title, "OK");
                     await Navigation.PopModalAsync();
                 }
 			};
 
 		}
-        public async Task<UserCookie> GetUser()
+        public async Task<Users> GetUser()
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            UserCookie cookie = new UserCookie();
+            Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
             {
-                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
             }
             return cookie;
         }
-        private async void LoadPage(table tab)
+        private async void LoadPage()
         {
             Connect con = new Connect();
             var usr = await GetUser();
-            var data = await con.DownloadData("https://planmy.me/maizonpub-api/guestlist.php", "action=getaccepted&userid=" + usr.user.id);
-            var guests = Newtonsoft.Json.JsonConvert.DeserializeObject<List<guest>>(data);
+            var data = await con.DownloadData(Statics.apiLink+"GuestLists", "UserId=" + usr.Id);
+            var guests = Newtonsoft.Json.JsonConvert.DeserializeObject<List<GuestList>>(data);
             guestlist.ItemsSource = guests;
         }
 

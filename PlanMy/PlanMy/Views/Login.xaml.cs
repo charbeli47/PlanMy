@@ -34,21 +34,13 @@ namespace PlanMy.Views
                 facebookProfile.Picture.Data.Url = requestUrl;
                 await con.SaveData("FaceBookProfile", userJson);
                 string password = CreatePassword(8);
-                string link = "https://planmy.me/maizonpub-api/users.php?action=fbregister&username=" + facebookProfile.FirstName + "&email=" + facebookProfile.Email + "&password=" + password+"&fb_id=" + facebookProfile.Id;
+                string link = Statics.apiLink + "Register?Username=" + facebookProfile.FirstName + "&Email=" + facebookProfile.Email + "&Password=" + password + "&FBToken=" + facebookProfile.Id;
                 WebClient client = new WebClient();
                 string resp = client.DownloadString(link);
-                 FBRegisterResponse regResp = Newtonsoft.Json.JsonConvert.DeserializeObject<FBRegisterResponse>(resp);
-                if (regResp.success == true)
-                {
-                    string usrdetails = await con.DownloadData("https://www.planmy.me/maizonpub-api/users.php", "action=get&userid=" + regResp.User.user.id);
-                    var u = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigUser>(usrdetails);
-                    regResp.User.configUsr = u;
-                    var uresp = Newtonsoft.Json.JsonConvert.SerializeObject(regResp.User);
-                    await con.SaveData("User", uresp);
-                    OperationCompleted?.Invoke(this, EventArgs.Empty);
-                    await Navigation.PopModalAsync();
-
-                }
+                var u = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(resp);
+                await con.SaveData("User", resp);
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
                 
                 //you can use this token to authenticate to the server here
                 //call your FacebookLoginService.LoginToServer(token)
@@ -86,25 +78,15 @@ namespace PlanMy.Views
 
         private async void Button_Clicked(object sender, EventArgs e)
         {
-            string link = "https://planmy.me/api/auth/generate_auth_cookie/?username=" + UsernameEntry.Text + "&password=" + PasswordEntry.Text;
+            Connect con = new Connect();
+            string link = Statics.apiLink + "Login?Username=" + UsernameEntry.Text + "&Password=" + PasswordEntry.Text + "&RememberMe=false";
             WebClient client = new WebClient();
             string resp = client.DownloadString(link);
-            UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(resp);
-            if (cookie.status == "ok")
-            {
-                Connect con = new Connect();
-                string usrdetails = await con.DownloadData("https://www.planmy.me/maizonpub-api/users.php", "action=get&userid=" + cookie.user.id);
-                var u = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigUser>(usrdetails);
-                cookie.configUsr = u;
-                var uresp = Newtonsoft.Json.JsonConvert.SerializeObject(cookie);
-                await con.SaveData("User", uresp);
-                con.DeleteData("FaceBookProfile");
-                OperationCompleted?.Invoke(this, EventArgs.Empty);
-                await Navigation.PopModalAsync();
-            }
-            else
-            {
-            }
+            var u = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(resp);
+            await con.SaveData("User", resp);
+            con.DeleteData("FaceBookProfile");
+            OperationCompleted?.Invoke(this, EventArgs.Empty);
+            await Navigation.PopModalAsync();
         }
 
         private async void fbBtn_Clicked(object sender, EventArgs e)

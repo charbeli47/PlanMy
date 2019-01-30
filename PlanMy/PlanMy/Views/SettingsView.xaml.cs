@@ -78,7 +78,7 @@ namespace PlanMy.Views
                 logoutBtn.IsVisible = false;
             if(_profile.user!=null)
             {
-                privateEventSwith.IsToggled = _profile.user.private_event == "true" || _profile.user.private_event == "True";
+                privateEventSwith.IsToggled = _profile.user.Events.IsPrivate == true;
             }
             else
             {
@@ -115,15 +115,16 @@ namespace PlanMy.Views
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            string isprivate = e.Value ? "1" : "0";
+            
             if (!string.IsNullOrEmpty(usr))
             {
-                UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
-                string link = "https://planmy.me/maizonpub-api/users.php?action=setprivateevent&userid=" + cookie.user.id + "&isprivate=" + isprivate;
-                WebClient client = new WebClient();
-                string resp = client.DownloadString(link);
+                Users cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
+                var events = cookie.Events;
+                events.IsPrivate = e.Value;
+                var json = JsonConvert.SerializeObject(events);
+                con.PostToServer(Statics.apiLink + "Events", json);
             }
-            _profile.user.private_event = e.Value.ToString();
+            _profile.user.Events.IsPrivate = e.Value;
         }
     }
 }

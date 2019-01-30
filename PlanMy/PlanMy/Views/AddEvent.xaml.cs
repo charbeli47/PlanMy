@@ -1,4 +1,6 @@
-﻿using PCLStorage;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using PCLStorage;
 using PlanMy.Library;
 using System;
 using System.Collections.Generic;
@@ -21,16 +23,16 @@ namespace PlanMy.Views
     {
         protected Stream stream;
         public event EventHandler<EventArgs> OperationCompleted;
-        public AddEvent(ConfigUser user)
+        public AddEvent(Users user)
 		{
 			InitializeComponent();
-            if(user!=null)
+            if(user.Events!=null)
             {
-                eventname.Text = user.event_name;
-                eventlocation.Text = user.event_location;
-                pickImg.Source = user.event_img;
+                eventname.Text = user.Events.Title;
+                eventlocation.Text = user.Events.Description;
+                pickImg.Source = user.Events.Image;
                 pickImg.IsVisible = false;
-                eventDate.Date = DateTime.Parse(user.event_date);
+                eventDate.Date = user.Events.Date;
             }
             //EventTypePicker.SelectedIndex = 0;
             IsLoading = false;
@@ -72,10 +74,10 @@ namespace PlanMy.Views
             Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
                 cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
-            string data = "userid=" + cookie.id+ "&eventname=" + eventname.Text+ "&eventdate=" + eventDate.Date.ToString("MM/dd/yyyy")+ "&eventlocation="+eventlocation.Text;
+            Events events = new Events { Date = eventDate.Date, Title = eventname.Text, Description = eventlocation.Text, UserId = cookie.Id, IsPrivate = false };
+            //string data = "userid=" + cookie.id+ "&eventname=" + eventname.Text+ "&eventdate=" + eventDate.Date.ToString("MM/dd/yyyy")+ "&eventlocation="+eventlocation.Text;
             string filename = Guid.NewGuid().ToString()+".jpg";
-            //var stream = GetStream(content);
-            bool uploaded = await Upload(stream, filename, data);
+            bool uploaded = await Upload(stream, filename, events);
         }
         private async void Button_Clicked(object sender, EventArgs e)
         {
@@ -117,8 +119,10 @@ namespace PlanMy.Views
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
             return stream;
         }
-        public async Task<bool> Upload(Stream stream, string filename, string data)
+        public async Task<bool> Upload(Stream stream, string filename, Events data)
         {
+            var jsonToSend = JsonConvert.SerializeObject(data, Formatting.None, new IsoDateTimeConverter());
+            var body = new StringContent(jsonToSend, Encoding.UTF8, "application/json");
             //byte[] bitmapData;
             //using (BinaryReader br = new BinaryReader(stream))
             //{
@@ -127,41 +131,38 @@ namespace PlanMy.Views
             //var fileContent = new ByteArrayContent(bitmapData);
             IsLoading = true;
             MultipartFormDataContent multipartContent = new MultipartFormDataContent();
+            multipartContent.Add(body);
             if (stream != null)
             {
                 var fileContent = new StreamContent(stream);
                 fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
                 {
-                    Name = "eventimg",
+                    Name = "Image",
                     FileName = filename
                 };
                 multipartContent.Add(fileContent);
             }
-
+            
             
             
             //var body = new StringContent(json);
             //multipartContent.Add(body);
 
             HttpClient httpClient = new HttpClient();
-            HttpResponseMessage response = await httpClient.PostAsync(Statics.apiLink+"UpdateEvent?"+data, multipartContent);
+            HttpResponseMessage response = await httpClient.PostAsync(Statics.apiLink+"Events", multipartContent);
             response.EnsureSuccessStatusCode();
             IsLoading = false;
             if (response.IsSuccessStatusCode)
             {
                 Connect con = new Connect();
                 var usr = await con.GetData("User");
-                UserCookie cookie = new UserCookie();
+                Users cookie = new Users();
                 if (!string.IsNullOrEmpty(usr))
-                    cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
-                var config = cookie.configUsr;
-                config.event_date = eventDate.Date.ToString("MM/dd/yyyy");
-                config.event_name = eventname.Text;
-                config.event_location = eventlocation.Text;
+                    cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
                 if (stream != null)
-                    config.event_img = await DownLoadFile("https://planmy.me/wp-content/uploads/events/" + filename, filename);
+                    cookie.Events.Image = await DownLoadFile("http://test.planmy.me/Media/" + filename, filename);
                 
-                cookie.configUsr = config;
+                
                 var resp = Newtonsoft.Json.JsonConvert.SerializeObject(cookie);
                 await con.SaveData("User", resp);
                 string content = await response.Content.ReadAsStringAsync();

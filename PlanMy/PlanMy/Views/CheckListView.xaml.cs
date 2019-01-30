@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +18,7 @@ namespace PlanMy.Views
 	{
         public List<VendorCategory> categories = new List<VendorCategory>();
         public IEnumerable<VendorCategory> cats;
-        List<todoobj> specifiedobj = new List<todoobj>();
+        List<CheckList> specifiedobj = new List<CheckList>();
         public CheckListView()
 		{
 			InitializeComponent ();
@@ -274,39 +275,40 @@ namespace PlanMy.Views
             return stack;
 
         }
-        public async Task<UserCookie> GetUser()
+        public async Task<Users> GetUser()
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            UserCookie cookie = new UserCookie();
+            Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
             {
-                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
             }
             return cookie;
         }
         public async void gettasks()
         {
-            /*commit from charbel var usr = await GetUser();
+            var usr = await GetUser();
             donestack.Children.Clear();
             todostack.Children.Clear();
             checkList.Children.Clear();
-            WordpressService service = new WordpressService();
-            cats = await service.GetItemCategoriesAsync();
+            WebClient client = new WebClient();
+            var resp = client.DownloadString(Statics.apiLink + "Categories");
+            cats = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorCategory>>(resp);
             categories = cats.ToList();
             Connect con = new Connect();
             //await con.DownloadData("https://www.planmy.me/maizonpub-api/todolist.php", "action=get&todo_user=169");
             //var json = wc.DownloadString();
-            if (usr.user != null)
+            if (usr != null)
             {
-                string todostring = await con.DownloadData("https://www.planmy.me/maizonpub-api/todolist.php", "action=get&todo_user=" + usr.user.id);
-                List<todoobj> listoftodo = JsonConvert.DeserializeObject<List<todoobj>>(todostring);
+                string todostring = await con.DownloadData(Statics.apiLink+"CheckLists", "UserId=" + usr.Id);
+                List<CheckList> listoftodo = JsonConvert.DeserializeObject<List<CheckList>>(todostring);
                 int numberttasks = listoftodo.Count;
                 numbertotaltasks.Text = numberttasks.ToString();
                 int donetaskscount = 0;
-                foreach (todoobj o in listoftodo)
+                foreach (CheckList o in listoftodo)
                 {
-                    if (o.todo_read.ToString() == "1")
+                    if (o.Status == CheckListStatus.Done)
                     {
                         donetaskscount++;
                     }
@@ -317,11 +319,11 @@ namespace PlanMy.Views
                     division = donetaskscount / numberttasks;
                 progress.Progress = division;
 
-                IDictionary<todoobj, string> dictmonthtodo = new Dictionary<todoobj, string>();
-                foreach (todoobj obj in listoftodo)
+                IDictionary<CheckList, string> dictmonthtodo = new Dictionary<CheckList, string>();
+                foreach (CheckList obj in listoftodo)
                 {
                     //int toid = Int32.Parse(obj.todo_id);
-                    DateTime dateTodo = DateTime.Parse(obj.todo_date);
+                    DateTime dateTodo = obj.Timing;
                     string monthName = dateTodo.ToString("MMM", CultureInfo.InvariantCulture);
                     string year = dateTodo.Year.ToString();
                     dictmonthtodo.Add(obj, monthName + " " + year);
@@ -332,25 +334,25 @@ namespace PlanMy.Views
                 {
                     StackLayout donemonth = new StackLayout();
                     specifiedobj = dictmonthtodo.Where(item => item.Value == valuee).Select(item => item.Key).ToList();
-                    if (specifiedobj.Any(p => p.todo_read.ToString().Equals("1")))
+                    if (specifiedobj.Any(p => p.Status.Equals(CheckListStatus.Done)))
                     {
                         donemonth = createmonthstack(valuee);
                     }
-                    foreach (todoobj o in specifiedobj)
+                    foreach (CheckList o in specifiedobj)
                     {
                         StackLayout doneroww;
                         string categoryo = "no category";
-                        int indexofequivalentcat = categories.FindIndex(a => a.Id.ToString() == o.todo_category.ToString());
-                        categoryo = categories.ElementAt(indexofequivalentcat).Name;
-                        if (o.todo_read.ToString() == "1")
+                        int indexofequivalentcat = categories.FindIndex(a => a.Id == o.VendorCategoryId);
+                        categoryo = categories.ElementAt(indexofequivalentcat).Title;
+                        if (o.Status == CheckListStatus.Done)
                         {
-                            if (o.is_priority.ToString() == "1")
+                            if (o.IsPriority)
                             {
-                                doneroww = priorityrowdone(o.todo_title, categoryo);
+                                doneroww = priorityrowdone(o.Title, categoryo);
                             }
                             else
                             {
-                                doneroww = donerow(o.todo_title, categoryo);
+                                doneroww = donerow(o.Title, categoryo);
                             }
                             doneroww.GestureRecognizers.Add(new TapGestureRecognizer
                             {
@@ -374,27 +376,27 @@ namespace PlanMy.Views
                     ///
                     StackLayout notdonemonth = new StackLayout();
 
-                    if (specifiedobj.Any(p => p.todo_read.ToString().Equals("0")))
+                    if (specifiedobj.Any(p => p.Status.Equals(CheckListStatus.ToDo)))
                     {
                         notdonemonth = createmonthstack(valuee);
                     }
 
 
-                    foreach (todoobj o in specifiedobj)
+                    foreach (CheckList o in specifiedobj)
                     {
                         StackLayout notdoneroww;
                         string categoryo = "no category";
-                        int indexofequivalentcat = categories.FindIndex(a => a.Id.ToString() == o.todo_category.ToString());
-                        categoryo = categories.ElementAt(indexofequivalentcat).Name;
-                        if (o.todo_read.ToString() == "0")
+                        int indexofequivalentcat = categories.FindIndex(a => a.Id == o.VendorCategoryId);
+                        categoryo = categories.ElementAt(indexofequivalentcat).Title;
+                        if (o.Status == CheckListStatus.ToDo)
                         {
-                            if (o.is_priority.ToString() == "1")
+                            if (o.IsPriority)
                             {
-                                notdoneroww = priorityrownotdone(o.todo_title, categoryo);
+                                notdoneroww = priorityrownotdone(o.Title, categoryo);
                             }
                             else
                             {
-                                notdoneroww = notdonerow(o.todo_title, categoryo);
+                                notdoneroww = notdonerow(o.Title, categoryo);
                             }
                             notdoneroww.GestureRecognizers.Add(new TapGestureRecognizer
                             {
@@ -416,35 +418,35 @@ namespace PlanMy.Views
 
                     StackLayout month = createmonthstack(valuee);
 
-                    foreach (todoobj o in specifiedobj)
+                    foreach (CheckList o in specifiedobj)
                     {
                         //forloop to fill the all stack without conditions///
                         StackLayout row;
 
                         string categoryo = "no category";
-                        int indexofequivalentcat = categories.FindIndex(a => a.Id.ToString() == o.todo_category.ToString());
-                        categoryo = categories.ElementAt(indexofequivalentcat).Name;
+                        int indexofequivalentcat = categories.FindIndex(a => a.Id == o.VendorCategoryId);
+                        categoryo = categories.ElementAt(indexofequivalentcat).Title;
 
-                        if (o.todo_read.ToString() == "1")
+                        if (o.Status == CheckListStatus.Done)
                         {
-                            if (o.is_priority.ToString() == "1")
+                            if (o.IsPriority)
                             {
-                                row = priorityrowdone(o.todo_title, categoryo);
+                                row = priorityrowdone(o.Title, categoryo);
                             }
                             else
                             {
-                                row = donerow(o.todo_title, categoryo);
+                                row = donerow(o.Title, categoryo);
                             }
                         }
                         else
                         {
-                            if (o.is_priority.ToString() == "1")
+                            if (o.IsPriority)
                             {
-                                row = priorityrownotdone(o.todo_title, categoryo);
+                                row = priorityrownotdone(o.Title, categoryo);
                             }
                             else
                             {
-                                row = notdonerow(o.todo_title, categoryo);
+                                row = notdonerow(o.Title, categoryo);
                             }
                         }
 
@@ -469,7 +471,7 @@ namespace PlanMy.Views
 
 
                 }
-            }*/
+            }
 
         }
     }

@@ -22,32 +22,30 @@ namespace PlanMy.Views
 
         private async void LoadPage(List<BasketItem> lineItems)
         {
-            /*commit from charbel Connect con = new Connect();
+            Connect con = new Connect();
             var usr = await con.GetData("User");
             Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
                 cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
-            WooCommerceNET.RestAPI rest = new WooCommerceNET.RestAPI("https://www.planmy.me/wp-json/wc/v2/", Statics.ConsumerKey, Statics.ConsumerSecret);
-            wc = new WooCommerceNET.WooCommerce.v2.WCObject(rest);
-            int userId = cookie.user.id;
-            var user = cookie.configUsr;
+            
+            string userId = cookie.Id;
+            var user = cookie;
 
             decimal total = 0;
-            List<OrderLineItem> items = new List<OrderLineItem>();
+            List<BasketItems> items = new List<BasketItems>();
             foreach (var item in lineItems)
             {
-                total += !string.IsNullOrEmpty(item.OrderItem.total) ? decimal.Parse(item.OrderItem.total) : 0;
+                total += item.OrderItem.TotalPrice;
                 items.Add(item.OrderItem);
             }
-            var order = wc.Order;
-            OrderBilling billing = new OrderBilling { address_1 = user.user_weddingcity, address_2 = "", city = user.user_weddingcity, country = "LB", email = user.email, first_name = user.first_name, last_name = user.last_name, state = "", postcode = "", phone = "" };
             try
             {
-                Order o = new Order { line_items = items, total = total, customer_id = cookie.user.id, status = "pending", billing = billing, payment_method = "cybsawm", payment_method_title = "CyberSource Secure Acceptance", set_paid = false };
-                addedOrder = await order.Add(o);
-
-                string link = "https://planmy.me/maizonpub-api/pay/payment_form.php?reference_number={0}&bill_to_forename={1}&bill_to_surname={2}&bill_to_phone={3}&bill_to_email={4}&bill_to_address_line1={5}&bill_to_address_city={6}&bill_to_address_country={7}&amount={8}";
-                link = string.Format(link, addedOrder.number, addedOrder.billing.first_name, addedOrder.billing.last_name, addedOrder.billing.phone, addedOrder.billing.email, addedOrder.billing.address_1, addedOrder.billing.city, addedOrder.billing.country, addedOrder.total);
+                Order o = new Order { BasketItems = items, Total = total, UserId = userId, OrderStatus = OrderStatus.Pending_Payment };
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(o);
+                string resp = con.PostToServer(Statics.apiLink + "Orders", json);
+                o = Newtonsoft.Json.JsonConvert.DeserializeObject<Order>(resp);
+                string link = Statics.payLink+ "?OrderId={0}";
+                link = string.Format(link, o.Id);
                 paymentWebView.Source = link;
                 paymentWebView.Navigated += PaymentWebView_Navigated;
             }
@@ -55,12 +53,12 @@ namespace PlanMy.Views
             {
                 await DisplayAlert("Failure", "An error occured, please try again later.", "CLOSE");
                 await Navigation.PopModalAsync();
-            }*/
+            }
         }
 
         private void PaymentWebView_Navigated(object sender, WebNavigatedEventArgs e)
         {
-            if(e.Url.Contains("/maizonpub-api/pay/receipt.php"))
+            if(e.Url.Contains(Statics.payLink + "/Receipt"))
             {
                 string req = e.Url.Substring(e.Url.LastIndexOf("?")+1);
                 string[] query = req.Split('&');
@@ -82,14 +80,8 @@ namespace PlanMy.Views
 
         async void ProcessOrder()
         {
-           /*commit from charbel var order = wc.Order;
-            addedOrder.status = "processing";
-            addedOrder.set_paid = true;
-            addedOrder = await order.Update((int)addedOrder.id, addedOrder);
-            paid = true;
-
             new BasketItem().Clear();
-            await Navigation.PopModalAsync();*/
+            await Navigation.PopModalAsync();
         }
 
         private async void backarrow_Clicked(object sender, EventArgs e)

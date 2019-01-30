@@ -18,9 +18,10 @@ namespace PlanMy.Droid
             var usr = await con.GetData("User");
             if (!string.IsNullOrEmpty(usr))
             {
-                UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                Users cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
                 WebClient client = new WebClient();
-                string updateLink = "https://planmy.me/maizonpub-api/add_device.php?action=updatedevice&userid=" + cookie.user.id + "&token=" + refreshedToken;                
+                var oldtoken = await con.GetData("FirebaseToken");
+                string updateLink = Statics.apiLink + "AddPushToken?UserId=" + cookie.Id + "&NewToken=" + refreshedToken+"&OldToken="+oldtoken+"&PushDevice="+ PushDevice.Android;               
                 client.DownloadString(updateLink);
             }
             await con.SaveData("FirebaseToken", refreshedToken);

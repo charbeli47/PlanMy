@@ -16,7 +16,7 @@ namespace PlanMy.Library
         public string Country { get; set; }
         public string City { get; set; }
         public GuestListTables GuestListTables { get; set; }
-        public Users User { get; set; }
+        public string UserId { get; set; }
 
     }
     public enum GuestStatus

@@ -17,7 +17,7 @@ namespace PlanMy
 	public partial class checklist : ContentPage
 	{
         public event EventHandler<EventArgs> OperationCompleted;
-        public checklist(todoobj task,string catname)
+        public checklist(CheckList task,string catname)
 		{
 			InitializeComponent();
 			// for testing purposes ///
@@ -28,10 +28,10 @@ namespace PlanMy
                 await Navigation.PopModalAsync();
 			};
 			NavigationPage.SetHasNavigationBar(this, false);
-			title.Text = task.todo_title;
+			title.Text = task.Title;
 			category.Text = catname;
-			description.Text = task.todo_details;
-			DateTime dateTodo = DateTime.Parse(task.todo_date);
+			description.Text = task.Description;
+			DateTime dateTodo = task.Timing;
 			string monthName = dateTodo.ToString("MMM", CultureInfo.InvariantCulture);
 			string year = dateTodo.Year.ToString();
 
@@ -41,27 +41,10 @@ namespace PlanMy
 			//action for delete task///
 			deletetask.Clicked += async (object sender, EventArgs e) =>
 			{
-				using (var cl = new HttpClient())
-				{
-					var formcontent = new FormUrlEncodedContent(new[]
-					{
-			new KeyValuePair<string,string>("todo_id",task.todo_id),
-			
-		});
-
-
-					var request = await cl.PostAsync("https://www.planmy.me/maizonpub-api/todolist.php?action=delete", formcontent);
-
-					request.EnsureSuccessStatusCode();
-
-					var response = await request.Content.ReadAsStringAsync();
-
-                    //jsonResponselogin res = JsonConvert.DeserializeObject<jsonResponselogin>(response);
-
-                    //lbl1.Text = res.code + " " + res.status + " " + res.message;
-                    OperationCompleted?.Invoke(this, EventArgs.Empty);
-                    await Navigation.PopModalAsync();
-				}
+                Connect con = new Connect();
+                con.DeleteFromServer(Statics.apiLink + "CheckLists/" + task.Id);
+                OperationCompleted?.Invoke(this, EventArgs.Empty);
+                await Navigation.PopModalAsync();
 			};
 
 			///action for edit task///
@@ -76,7 +59,7 @@ namespace PlanMy
 			pendingbut.Clicked += (object sender, EventArgs e) =>
 			{
 
-				edittaskstatus(task,"1");
+				edittaskstatus(task,CheckListStatus.Done);
 			};
 
 
@@ -89,26 +72,26 @@ namespace PlanMy
             
 
         }
-        public async void LoadRecommendedSuppliers(todoobj task)
+        public async void LoadRecommendedSuppliers(CheckList task)
         {
-            /*commit from charbel string cat = task.todo_category;
-            WordpressService service = new WordpressService();
-            int categoryId = int.Parse(cat);
-            var featuredItems = await service.GetFeaturedItemsByCategoryAsync(categoryId);
-            for (int i = 0; i < featuredItems.Count(); i++)
+            int cat = task.VendorCategoryId;
+            Connect con = new Connect();
+            string fresp = await con.DownloadData(Statics.apiLink + "VendorItems/Featured/" + cat, "");
+            var featuredItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorItem>>(fresp);
+            for (int i = 0; i < featuredItems.Count; i++)
             {
-                var item = featuredItems.ToList()[i];
+                var item = featuredItems[i];
                 if (i == 0)
                 {
-                    StackLayout firststack = createsupplierverticalstack(item, WebUtility.HtmlDecode(item.Title.Rendered), item.featured_img);
+                    StackLayout firststack = createsupplierverticalstack(item, WebUtility.HtmlDecode(item.Title), Statics.MediaLink+item.Thumb);
                     firststack.Margin = new Thickness(15, 0, 0, 0);
                     Suppliersstack.Children.Add(firststack);
                 }
                 else
                 {
-                    Suppliersstack.Children.Add(createsupplierverticalstack(item, WebUtility.HtmlDecode(item.Title.Rendered), item.featured_img));
+                    Suppliersstack.Children.Add(createsupplierverticalstack(item, WebUtility.HtmlDecode(item.Title), Statics.MediaLink + item.Thumb));
                 }
-            }*/
+            }
         }
 		public StackLayout createsupplierverticalstack(VendorItem item, string nametxt,string imgurl)
 		{
@@ -120,7 +103,7 @@ namespace PlanMy
             recognizer.Tapped += (sender2, args) =>
             {
                 //(MainPage as ContentPage).Content = this.Content;
-                //commit from charbelNavigation.PushModalAsync(new selectedvendor(item.Title, item), true);
+                Navigation.PushModalAsync(new selectedvendor(item.Title, item), true);
             };
             img.GestureRecognizers.Add(recognizer);
             Label name = new Label();
@@ -131,32 +114,14 @@ namespace PlanMy
 		}
 
 		// function for edit task status///
-		public async void edittaskstatus(todoobj task, string statusval)
+		public async void edittaskstatus(CheckList task, CheckListStatus statusval)
 		{
-
-			using (var cl = new HttpClient())
-			{
-				var formcontent = new FormUrlEncodedContent(new[]
-				{
-			new KeyValuePair<string,string>("todo_id",task.todo_id),
-			new KeyValuePair<string, string>("todo_title",task.todo_title),
-				new KeyValuePair<string,string>("todo_details",task.todo_details),
-			new KeyValuePair<string, string>("todo_date",task.todo_date),
-			new KeyValuePair<string,string>("todo_read",statusval),
-			new KeyValuePair<string, string>("todo_category",task.todo_category.ToString()),
-			new KeyValuePair<string, string>("is_priority",task.is_priority.ToString())
-		});
-
-
-				var request = await cl.PostAsync("https://www.planmy.me/maizonpub-api/todolist.php?action=update", formcontent);
-
-				request.EnsureSuccessStatusCode();
-
-				var response = await request.Content.ReadAsStringAsync();
-                OperationCompleted?.Invoke(this, EventArgs.Empty);
-                await Navigation.PopModalAsync();
-
-			}
+            Connect con = new Connect();
+            task.Status = statusval;
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(task);
+            con.PutToServer(Statics.apiLink + "CheckLists", json);
+            OperationCompleted?.Invoke(this, EventArgs.Empty);
+            await Navigation.PopModalAsync();
 		}
 
 	}

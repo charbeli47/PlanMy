@@ -29,8 +29,8 @@ namespace PlanMy.Views
             var usr = await con.GetData("User");
             if (!string.IsNullOrEmpty(usr))
             {
-                UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
-                var datas = await con.DownloadData("https://planmy.me/maizonpub-api/chat.php", "action=getvendors&my_id=" + cookie.user.id);
+                Users cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
+                var datas = await con.DownloadData("https://planmy.me/maizonpub-api/chat.php", "action=getvendors&my_id=" + cookie.Id);
                 List<VendorItem> vendors = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorItem>>(datas);
                 foreach (var vendor in vendors)
                     vendor.Title = WebUtility.HtmlDecode(vendor.Title);

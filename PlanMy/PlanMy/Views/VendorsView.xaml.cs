@@ -14,7 +14,7 @@ namespace PlanMy.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class VendorsView : ContentView
 	{
-        //commit from charbel public IEnumerable<WordPressPCL.Models.ItemCategory> vendors;
+        public IEnumerable<VendorCategory> vendors;
         public VendorsView ()
 		{
 			InitializeComponent ();
@@ -28,37 +28,40 @@ namespace PlanMy.Views
                     return; //ItemSelected is called on deselection, which results in SelectedItem being set to null
                 }
 
-                /*commit from charbel var selectedvendor = e.SelectedItem as WordPressPCL.Models.ItemCategory;
+                var selectedvendor = e.SelectedItem as VendorCategory;
 
                  if (selectedvendor == null)
                      return;
                  ((ListView)sender).SelectedItem = null;
                  //var newpage = new allVendors(selectedvendor.Id,selectedvendor.Name);
-                 Navigation.PushModalAsync(new allVendors(selectedvendor.Id, selectedvendor.Name));*/
+                 Navigation.PushModalAsync(new allVendors(selectedvendor.Id, selectedvendor.Title));
              };
          }
          private void Entry_TextChanged(object sender, TextChangedEventArgs e)
          {
-            /*commit from charbel VendorsListView.BeginRefresh();
+            VendorsListView.BeginRefresh();
 
             if (string.IsNullOrWhiteSpace(e.NewTextValue))
                 VendorsListView.ItemsSource = vendors;
             else
-                VendorsListView.ItemsSource = vendors.Where(i => i.Name.ToLower().Contains(e.NewTextValue.ToString().ToLower()));
+                VendorsListView.ItemsSource = vendors.Where(i => i.Title.ToLower().Contains(e.NewTextValue.ToString().ToLower()));
 
-            VendorsListView.EndRefresh();*/
+            VendorsListView.EndRefresh();
         }
 
         async void LoadVendors()
         {
 
             //var vendors = service.GetItemCategoriesAsync();
-            /*commit from charbel vendors = await service.GetItemCategoriesAsync();
+            WebClient client = new WebClient();
+            var resp = client.DownloadString(Statics.apiLink + "Categories");
+            vendors = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<VendorCategory>>(resp);
             foreach(var vendor in vendors)
             {
-                vendor.Name = WebUtility.HtmlDecode(vendor.Name);
+                vendor.Title = WebUtility.HtmlDecode(vendor.Title);
+                vendor.Image = Statics.MediaLink + vendor.Image;
             }
-            VendorsListView.ItemsSource = vendors;*/
+            VendorsListView.ItemsSource = vendors;
         }
     }
 }

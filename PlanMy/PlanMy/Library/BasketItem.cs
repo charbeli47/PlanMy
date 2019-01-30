@@ -8,7 +8,7 @@ namespace PlanMy.Library
     public class BasketItem
     {
         public Offers Product { get; set; }
-        public BasketItem OrderItem { get; set; }
+        public BasketItems OrderItem { get; set; }
         public async Task<string> Save(List<BasketItem> items)
         {
             Connect con = new Connect();

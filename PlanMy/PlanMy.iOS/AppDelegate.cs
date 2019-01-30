@@ -76,13 +76,16 @@ namespace PlanMy.iOS
                 string user = await con.GetData("User");
                 if (user != "")
                 {
-                    UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(user);
-                    int userId = cookie.user.id;
-                    client.DownloadString("https://planmy.me/maizonpub-api/add_device.php?action=insertdevice&token=" + newToken + "&device=iOS&userid=" + userId);
+                    Users cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(user);
+                    var oldtoken = await con.GetData("FirebaseToken");
+                    string updateLink = Statics.apiLink + "AddPushToken?UserId=" + cookie.Id + "&NewToken=" + newToken + "&OldToken=" + oldtoken + "&PushDevice=" + PushDevice.iOS;
+                    client.DownloadString(updateLink);
                 }
                 else
                 {
-                    client.DownloadString("https://planmy.me/maizonpub-api/add_device.php?action=insertdevice&token=" + newToken + "&device=iOS");
+                    var oldtoken = await con.GetData("FirebaseToken");
+                    string updateLink = Statics.apiLink + "AddPushToken?UserId=&NewToken=" + newToken + "&OldToken=" + oldtoken + "&PushDevice=" + PushDevice.iOS;
+                    client.DownloadString(updateLink);
                 }
                 // if you want to send notification per user, use this token
                 System.Diagnostics.Debug.WriteLine(newToken);
@@ -181,8 +184,8 @@ namespace PlanMy.iOS
                 var user = await con.GetData("User");
                 if (user != "")
                 {
-                    UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(user);
-                    int userId = cookie.user.id;
+                    Users cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(user);
+                    string userId = cookie.Id;
                     if (senderId == 1)
                     {
                         /*commit from charbelVendorItem vendorItem = new VendorItem { post_author = "1", featured_media = "chatlogo.png", post_title = "Plan My" };
