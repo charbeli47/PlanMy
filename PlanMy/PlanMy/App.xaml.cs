@@ -14,7 +14,7 @@ namespace PlanMy
 		public App ()
 		{
 			InitializeComponent();
-			SendBirdClient.Init("ED8B418E - BFCD - 4283 - 8075 - AD97675C6B4C");
+			SendBirdClient.Init("C6A61C32-BD15-424D-8504-5763BF46C392");
 
 
 			MainPage = new MainPage();

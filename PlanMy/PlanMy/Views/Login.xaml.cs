@@ -2,6 +2,7 @@
 using PlanMy.Library;
 using PlanMy.Models;
 using PlanMy.ViewModels;
+using SendBird;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -38,6 +39,51 @@ namespace PlanMy.Views
                 WebClient client = new WebClient();
                 string resp = client.DownloadString(link);
                 var u = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(resp);
+                SendBirdClient.Connect(u.Id, (User user, SendBirdException e) =>
+                {
+                    if (e != null)
+                    {
+                        // Error
+                        return;
+                    }
+                    SendBirdClient.UpdateCurrentUserInfo(u.FirstName + " " + u.LastName, user.ProfileUrl, (SendBirdException e1) =>
+                    {
+                        if (e1 != null)
+                        {
+                            // Error
+                            return;
+                        }
+                    });
+                    if (SendBirdClient.GetPendingPushToken() == null) return;
+
+                    // For Android
+                    SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) => {
+                        if (e1 != null)
+                        {
+                            // Error.
+                            return;
+                        }
+
+                        if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                        {
+                            // Try registration after connection is established.
+                        }
+                    });
+
+                    // For iOS
+                    SendBirdClient.RegisterAPNSPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) => {
+                        if (e1 != null)
+                        {
+                            // Error.
+                            return;
+                        }
+
+                        if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                        {
+                            // Try registration after connection is established.
+                        }
+                    });
+                });
                 await con.SaveData("User", resp);
                 OperationCompleted?.Invoke(this, EventArgs.Empty);
                 await Navigation.PopModalAsync();
@@ -83,6 +129,51 @@ namespace PlanMy.Views
             WebClient client = new WebClient();
             string resp = client.DownloadString(link);
             var u = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(resp);
+            SendBirdClient.Connect(u.Id, (User user, SendBirdException ev) =>
+            {
+                if (ev != null)
+                {
+                    // Error
+                    return;
+                }
+                SendBirdClient.UpdateCurrentUserInfo(u.FirstName + " " + u.LastName, user.ProfileUrl, (SendBirdException e1) =>
+                {
+                    if (e1 != null)
+                    {
+                        // Error
+                        return;
+                    }
+                });
+                if (SendBirdClient.GetPendingPushToken() == null) return;
+
+                // For Android
+                SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) => {
+                    if (e1 != null)
+                    {
+                        // Error.
+                        return;
+                    }
+
+                    if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                    {
+                        // Try registration after connection is established.
+                    }
+                });
+
+                // For iOS
+                SendBirdClient.RegisterAPNSPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) => {
+                    if (e1 != null)
+                    {
+                        // Error.
+                        return;
+                    }
+
+                    if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                    {
+                        // Try registration after connection is established.
+                    }
+                });
+            });
             await con.SaveData("User", resp);
             con.DeleteData("FaceBookProfile");
             OperationCompleted?.Invoke(this, EventArgs.Empty);

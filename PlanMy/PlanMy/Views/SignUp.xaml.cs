@@ -1,4 +1,5 @@
 ﻿using PlanMy.Library;
+using SendBird;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,51 @@ namespace PlanMy.Views
             WebClient client = new WebClient();
             string resp = client.DownloadString(link);
             var u = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(resp);
-            
+            SendBirdClient.Connect(u.Id, (User user, SendBirdException ev) =>
+            {
+                if (ev != null)
+                {
+                    // Error
+                    return;
+                }
+                SendBirdClient.UpdateCurrentUserInfo(u.FirstName + " " + u.LastName, user.ProfileUrl, (SendBirdException e1) =>
+                {
+                    if (e1 != null)
+                    {
+                        // Error
+                        return;
+                    }
+                });
+                if (SendBirdClient.GetPendingPushToken() == null) return;
+
+                // For Android
+                SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) => {
+                    if (e1 != null)
+                    {
+                        // Error.
+                        return;
+                    }
+
+                    if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                    {
+                        // Try registration after connection is established.
+                    }
+                });
+
+                // For iOS
+                SendBirdClient.RegisterAPNSPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) => {
+                    if (e1 != null)
+                    {
+                        // Error.
+                        return;
+                    }
+
+                    if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                    {
+                        // Try registration after connection is established.
+                    }
+                });
+            });
             await con.SaveData("User", resp);
             OperationCompleted?.Invoke(this, EventArgs.Empty);
             await Navigation.PopModalAsync();

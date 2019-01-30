@@ -3,10 +3,12 @@ using PlanMy.Helpers;
 using PlanMy.Library;
 using PlanMy.Models;
 using Plugin.Geolocator;
+using SendBird;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -39,11 +41,16 @@ namespace PlanMy.ViewModels
 
             SendCommand = new Command(async() =>
             {
+
                 Connect con = new Connect();
                 var usr = await con.GetData("User");
                 Users cookie = new Users();
-                if(!string.IsNullOrEmpty(usr))
+                if (!string.IsNullOrEmpty(usr))
+                {
                     cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
+                    
+                }
+
                 string msg = OutGoingText;
                 var message = new Message
                 {
@@ -60,9 +67,7 @@ namespace PlanMy.ViewModels
 
                 OutGoingText = string.Empty;
                 
-                string json = await con.DownloadData("https://www.planmy.me/maizonpub-api/chat.php", "action=insert&sender_id=" + cookie.Id + "&receiver_id=" + vendor.UserId + "&message=" + msg);
-
-                await con.DownloadData("https://planmy.me/maizonpub-api/add_device.php", "action=sendpush&body=" + msg + "&title=New message from User on PlanMy app&userid=" + vendor.UserId);
+                
             });
 
 
@@ -95,46 +100,98 @@ namespace PlanMy.ViewModels
         }
         async void LoadChat(VendorItem vendor)
         {
+            
             Connect con = new Connect();
             var usr = await con.GetData("User");
             Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
             {
                 cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
-                string json = await con.DownloadData("https://www.planmy.me/maizonpub-api/chat.php", "action=get&my_id=" + cookie.Id + "&partner_id=" + vendor.UserId);
-                var items = Newtonsoft.Json.JsonConvert.DeserializeObject<List<WeddexChat>>(json);
+                List<string> userIds = new List<string> { cookie.Id, vendor.UserId };
+                SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler();
+                SendBirdClient.CreateUserListQuery(userIds);
+                GroupChannel.CreateChannelWithUserIds(userIds, true, (GroupChannel groupChannel, SendBirdException e) => {
+                    if (e != null)
+                    {
+                        // Error.
+                        return;
+                    }
+                    SendCommand = new Command(async () =>
+                    {
 
-                foreach (var item in items)
-                {
-                    if (item.type == "Incoming")
-                        Messages.Add(new Message { Text = item.message, IsIncoming = true, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = vendor.Thumb });
-                    else
-                        Messages.Add(new Message { Text = item.message, IsIncoming = false, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = Statics.MediaLink + cookie.Image });
-                }
-                Xamarin.Forms.Device.StartTimer(new TimeSpan(0, 0, 1), () =>
-                {
-                    GetNewChats(con, vendor, cookie);
+                        groupChannel.StartTyping();
+                        string msg = OutGoingText;
+                        var message = new Message
+                        {
+                            Text = OutGoingText,
+                            IsIncoming = false,
+                            MessageDateTime = DateTime.Now,
+                            SenderImg = Statics.MediaLink + cookie.Image
+                        };
 
-                    return true;
+
+                        Messages.Add(message);
+
+                        //twilioMessenger?.SendMessage(message.Text);
+                        groupChannel.SendUserMessage(OutGoingText, "", (UserMessage userMessage, SendBirdException se) => {
+                            if (se != null)
+                            {
+                                // Error.
+                                return;
+                            }
+                        });
+                        OutGoingText = string.Empty;
+                        groupChannel.EndTyping();
+
+                    });
+                    PreviousMessageListQuery mPrevMessageListQuery = groupChannel.CreatePreviousMessageListQuery();
+                    mPrevMessageListQuery.Load(30, true, (List<BaseMessage> messages, SendBirdException ev) => {
+                        if (ev != null)
+                        {
+                            // Error.
+                            return;
+                        }
+                        foreach(var message in messages)
+                        {
+                            UserMessage userMsg = (UserMessage)message;
+                            var user = userMsg.Sender;
+                            if(user.UserId!=cookie.Id)
+                                Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + vendor.Thumb });
+                            else
+                                Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + cookie.Image });
+                        }
+                            
+                    });
                 });
+                
+                ch.OnMessageReceived = (BaseChannel baseChannel, BaseMessage baseMessage) => {
+                    UserMessage userMsg = (UserMessage)baseMessage;
+                    Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + vendor.Thumb });
+                };
+                SendBirdClient.AddChannelHandler(Statics.ChannelHandler, ch);
+                
             }
-
         }
-
-        private async void GetNewChats(Connect con, VendorItem vendor, Users cookie)
+        DateTime ConvertToDate(long unixDate)
         {
-            string postData = "action=getnew&my_id=" + cookie.Id + "&partner_id=" + vendor.UserId;
-            string jdata = await con.DownloadData("https://www.planmy.me/maizonpub-api/chat.php", postData);
-            var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<WeddexChat>>(jdata);
-
-            foreach (var item in datas)
-            {
-                if (item.type == "Incoming")
-                    Messages.Add(new Message { Text = item.message, IsIncoming = true, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = vendor.Thumb });
-                else
-                    Messages.Add(new Message { Text = item.message, IsIncoming = false, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = Statics.MediaLink + cookie.Image });
-            }
+            DateTime start = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            DateTime date = start.AddMilliseconds(unixDate).ToLocalTime();
+            return date;
         }
+        //private async void GetNewChats(Connect con, VendorItem vendor, Users cookie)
+        //{
+        //    string postData = "action=getnew&my_id=" + cookie.Id + "&partner_id=" + vendor.UserId;
+        //    string jdata = await con.DownloadData("https://www.planmy.me/maizonpub-api/chat.php", postData);
+        //    var datas = Newtonsoft.Json.JsonConvert.DeserializeObject<List<WeddexChat>>(jdata);
+
+        //    foreach (var item in datas)
+        //    {
+        //        if (item.type == "Incoming")
+        //            Messages.Add(new Message { Text = item.message, IsIncoming = true, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = vendor.Thumb });
+        //        else
+        //            Messages.Add(new Message { Text = item.message, IsIncoming = false, MessageDateTime = DateTime.Parse(item.dateInsert), SenderImg = Statics.MediaLink + cookie.Image });
+        //    }
+        //}
 
     }
 }

@@ -10,6 +10,8 @@ namespace PlanMy.Library
         public static string apiLink = "http://test.planmy.me/api/";
         public static string MediaLink = "http://test.planmy.me/Media/";
         public static string payLink = "http://test.planmy.me/MobilePay";
+
+        public static string ChannelHandler = "GLOBAL_HANDLER";
     }
 
 }
