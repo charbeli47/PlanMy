@@ -188,18 +188,18 @@ namespace PlanMy.iOS
                     string userId = cookie.Id;
                     if (senderId == 1)
                     {
-                        /*commit from charbelVendorItem vendorItem = new VendorItem { post_author = "1", featured_media = "chatlogo.png", post_title = "Plan My" };
+                        VendorItem vendorItem = new VendorItem { UserId = "98d095b7-f698-4579-bb5b-7d2d936aeb62", Thumb = "chatlogo.png", Title = "Plan My" };
                         var mainPage = new MainChatPage(vendorItem);
 
-                        _app.MainPage = mainPage;*/
+                        _app.MainPage = mainPage;
 
                     }
                     else if (senderId != 0)
                     {
-                        /*commit from charbelVendorItem vendorItem = new VendorItem { post_author = senderId.ToString(), featured_media = "chatlogo.png", post_title = "Plan My Supplier" };
+                        VendorItem vendorItem = new VendorItem { UserId = senderId.ToString(), Thumb = "chatlogo.png", Title = "Plan My Supplier" };
                         var mainPage = new MainChatPage(vendorItem);
                         MainPage indexpage = (MainPage)_app.MainPage;
-                        await indexpage.Navigation.PushModalAsync(mainPage);*/
+                        await indexpage.Navigation.PushModalAsync(mainPage);
                     }
                 }
             }
@@ -253,27 +253,27 @@ namespace PlanMy.iOS
 
                 Connect con = new Connect();
 
-                /*commit from charbel var user = await con.GetData("User");
+                var user = await con.GetData("User");
                 if (user != "")
                 {
 
                     
                     if (senderId == 1)
                     {
-                        VendorItem vendorItem = new VendorItem { post_author = "1", featured_media = "chatlogo.png", post_title = "Plan My" };
+                        VendorItem vendorItem = new VendorItem { UserId = "98d095b7-f698-4579-bb5b-7d2d936aeb62", Thumb = "chatlogo.png", Title = "Plan My" };
                         var mainPage = new MainChatPage(vendorItem);
 
                         _app.MainPage = mainPage;
                     }
                     else if (senderId != 0)
                     {
-                        VendorItem vendorItem = new VendorItem { post_author = senderId.ToString(), featured_media = "chatlogo.png", post_title = "Plan My Supplier" };
+                        VendorItem vendorItem = new VendorItem { UserId = senderId.ToString(), Thumb = "chatlogo.png", Title = "Plan My Supplier" };
                         var mainPage = new MainChatPage(vendorItem);
 
                         _app.MainPage = mainPage;
                     }
                 }
-                */
+                
             }
         }
 
