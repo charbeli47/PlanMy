@@ -10,9 +10,11 @@ namespace PlanMy.Library
         public string Title { get; set; }
         public DateTime Timing { get; set; }
         public VendorCategory VendorCategory { get; set; }
+        public int VendorCategoryId { get; set; }
         public string Description { get; set; }
         public Users User { get; set; }
         public CheckListStatus Status { get; set; }
+        public bool IsPriority { get; set; }
 
     }
     public enum CheckListStatus

@@ -3,7 +3,7 @@ using PlanMy.Library;
 using PlanMy.Models;
 using PlanMy.ViewModels;
 using System;
-
+using System.Collections.Generic;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -13,7 +13,7 @@ namespace PlanMy.Views
 	public partial class ProfilePage : ContentPage
 	{
         public bool settingsVisible = false;
-        public ConfigUser user;
+        public Users user;
         public SettingsView settingsView;
         public ProfilePage()
 		{
@@ -39,16 +39,16 @@ namespace PlanMy.Views
             var usr = await con.GetData("User");
             if (!string.IsNullOrEmpty(usr))
             {
-                UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
-                user = cookie.configUsr;
-                if (!string.IsNullOrEmpty(user.event_img))
+                Users cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
+                user = cookie;
+                if (!string.IsNullOrEmpty(user.Events.Image))
                 {
-                    ProfileImg.Source = user.event_img;
+                    ProfileImg.Source = user.Events.Image;
                     StartPlanningBtn.IsVisible = false;
                     planningstarted.IsVisible = true;
-                    eventlocation.Text = user.event_location;
-                    eventwebsite.Text = user.event_name;
-                    DateTime endTime = DateTime.Parse(user.event_date);
+                    eventlocation.Text = user.Events.Description;
+                    eventwebsite.Text = user.Events.Title;
+                    DateTime endTime = user.Events.Date;
                     var timespan = endTime.Subtract(DateTime.Now);
                     Xamarin.Forms.Device.StartTimer(new TimeSpan(0, 0, 1), () =>
                     {
@@ -75,24 +75,17 @@ namespace PlanMy.Views
             var usr = await con.GetData("User");
             if(!string.IsNullOrEmpty(usr))
             {
-                UserCookie cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
-                user = cookie.configUsr;
-                if (user == null)
+                Users cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
+                user = cookie;
+                
+                if (!string.IsNullOrEmpty(user.Events.Image))
                 {
-                    string usrdetails = await con.DownloadData("https://www.planmy.me/maizonpub-api/users.php", "action=get&userid=" + cookie.user.id);
-                    user = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigUser>(usrdetails);
-                    cookie.configUsr = user;
-                    string resp = Newtonsoft.Json.JsonConvert.SerializeObject(cookie);
-                    await con.SaveData("User", resp);
-                }
-                if (!string.IsNullOrEmpty(user.event_img))
-                {
-                    ProfileImg.Source = user.event_img;
+                    ProfileImg.Source = user.Events.Image;
                     StartPlanningBtn.IsVisible = false;
                     planningstarted.IsVisible = true;
-                    eventlocation.Text = user.event_location;
-                    eventwebsite.Text = user.event_name;
-                    DateTime endTime = DateTime.Parse(user.event_date);
+                    eventlocation.Text = user.Events.Description;
+                    eventwebsite.Text = user.Events.Title;
+                    DateTime endTime = user.Events.Date;
                     var timespan = endTime.Subtract(DateTime.Now);
                     Xamarin.Forms.Device.StartTimer(new TimeSpan(0, 0, 1), () =>
                     {
@@ -111,11 +104,11 @@ namespace PlanMy.Views
 
                     });
                 }
-                string stats = await con.DownloadData("https://planmy.me/maizonpub-api/users.php", "action=getstats&userid=" + cookie.user.id);
+                string stats = await con.DownloadData(Statics.apiLink+ "UserStats", "UserId=" + cookie.Id);
                 var usrStats = Newtonsoft.Json.JsonConvert.DeserializeObject<UserStats>(stats);
                 guestsLabel.Text = usrStats.guestsCount.ToString();
                 tasksLabel.Text = usrStats.todosCount.ToString();
-                favouriteLabel.Text = usrStats.wishesCount.ToString(); ;
+                favouriteLabel.Text = usrStats.wishesCount.ToString();
                 
                 
                 configBtn.IsVisible = true;
@@ -127,7 +120,8 @@ namespace PlanMy.Views
                 ProfileImg.Source = facebookProfile.Picture.Data.Url;
                 ProfileImg.WidthRequest = Bounds.Width;
             }*/
-            /*commit from charbel var featuredItems = await service.GetFeaturedItemsAsync();
+            string fresp = await con.DownloadData(Statics.apiLink + "VendorItems/Featured", "");
+            var featuredItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorItem>>(fresp);
             preload.IsVisible = false;
             //WooCommerceNET.RestAPI rest = new WooCommerceNET.RestAPI(Statics.WooApi, Statics.ConsumerKey, Statics.ConsumerSecret);
             //WooCommerceNET.WooCommerce.v2.WCObject wc = new WooCommerceNET.WooCommerce.v2.WCObject(rest);
@@ -137,17 +131,17 @@ namespace PlanMy.Views
             {
                 Image img = new Image();
                 
-                img.Source = item.featured_img;
+                img.Source = Statics.MediaLink + item.Thumb;
                 img.Margin = new Thickness(10, 0, 0, 0);
             TapGestureRecognizer recognizer = new TapGestureRecognizer();
                 recognizer.Tapped += (sender2, args) =>
                 {
                     //(MainPage as ContentPage).Content = this.Content;
-                    Navigation.PushModalAsync(new selectedvendor(item.Title.Rendered, item),true);
+                    Navigation.PushModalAsync(new selectedvendor(item.Title, item),true);
                 };
                 img.GestureRecognizers.Add(recognizer);
                 favVendors.Children.Add(img);
-            }*/
+            }
             
         }
         

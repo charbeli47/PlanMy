@@ -12,6 +12,7 @@ namespace PlanMy.Library
         public string Description { get; set; }
         public DateTime Date { get; set; }
         public string Image { get; set; }
-        public Users User { get; set; }
+        public string UserId { get; set; }
+        public bool IsPrivate { get; set; }
     }
 }

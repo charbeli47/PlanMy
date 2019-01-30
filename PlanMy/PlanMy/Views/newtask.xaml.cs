@@ -3,6 +3,7 @@ using PlanMy.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,19 +20,19 @@ namespace PlanMy
         public event EventHandler<EventArgs> OperationCompleted;
         List<string> catnames = new List<string>();
 		List<int> catids = new List<int>();
-		public newtask (bool isedit,todoobj task)
+		public newtask (bool isedit,CheckList task)
 		{
 			InitializeComponent ();
 			NavigationPage.SetHasNavigationBar(this, false);
 			Loadcats(isedit,task);
-			if (isedit == true && task!=null)
-			{
-				priorityPicker.IsVisible = true;
-				prioritylabel.IsVisible = true;
-				Pagetitle.Text = "EDIT TASK";
-				titleoftask.Text = task.todo_title;
-				detailstask.Text = task.todo_details;
-				if (task.is_priority.ToString() == "0")
+            if (isedit == true && task != null)
+            {
+                priorityPicker.IsVisible = true;
+                prioritylabel.IsVisible = true;
+                Pagetitle.Text = "EDIT TASK";
+                titleoftask.Text = task.Title;
+                detailstask.Text = task.Description;
+                if (!task.IsPriority)
 				{
 					priorityPicker.SelectedIndex = 1;
 				}
@@ -39,7 +40,7 @@ namespace PlanMy
 				{
 					priorityPicker.SelectedIndex = 0;
 				}
-					}
+            }
 
 		
 		
@@ -71,99 +72,70 @@ namespace PlanMy
 
 
 
-		public async void Loadcats(bool isedit,todoobj task)
+		public async void Loadcats(bool isedit,CheckList task)
 		{
-
-            /*commit from charbel WordpressService service = new WordpressService();
-			//var vendors = service.GetItemCategoriesAsync();
-			cats = await service.GetItemCategoriesAsync();
-			//VendorsListView.ItemsSource = vendors;
-
-
-			catPicker.ItemsSource = cats.ToList();
+            WebClient client = new WebClient();
+            //var vendors = service.GetItemCategoriesAsync();
+            //cats = await service.GetItemCategoriesAsync();
+            //VendorsListView.ItemsSource = vendors;
+            var resp = client.DownloadString(Statics.apiLink + "Categories");
+            var cats = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorCategory>>(resp);
+			catPicker.ItemsSource = cats;
 			var catepicker = catPicker.ItemsSource;
 			int selectedindex = 0;
 			int i = 0;
 			if (isedit == true)
 			{
 				
-				foreach(WordPressPCL.Models.ItemCategory item in catepicker)
+				foreach(VendorCategory item in catepicker)
 				{
-					if (item.Id.ToString() == task.todo_category.ToString())
+					if (item.Id.ToString() == task.VendorCategoryId.ToString())
 					{
 						selectedindex = i;
 					}
 					i++;
 				}
 				catPicker.SelectedIndex = selectedindex;
-			}*/
+			}
 
         }
 
         //function to add task//
         public async void addtask()
 		{
-            /*commit from charbel var usr = await GetUser();
-            WordPressPCL.Models.ItemCategory catt = (WordPressPCL.Models.ItemCategory)catPicker.SelectedItem;
-			using (var cl = new HttpClient())
-			{
-				var formcontent = new FormUrlEncodedContent(new[]
-				{
-			new KeyValuePair<string,string>("todo_user",usr.user.id.ToString()),
-			new KeyValuePair<string, string>("todo_title",titleoftask.Text),
-				new KeyValuePair<string,string>("todo_details",detailstask.Text),
-			new KeyValuePair<string, string>("todo_date",Datepickertask.Date.ToString("yyyy-MM-dd")),
-			new KeyValuePair<string,string>("todo_read","0"),
-			new KeyValuePair<string, string>("todo_category",catt.Id.ToString()),
-			new KeyValuePair<string, string>("is_priority","no")
-		});
-
-				var request = await cl.PostAsync("https://www.planmy.me/maizonpub-api/todolist.php?action=insert", formcontent);
-				request.EnsureSuccessStatusCode();
-				var response = await request.Content.ReadAsStringAsync();
-                OperationCompleted?.Invoke(this, EventArgs.Empty);
-                Navigation.PopModalAsync();
-
-			}*/
+            var usr = await GetUser();
+            VendorCategory catt = (VendorCategory)catPicker.SelectedItem;
+            Connect con = new Connect();
+            CheckList list = new CheckList { Description = detailstask.Text, Status = CheckListStatus.ToDo, VendorCategoryId = catt.Id, Timing = Datepickertask.Date, Title = titleoftask.Text, User = usr };
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(list);
+            con.PostToServer(Statics.apiLink + "CheckLists", json);
+            OperationCompleted?.Invoke(this, EventArgs.Empty);
+            Navigation.PopModalAsync();
         }
-        public async Task<UserCookie> GetUser()
+        public async Task<Users> GetUser()
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            UserCookie cookie = new UserCookie();
+            Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
             {
-                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
             }
             return cookie;
         }
         //function to edit task//
-        public async void edittask(todoobj task)
+        public async void edittask(CheckList task)
 		{
-			/*commit from charbel WordPressPCL.Models.ItemCategory catt = (WordPressPCL.Models.ItemCategory)catPicker.SelectedItem;
-			using (var cl = new HttpClient())
-			{
-				var formcontent = new FormUrlEncodedContent(new[]
-				{
-			new KeyValuePair<string,string>("todo_id",task.todo_id),
-			new KeyValuePair<string, string>("todo_title",titleoftask.Text),
-				new KeyValuePair<string,string>("todo_details",detailstask.Text),
-			new KeyValuePair<string, string>("todo_date",Datepickertask.Date.ToString("yyyy-MM-dd")),
-			new KeyValuePair<string,string>("todo_read",task.todo_read),
-			new KeyValuePair<string, string>("todo_category",catt.Id.ToString()),
-			new KeyValuePair<string, string>("is_priority",priorityPicker.SelectedItem.ToString())
-		});
-
-
-				var request = await cl.PostAsync("https://www.planmy.me/maizonpub-api/todolist.php?action=update", formcontent);
-
-				request.EnsureSuccessStatusCode();
-
-				var response = await request.Content.ReadAsStringAsync();
-                OperationCompleted?.Invoke(this, EventArgs.Empty);
-                Navigation.PopModalAsync();
-
-			}*/
+			VendorCategory catt = (VendorCategory)catPicker.SelectedItem;
+            task.VendorCategoryId = catt.Id;
+            task.Title = titleoftask.Text;
+            task.Description = detailstask.Text;
+            task.Timing = Datepickertask.Date;
+            Connect con = new Connect();
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(task);
+            con.PutToServer(Statics.apiLink + "CheckLists/"+task.Id, json);
+            OperationCompleted?.Invoke(this, EventArgs.Empty);
+            await Navigation.PopModalAsync();
 		}
 	}
 }

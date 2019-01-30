@@ -14,7 +14,7 @@ namespace PlanMy.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class GuestView : ContentView
 	{
-        List<guest> listofguests = new List<guest>();
+        List<GuestList> listofguests = new List<GuestList>();
         public GuestView ()
 		{
 			InitializeComponent ();
@@ -88,29 +88,29 @@ namespace PlanMy.Views
             gueststack.Children.Clear();
             var usr = await GetUser();
             Connect con = new Connect();
-            if (usr.user != null)
+            if (usr != null)
             {
-                string todostring = await con.DownloadData("https://planmy.me/maizonpub-api/guestlist.php", "action=get&userid=" + usr.user.id);
-                listofguests = JsonConvert.DeserializeObject<List<guest>>(todostring);
+                string todostring = await con.DownloadData(Statics.apiLink+ "GuestLists", "UserId=" + usr.Id);
+                listofguests = JsonConvert.DeserializeObject<List<GuestList>>(todostring);
 
-                foreach (guest g in listofguests)
+                foreach (GuestList g in listofguests)
                 {
 
                     string status = "";
-                    if (g.RSVP == "Not Invited" || g.RSVP == "Declined")
+                    if (g.GuestStatus == GuestStatus.Not_Invited || g.GuestStatus == GuestStatus.Declined)
                     {
                         status = "notattending.png";
                     }
-                    if (g.RSVP == "No Response")
+                    if (g.GuestStatus == GuestStatus.No_Response)
                     {
                         status = "pending2.png";
                     }
-                    if (g.RSVP == "Accepted")
+                    if (g.GuestStatus == GuestStatus.Accepted)
                     {
                         status = "attending.png";
                     }
 
-                    StackLayout grow = createguestrow(g.guest_name, status);
+                    StackLayout grow = createguestrow(g.FullName, status);
                     grow.GestureRecognizers.Add(new TapGestureRecognizer
                     {
                         Command = new Command(async () =>
@@ -129,26 +129,26 @@ namespace PlanMy.Views
         public void myPickerSelectedIndexChanged(object sender, EventArgs e)
         {
             gueststack.Children.Clear();
-            string statusguest = RspPicker.SelectedItem.ToString();
-            foreach (guest gt in listofguests)
+            int statusguest = RspPicker.SelectedIndex;
+            foreach (GuestList gt in listofguests)
             {
-                if (gt.RSVP == statusguest)
+                if ((int)gt.GuestStatus == statusguest)
 
                 {
                     string status = "";
-                    if (gt.RSVP == "Not Invited" || gt.RSVP == "Declined")
+                    if (gt.GuestStatus == GuestStatus.Not_Invited || gt.GuestStatus == GuestStatus.Declined)
                     {
                         status = "notattending.png";
                     }
-                    if (gt.RSVP == "No Response")
+                    if (gt.GuestStatus == GuestStatus.No_Response)
                     {
                         status = "pending2.png";
                     }
-                    if (gt.RSVP == "Accepted")
+                    if (gt.GuestStatus == GuestStatus.Accepted)
                     {
                         status = "attending.png";
                     }
-                    StackLayout rowg = createguestrow(gt.guest_name, status);
+                    StackLayout rowg = createguestrow(gt.FullName, status);
                     rowg.GestureRecognizers.Add(new TapGestureRecognizer
                     {
                         Command = new Command(async () => {
@@ -211,32 +211,32 @@ namespace PlanMy.Views
             seatstack.Children.Clear();
             Connect con = new Connect();
             var usr = await GetUser();
-            string todostring = await con.DownloadData("https://planmy.me/maizonpub-api/tables.php", "action=get&userid=" + usr.user.id);
-            List<table> listoftables = JsonConvert.DeserializeObject<List<table>>(todostring);
+            string todostring = await con.DownloadData(Statics.apiLink+ "GuestListTables", "UserId=" + usr.Id);
+            List<GuestListTables> listoftables = JsonConvert.DeserializeObject<List<GuestListTables>>(todostring);
 
-            foreach (table t in listoftables)
+            foreach (GuestListTables t in listoftables)
             {
 
-                string rowstring = await con.DownloadData("https://planmy.me/maizonpub-api/guestlist.php", "action=getbytable&userid=" + usr.user.id + "&tableId=" + t.seating_id);
-                List<guestbytable> listofguesttable = JsonConvert.DeserializeObject<List<guestbytable>>(rowstring);
-                StackLayout tablerow = createtableguestrow(t, t.tableName, listofguesttable.Count.ToString());
-                foreach (guestbytable gt in listofguesttable)
+                string rowstring = await con.DownloadData(Statics.apiLink+"GuestsList", "UserId=" + usr.Id + "&tableId=" + t.Id);
+                List<GuestList> listofguesttable = JsonConvert.DeserializeObject<List<GuestList>>(rowstring);
+                StackLayout tablerow = createtableguestrow(t, t.Title, listofguesttable.Count.ToString());
+                foreach (GuestList gt in listofguesttable)
                 {
                     string status = "";
-                    if (gt.RSVP == "Not Invited" || gt.RSVP == "Declined")
+                    if (gt.GuestStatus == GuestStatus.Not_Invited || gt.GuestStatus == GuestStatus.Declined)
                     {
                         status = "notattending.png";
                     }
-                    if (gt.RSVP == "No Response")
+                    if (gt.GuestStatus == GuestStatus.No_Response)
                     {
                         status = "pending2.png";
                     }
-                    if (gt.RSVP == "Accepted")
+                    if (gt.GuestStatus == GuestStatus.Accepted)
                     {
                         status = "attending.png";
                     }
 
-                    StackLayout guest = createguestrowintable(gt.guest_name, status);
+                    StackLayout guest = createguestrowintable(gt.FullName, status);
                     tablerow.Children.Add(guest);
                 }
 
@@ -244,7 +244,7 @@ namespace PlanMy.Views
                 seatstack.Children.Add(createseperatorbetweentables());
             }
         }
-        public StackLayout createtableguestrow(table t, string namet, string numberguests)
+        public StackLayout createtableguestrow(GuestListTables t, string namet, string numberguests)
         {
             StackLayout tablelayout = new StackLayout();
             tablelayout.Orientation = StackOrientation.Vertical;
@@ -392,14 +392,14 @@ namespace PlanMy.Views
             vlayout.Children.Add(line);
             return vlayout;
         }
-        public async Task<UserCookie> GetUser()
+        public async Task<Users> GetUser()
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            UserCookie cookie = new UserCookie();
+            Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
             {
-                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
             }
             return cookie;
         }

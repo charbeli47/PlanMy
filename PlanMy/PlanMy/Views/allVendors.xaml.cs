@@ -18,13 +18,12 @@ namespace PlanMy.Views
 	public partial class allVendors : ContentPage, INotifyPropertyChanged
     {
 
-        //commit from charbel public IEnumerable<WordPressPCL.Models.Item> specificvendors;
+        
         public string selectedcatname;
-        //commit from charbel public IEnumerable<WordPressPCL.Models.Item> selectedpost;
         protected int _catid;
         protected int page;
         protected bool again = true;
-        public List<int> type = new List<int>(), city = new List<int>(), setting = new List<int>(), cateringservicesInt = new List<int>(), typeoffurnitureInt = new List<int>(), clienteleInt = new List<int>(), clothingInt = new List<int>(), beautyservicesInt = new List<int>(), typeofmusiciansInt = new List<int>(), itemlocationInt = new List<int>(), typeofserviceInt = new List<int>(), capacityInt = new List<int>(), honeymoonexperienceInt = new List<int>();
+        public List<VendorTypeValue> types = new List<VendorTypeValue>();
 
         private void list_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
@@ -32,26 +31,28 @@ namespace PlanMy.Views
             ((ListView)sender).SelectedItem = null;
             if (post == null)
                 return;
-            //commit from charbel Navigation.PushModalAsync(new selectedvendor(post.Title, post.item));
+            Navigation.PushModalAsync(new selectedvendor(post.Title, post.item));
         }
 
         private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
         {
             Connect con = new Connect();
             var usr = await GetUser();
-            if (usr.user != null)
+            if (usr != null)
             {
                 Image img = (Image)sender;
                 FileImageSource source = img.Source as FileImageSource;
                 if (source.File == "fav.png")
                 {
                     img.Source = "favselected.png";
-                    await con.DownloadData("http://planmy.me/maizonpub-api/wishlist.php", "action=insert&userid=" + usr.user.id + "&itemid=" + img.TabIndex);
+                    WishList list = new WishList { UserId = usr.Id, VendorItemId = img.TabIndex };
+                    string json = Newtonsoft.Json.JsonConvert.SerializeObject(list);
+                    con.PostToServer(Statics.apiLink + "WishLists", json);
                 }
                 else
                 {
                     img.Source = "fav.png";
-                    await con.DownloadData("http://planmy.me/maizonpub-api/wishlist.php", "action=delete&userid=" + usr.user.id + "&itemid=" + img.TabIndex);
+                    con.DeleteFromServer(Statics.apiLink + "WishLists/" + img.TabIndex+"/"+usr.Id);
                 }
             }
             else
@@ -93,7 +94,7 @@ namespace PlanMy.Views
 			selectedcatname = catname;
             page = 0;
 
-            LoadPage(catid, new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>(), new List<int>());	
+            LoadPage(catid, new List<VendorTypeValue>());	
 		}
         private bool isLoading;
         public bool IsLoading
@@ -118,31 +119,33 @@ namespace PlanMy.Views
                 PropertyChanged(this, new PropertyChangedEventArgs(propName));
             }
         }
-        public async Task<UserCookie> GetUser()
+        public async Task<Users> GetUser()
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            UserCookie cookie = new UserCookie();
+            Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
             {
-                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
             }
             return cookie;
         }
         public async Task<bool> LoadMore()
         {
-            /*commit from charbel page++;
-            WordpressService service = new WordpressService();
-            specificvendors = await service.GetItemsByFilterAsync(_catid, type.ToArray(), honeymoonexperienceInt.ToArray(), typeofserviceInt.ToArray(), capacityInt.ToArray(), setting.ToArray(), cateringservicesInt.ToArray(), typeoffurnitureInt.ToArray(), clienteleInt.ToArray(), clothingInt.ToArray(), beautyservicesInt.ToArray(), typeofmusiciansInt.ToArray(), city.ToArray(), itemlocationInt.ToArray(),page);
+            page++;
+            Connect con = new Connect();
+            VendorItemSearch search = new VendorItemSearch { CategoryId = _catid, Values = types };
+            string json = Newtonsoft.Json.JsonConvert.SerializeObject(search);
+            string resp = con.PostToServer(Statics.apiLink + "VendorItems", json);
+            var specificvendors = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorItem>>(resp);
             //NumberOfSupplieres.Text = specificvendors.Count().ToString();
             var user = await GetUser();
             foreach (var post in specificvendors)
             {
                 string favImg = "fav.png";
-                if (user.user != null)
+                if (user != null)
                 {
-                    Connect con = new Connect();
-                    var s = await con.DownloadData("http://planmy.me/maizonpub-api/wishlist.php", "action=getsingle&userid=" + user.user.id + "&itemid=" + post.Id);
+                    var s = await con.DownloadData(Statics.apiLink+ "WishLists/"+post.Id+"/"+user.Id, "");
                     if (s == "1")
                     {
                         favImg = "favselected.png";
@@ -153,10 +156,10 @@ namespace PlanMy.Views
                     }
 
                 }
-                string rendered = WebUtility.HtmlDecode(Regex.Replace(post.Content.Rendered, "<.*?>", ""));
+                string rendered = WebUtility.HtmlDecode(Regex.Replace(post.HtmlDescription, "<.*?>", ""));
                 rendered = rendered.Length > 100 ? rendered.Substring(0, 100) + "more..." : rendered;
-                string title = WebUtility.HtmlDecode(post.Title.Rendered);
-                string src = post.Embedded.WpFeaturedmedia != null ? post.Embedded.WpFeaturedmedia.ToList()[0].SourceUrl : "";
+                string title = WebUtility.HtmlDecode(post.Title);
+                string src = post.Thumb != null ? Statics.MediaLink + post.Thumb : "";
                 BindingItem binding = new BindingItem { Desc = rendered, Title = title, item = post, Src = src, FavImg = favImg, Id = post.Id };
                 bindings.Add(binding);
                 
@@ -172,26 +175,26 @@ namespace PlanMy.Views
             {
                 
                 return false;
-            }*/
-            return false;
+            }
         }
-        public async void LoadPage(int catid, List<int> type, List<int> city, List<int> setting, List<int> cateringservicesInt, List<int> typeoffurnitureInt, List<int> clienteleInt, List<int> clothingInt, List<int> beautyservicesInt, List<int> typeofmusiciansInt, List<int> itemlocationInt, List<int> typeofserviceInt, List<int> capacityInt, List<int> honeymoonexperienceInt)
+        public async void LoadPage(int catid, List<VendorTypeValue> types)
 		{
-            /*commit from charbel bindings = new List<BindingItem>();
+            bindings = new List<BindingItem>();
             IsLoading = true;
             try
             {
-                WordpressService service = new WordpressService();
-                specificvendors = await service.GetItemsByFilterAsync(catid, type.ToArray(), honeymoonexperienceInt.ToArray(), typeofserviceInt.ToArray(), capacityInt.ToArray(), setting.ToArray(), cateringservicesInt.ToArray(), typeoffurnitureInt.ToArray(), clienteleInt.ToArray(), clothingInt.ToArray(), beautyservicesInt.ToArray(), typeofmusiciansInt.ToArray(), city.ToArray(), itemlocationInt.ToArray(), page);
-                //NumberOfSupplieres.Text = specificvendors.Count().ToString();
+                Connect con = new Connect();
+                VendorItemSearch search = new VendorItemSearch { CategoryId = _catid, Values = types };
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(search);
+                string resp = con.PostToServer(Statics.apiLink + "VendorItems", json);
+                var specificvendors = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorItem>>(resp);
                 var user = await GetUser();
                 foreach (var post in specificvendors)
                 {
                     string favImg = "fav.png";
-                    if (user.user != null)
+                    if (user != null)
                     {
-                        Connect con = new Connect();
-                        var s = await con.DownloadData("http://planmy.me/maizonpub-api/wishlist.php", "action=getsingle&userid=" + user.user.id + "&itemid=" + post.Id);
+                        var s = await con.DownloadData(Statics.apiLink + "WishLists/" + post.Id + "/" + user.Id, "");
                         if (s == "1")
                         {
                             favImg = "favselected.png";
@@ -243,10 +246,10 @@ namespace PlanMy.Views
                     //Headerframe.HeightRequest = 40;
                     ////selectedpost = (IEnumerable<WordPressPCL.Models.Post>)post;
                     //but.Clicked += (s, e) => { Navigation.PushModalAsync(new selectedvendor(selectedcatname, post)); };
-                    string rendered = WebUtility.HtmlDecode(Regex.Replace(post.Content.Rendered, "<.*?>", ""));
+                    string rendered = WebUtility.HtmlDecode(Regex.Replace(post.HtmlDescription, "<.*?>", ""));
                     rendered = rendered.Length > 100 ? rendered.Substring(0, 100) + "more..." : rendered;
-                    string title = WebUtility.HtmlDecode(post.Title.Rendered);
-                    string src = post.Embedded.WpFeaturedmedia!=null? post.Embedded.WpFeaturedmedia.ToList()[0].SourceUrl:"";
+                    string title = WebUtility.HtmlDecode(post.Title);
+                    string src = post.Thumb != null ? Statics.MediaLink + post.Thumb : "";
                     BindingItem binding = new BindingItem { Desc = rendered, Title = title, item = post, Src = src, FavImg = favImg, Id = post.Id  };
                     bindings.Add(binding);
                 }
@@ -257,12 +260,12 @@ namespace PlanMy.Views
 
             }
             IsLoading = false;
-            */
+            
         }
 
         private void filterBtn_Clicked(object sender, EventArgs e)
         {
-            var filterPage = new VendorsFilter(_catid, ref type, ref city, ref setting, ref cateringservicesInt, ref typeoffurnitureInt, ref clienteleInt, ref clothingInt, ref beautyservicesInt, ref typeofmusiciansInt, ref itemlocationInt, ref typeofserviceInt, ref capacityInt, ref honeymoonexperienceInt);
+            var filterPage = new VendorsFilter(_catid, ref types);
             filterPage.OperationCompleted += FilterPage_OperationCompleted;
             Navigation.PushModalAsync(filterPage);
         }
@@ -271,7 +274,7 @@ namespace PlanMy.Views
         {
             list.ItemsSource = new List<BindingItem>();
             page = 0;
-            LoadPage(_catid, type, city, setting, cateringservicesInt, typeoffurnitureInt, clienteleInt, clothingInt, beautyservicesInt, typeofmusiciansInt, itemlocationInt, typeofserviceInt, capacityInt, honeymoonexperienceInt);
+            LoadPage(_catid, types);
         }
     }
     public class BindingItem
@@ -281,7 +284,7 @@ namespace PlanMy.Views
         public string Title { get; set; }
         public string Desc { get; set; }
         public string FavImg { get; set; }
-        //commit from charbel public WordPressPCL.Models.Item item { get; set; }
+        public VendorItem item { get; set; }
     }
 
 

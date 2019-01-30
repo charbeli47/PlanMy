@@ -16,7 +16,7 @@ namespace PlanMy.Views
 	public partial class NewExpense : ContentPage
 	{
         public event EventHandler<EventArgs> OperationCompleted;
-        public NewExpense (bool isedit,expenseforcat ec)
+        public NewExpense (bool isedit,Budget ec)
 		{
 			InitializeComponent ();
 
@@ -36,10 +36,10 @@ namespace PlanMy.Views
 				};
 
 				addnewcat.IsVisible = false;
-				expenddescription.Text = ec.budget_list_name;
-				expendpaidcost.Text = ec.budget_list_paid_cost;
-				expendactualcost.Text = ec.budget_list_actual_cost;
-				expendestimatedcost.Text = ec.budget_list_estimate_cost;
+				expenddescription.Text = ec.Description;
+				expendpaidcost.Text = ec.PaidCost.ToString();
+				expendactualcost.Text = ec.ActualCost.ToString();
+				expendestimatedcost.Text = ec.EstimatedCost.ToString();
 			}
 		
 
@@ -96,49 +96,35 @@ namespace PlanMy.Views
 		}
 		public async void addnewexpense()
 		{
-			expense expensecat = (expense)catPicker.SelectedItem;
+			BudgetCategory expensecat = (BudgetCategory)catPicker.SelectedItem;
             var usr = await GetUser();
-			using (var cl = new HttpClient())
-			{
-				var formcontent = new FormUrlEncodedContent(new[]
-				{
-			new KeyValuePair<string,string>("category_id",expensecat.category_id.ToString()),
-			new KeyValuePair<string, string>("user_id",usr.user.id.ToString()),
-				new KeyValuePair<string,string>("name",expenddescription.Text),
-			new KeyValuePair<string, string>("estimate_cost",expendestimatedcost.Text),
-			new KeyValuePair<string,string>("actual_cost",expendactualcost.Text),
-			new KeyValuePair<string, string>("paid_cost",expendpaidcost.Text),
-			
-		});
-
-				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/budget.php?action=insert", formcontent);
-				request.EnsureSuccessStatusCode();
-				var response = await request.Content.ReadAsStringAsync();
-                OperationCompleted?.Invoke(this, EventArgs.Empty);
-                await Navigation.PopModalAsync();
-
-			}
+            Connect con = new Connect();
+            Budget budget = new Budget { BudgetCategoryId = expensecat.Id, ActualCost = float.Parse(expendactualcost.Text), Description = expenddescription.Text, EstimatedCost = float.Parse(expendestimatedcost.Text), PaidCost = float.Parse(expendpaidcost.Text), UserId = usr.Id };
+            string json = JsonConvert.SerializeObject(budget);
+            con.PostToServer(Statics.apiLink + "Budgets", json);
+            OperationCompleted?.Invoke(this, EventArgs.Empty);
+            await Navigation.PopModalAsync();
 		}
 		
-        public async Task<UserCookie> GetUser()
+        public async Task<Users> GetUser()
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            UserCookie cookie = new UserCookie();
+            Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
             {
-                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
             }
             return cookie;
         }
-		public async void getcatsexpenses(bool isedit,expenseforcat ec)
+		public async void getcatsexpenses(bool isedit,Budget ec)
 		{
 			Connect con = new Connect();
             var usr = await GetUser();
-            if (usr.user != null)
+            if (usr != null)
             {
-                string todostring = await con.DownloadData("http://planmy.me/maizonpub-api/budget_category.php", "action=get&category_user_id=" + usr.user.id);
-                List<expense> listofcats = JsonConvert.DeserializeObject<List<expense>>(todostring);
+                string todostring = await con.DownloadData(Statics.apiLink+"BudgetCategories", "UserId=" + usr.Id);
+                List<BudgetCategory> listofcats = JsonConvert.DeserializeObject<List<BudgetCategory>>(todostring);
                 catPicker.ItemsSource = listofcats;
 
                 int selectedindex = 0;
@@ -146,9 +132,9 @@ namespace PlanMy.Views
                 if (isedit == true)
                 {
 
-                    foreach (expense item in listofcats)
+                    foreach (BudgetCategory item in listofcats)
                     {
-                        if (item.category_id.ToString() == ec.budget_list_category_id.ToString())
+                        if (item.Id == ec.BudgetCategoryId)
                         {
                             selectedindex = i;
                         }
@@ -160,73 +146,39 @@ namespace PlanMy.Views
             }
 		}
 
-		public async void updateexpense(expenseforcat expense)
+		public async void updateexpense(Budget expense)
 		{
-
-			using (var cl = new HttpClient())
-			{
-				var formcontent = new FormUrlEncodedContent(new[]
-				{
-			new KeyValuePair<string,string>("list_id",expense.budget_list_id),
-			new KeyValuePair<string, string>("name",expenddescription.Text),
-				new KeyValuePair<string,string>("estimate_cost",expendestimatedcost.Text),
-			new KeyValuePair<string, string>("actual_cost",expendactualcost.Text),
-			new KeyValuePair<string,string>("paid_cost",expendpaidcost.Text),
-
-
-		});
-
-				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/budget.php?action=update", formcontent);
-				request.EnsureSuccessStatusCode();
-				var response = await request.Content.ReadAsStringAsync();
-                OperationCompleted?.Invoke(this, EventArgs.Empty);
-                await Navigation.PopModalAsync();
-			}
+            Connect con = new Connect();
+            expense.Description = expenddescription.Text;
+            expense.EstimatedCost = float.Parse(expendestimatedcost.Text);
+            expense.ActualCost = float.Parse(expendactualcost.Text);
+            expense.PaidCost = float.Parse(expendpaidcost.Text);
+            string json = JsonConvert.SerializeObject(expense);
+            con.PutToServer(Statics.apiLink + "Budgets/"+expense.Id, json);
+            OperationCompleted?.Invoke(this, EventArgs.Empty);
+            await Navigation.PopModalAsync();
 		}
 
-		public async void deleteexpense(expenseforcat expense)
+		public async void deleteexpense(Budget expense)
 		{
-
-			using (var cl = new HttpClient())
-			{
-				var formcontent = new FormUrlEncodedContent(new[]
-				{
-			new KeyValuePair<string,string>("list_id",expense.budget_list_id)
-		});
-
-				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/budget.php?action=delete", formcontent);
-				request.EnsureSuccessStatusCode();
-				var response = await request.Content.ReadAsStringAsync();
-                OperationCompleted?.Invoke(this, EventArgs.Empty);
-                await Navigation.PopModalAsync();
-			}
+            Connect con = new Connect();
+            con.DeleteFromServer(Statics.apiLink + "Budgets/" + expense.Id);
+            OperationCompleted?.Invoke(this, EventArgs.Empty);
+            await Navigation.PopModalAsync();
 		}
 
 
-		public async void addnewexpensecat()
-		{
-			expense expensecat = (expense)catPicker.SelectedItem;
+        public async void addnewexpensecat()
+        {
+            //BudgetCategory expensecat = (BudgetCategory)catPicker.SelectedItem;
             var usr = await GetUser();
-			using (var cl = new HttpClient())
-			{
-				var formcontent = new FormUrlEncodedContent(new[]
-				{
-			new KeyValuePair<string,string>("category_user_id",usr.user.id.ToString()),
-			new KeyValuePair<string, string>("category_name",expendnewname.Text),
-			
-
-		});
-
-				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/budget_category.php?action=insert", formcontent);
-				request.EnsureSuccessStatusCode();
-				var response = await request.Content.ReadAsStringAsync();
-                OperationCompleted?.Invoke(this, EventArgs.Empty);
-                await Navigation.PopModalAsync();
-
-			}
-		}
+            Connect con = new Connect();
+            BudgetCategory cat = new BudgetCategory { Title = expendnewname.Text, UserId = usr.Id };
+            string json = JsonConvert.SerializeObject(cat);
+            con.PostToServer(Statics.apiLink + "BudgetCategories", json);
+            OperationCompleted?.Invoke(this, EventArgs.Empty);
+            await Navigation.PopModalAsync();
+        }
 		
 	}
-
-	
 }

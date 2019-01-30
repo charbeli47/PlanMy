@@ -14,41 +14,46 @@ namespace PlanMy.Views
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class DealsView : ContentView
 	{
-        /*commit from charbel protected List<Product> hotdealsproducts;
+        protected List<Offers> hotdealsproducts;
 
          public DealsView ()
          {
              InitializeComponent ();
              LoadPage();
          }
-         async void LoadPage()
+         void LoadPage()
          {
-             WooCommerceNET.RestAPI rest = new WooCommerceNET.RestAPI(Statics.WooApi, Statics.ConsumerKey, Statics.ConsumerSecret);
-             WooCommerceNET.WooCommerce.v2.WCObject wc = new WooCommerceNET.WooCommerce.v2.WCObject(rest);
-             var tags = await LoadTags(wc);
-             LoadCategories(wc);
-             LoadDeals(wc, tags);
+            LoadCategories();
+            WebClient client = new WebClient();
+            string resp = client.DownloadString(Statics.apiLink + "Offers");
+            List<Offers> offers = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Offers>>(resp);
+            hotdealsproducts = offers.Where(x => x.OffersType == OffersType.HotDeals).ToList();
+            List<deals> bundles = new List<deals>();
+            foreach (var bundle in hotdealsproducts)
+            {
+                deals deal = new deals();
+                deal.desc = bundle.Description;
+                deal.img = Statics.MediaLink + bundle.Image;
+                deal.product = bundle;
+                deal.title = bundle.Title;
+                deal.id = bundle.Id;
+                bundles.Add(deal);
+            }
+            dealsList.FlowItemsSource = bundles;
 
-         }
-         private async void LoadCategories(WCObject wc)
+        }
+         private void LoadCategories()
          {
-             var cat = wc.Category;
-             var categories = await cat.GetAll();
-             foreach (var c in categories)
-                 c.name = WebUtility.HtmlDecode(c.name);
-             CategoriePicker.ItemsSource = categories;
+            WebClient client = new WebClient();
+            var resp = client.DownloadString(Statics.apiLink + "Categories");
+            var cats = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorCategory>>(resp);
+            var categories = cats.ToList();
+            CategoriePicker.ItemsSource = categories;
          }
-         private async Task<List<ProductTag>> LoadTags(WooCommerceNET.WooCommerce.v2.WCObject wc)
-         {
-             var t = wc.Tag;
-             var tags = await t.GetAll();
-             return tags;
-
-         }*/
          private void dealsList_FlowItemTapped(object sender, ItemTappedEventArgs e)
          {
-             /*var item = (deals)e.Item;
-             Navigation.PushModalAsync(new SingleDeal(item));*/
+             var item = (deals)e.Item;
+             Navigation.PushModalAsync(new SingleDeal(item));
          }
          /*private async void LoadDeals(WooCommerceNET.WooCommerce.v2.WCObject wc, List<ProductTag> tags)
          {
@@ -74,24 +79,24 @@ namespace PlanMy.Views
 
         private void CategoriePicker_SelectedIndexChanged(object sender, EventArgs e)
          {
-             /*if(hotdealsproducts!=null)
+             if(hotdealsproducts!=null)
              {
                  var picker = (Pickerarrow)sender;
-                 var cat = (ProductCategory)picker.SelectedItem;
-                 var filtered = hotdealsproducts.Where(x => x.categories.Where(z => z.id == cat.id).Count() > 0).ToList();
+                 var cat = (VendorCategory)picker.SelectedItem;
+                 var filtered = hotdealsproducts.Where(x => x.OffersCategories.Where(z => z.Id == cat.Id).Count() > 0).ToList();
                  List<deals> listdeals = new List<deals>();
                  foreach (var item in filtered)
                  {
                      deals d1 = new deals();
-                     d1.img = item.images[0].src;
-                     d1.title = item.name;
-                     d1.desc = item.description;
-                     d1.id = item.id;
+                     d1.img = Statics.MediaLink + item.Image;
+                     d1.title = item.Title;
+                     d1.desc = item.Description;
+                     d1.id = item.Id;
                      d1.product = item;
                      listdeals.Add(d1);
                  }
                  dealsList.FlowItemsSource = listdeals;
-             }*/
+             }
          }
     }
 }

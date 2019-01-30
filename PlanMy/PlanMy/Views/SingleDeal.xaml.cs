@@ -35,30 +35,26 @@ namespace PlanMy.Views
 
         private async void Button_Clicked(object sender, EventArgs e)
         {
-            /*commit from charbel Connect con = new Connect();
+            Connect con = new Connect();
             BasketItem b = new BasketItem();
             List<BasketItem> lineItems = await b.Get();
-            WooCommerceNET.RestAPI rest = new WooCommerceNET.RestAPI("https://planmy.me/wp-json/wc/v2", Statics.ConsumerKey, Statics.ConsumerSecret);
-            WooCommerceNET.WooCommerce.v2.WCObject wc = new WooCommerceNET.WooCommerce.v2.WCObject(rest);
-            var orderlineitem = new WooCommerceNET.WooCommerce.v2.OrderLineItem { };
-            string prodprice = prod.price.ToString();
-            if (prod.price != null && prod.price != 0)
+            
+            if (prod.Price != null && prod.Price != 0)
             {
 
-                var lineItem = new OrderLineItem { name = prod.name, price = prodprice, quantity = 1, product_id = prod.id, subtotal = prodprice, total = prodprice };
-                if (lineItems.Where(x => x.OrderItem.product_id == prod.id).Count() == 0)
+                var lineItem = new BasketItems { OffersId = prod.Id, Offers = prod, Quantity = 1, TotalPrice = (decimal)prod.Price };
+                if (lineItems.Where(x => x.OrderItem.OffersId == prod.Id).Count() == 0)
                 {
                     lineItems = await b.AddItem(new BasketItem { OrderItem = lineItem, Product = prod });
                 }
                 else
                 {
-                    var item = lineItems.Where(x => x.OrderItem.product_id == prod.id).FirstOrDefault();
+                    var item = lineItems.Where(x => x.OrderItem.OffersId == prod.Id).FirstOrDefault();
                     if (item != null)
                     {
-                        item.OrderItem.quantity++;
-                        decimal subtotal = decimal.Parse(item.OrderItem.price) * (int)item.OrderItem.quantity;
-                        item.OrderItem.subtotal = subtotal.ToString();
-                        item.OrderItem.total = subtotal.ToString();
+                        item.OrderItem.Quantity++;
+                        decimal subtotal = (decimal)item.OrderItem.Offers.Price * (int)item.OrderItem.Quantity;
+                        item.OrderItem.TotalPrice = subtotal;
                     }
                 }
                 //b.Save(lineItems);
@@ -67,23 +63,21 @@ namespace PlanMy.Views
             }
             else
             {
-                List<OrderLineItem> items = new List<OrderLineItem>();
-                var lineItem = new OrderLineItem { name = prod.name, price = prodprice, quantity = 1, product_id = prod.id, subtotal = prodprice, total = prodprice };
+                List<BasketItems> items = new List<BasketItems>();
+                var lineItem = new BasketItems { OffersId = prod.Id, Offers = prod, Quantity = 1, TotalPrice = (decimal)prod.Price };
                 items.Add(lineItem);
                 var usr = await con.GetData("User");
-                UserCookie cookie = new UserCookie();
+                Users cookie = new Users();
                 if (!string.IsNullOrEmpty(usr))
                 {
-                    cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
-                    int userId = cookie.user.id;
-                    string data = await con.DownloadData("http://planmy.me/maizonpub-api/users.php", "action=get&userid=" + userId);
-                    var user = Newtonsoft.Json.JsonConvert.DeserializeObject<ConfigUser>(data);
-                    var order = wc.Order;
-                    OrderBilling billing = new OrderBilling { address_1 = user.user_weddingcity, address_2 = "", city = user.user_weddingcity, country = "LB", email = user.email, first_name = user.first_name, last_name = user.last_name, state = "", postcode = "", phone = "" };
+                    cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
+                    string userId = cookie.Id;
+                    //OrderBilling billing = new OrderBilling { address_1 = user.user_weddingcity, address_2 = "", city = user.user_weddingcity, country = "LB", email = user.email, first_name = user.first_name, last_name = user.last_name, state = "", postcode = "", phone = "" };
                     try
                     {
-                        Order o = new Order { line_items = items, total = prod.price, customer_id = cookie.user.id, status = "processing", billing = billing, payment_method = "cybsawm", payment_method_title = "CyberSource Secure Acceptance", set_paid = true };
-                        var addedOrder = await order.Add(o);
+                        Order o = new Order { BasketItems = items, Total = (decimal)prod.Price, Users = cookie, OrderStatus = OrderStatus.Pending_Payment, UserId = cookie.Id };
+                        string json = Newtonsoft.Json.JsonConvert.SerializeObject(o);
+                        con.PostToServer(Statics.apiLink + "Orders", json);
 
                         await DisplayAlert("Success", "Thank you for selecting this offer.\r\n We sent you an email please check it.", "CLOSE");
                         await Navigation.PopModalAsync(true);
@@ -100,7 +94,6 @@ namespace PlanMy.Views
                     }
                 }
             }
-            */
         }
     }
 }

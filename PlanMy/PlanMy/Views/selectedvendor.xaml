@@ -30,7 +30,7 @@
                     <controls:CarouselViewControl  x:Name="imgSlider" Orientation="Horizontal" InterPageSpacing="10" Position="0"  HorizontalOptions="FillAndExpand" IndicatorsShape="Circle" ShowIndicators="True" ShowArrows="True" CurrentPageIndicatorTintColor="#FFFFFF" IndicatorsTintColor="#c3c3c3">
                         <controls:CarouselViewControl.ItemTemplate>
                             <DataTemplate>
-                                <Image TranslationX="{Binding Position}" Source="{Binding SourceUrl}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"></Image>
+                                <Image TranslationX="{Binding Position}" Source="{Binding Image}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"></Image>
                             </DataTemplate>
                         </controls:CarouselViewControl.ItemTemplate>
                     </controls:CarouselViewControl>

@@ -33,14 +33,14 @@ namespace PlanMy.Views
 
 
 
-        public async Task<UserCookie> GetUser()
+        public async Task<Users> GetUser()
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            UserCookie cookie = new UserCookie();
+            Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
             {
-                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
             }
             return cookie;
         }
@@ -138,14 +138,14 @@ namespace PlanMy.Views
 
             Connect con = new Connect();
             var usr = await GetUser();
-            if (usr.user != null)
+            if (usr != null)
             {
-                string todostring = await con.DownloadData("https://planmy.me/maizonpub-api/budget_category.php", "action=get&category_user_id=" + usr.user.id);
-                List<expense> listofcats = JsonConvert.DeserializeObject<List<expense>>(todostring);
+                string todostring = await con.DownloadData(Statics.apiLink+ "BudgetCategories","UserId =" + usr.Id);
+                List<BudgetCategory> listofcats = JsonConvert.DeserializeObject<List<BudgetCategory>>(todostring);
 
-                foreach (expense e in listofcats)
+                foreach (BudgetCategory e in listofcats)
                 {
-                    StackLayout row = createtablerow(e.category_name);
+                    StackLayout row = createtablerow(e.Title);
                     row.GestureRecognizers.Add(new TapGestureRecognizer
                     {
 
@@ -158,13 +158,12 @@ namespace PlanMy.Views
                         }),
                     });
                     //budgetstack.Children.Add(row);
-                    string todostringg = await con.DownloadData("https://planmy.me/maizonpub-api/budget.php", "action=get&category_id=" + e.category_id + "&user_id=" + usr.user.id);
-                    List<expenseforcat> listofexpenses = JsonConvert.DeserializeObject<List<expenseforcat>>(todostringg);
+                    List<Budget> listofexpenses = e.Budgets;
 
-                    foreach (expenseforcat ec in listofexpenses)
+                    foreach (Budget ec in listofexpenses)
                     {
 
-                        StackLayout rowexpense = createsupplierrowintable(ec.budget_list_name.ToString(), ec.budget_list_estimate_cost.ToString(), ec.budget_list_paid_cost.ToString());
+                        StackLayout rowexpense = createsupplierrowintable(ec.Description.ToString(), ec.EstimatedCost.ToString(), ec.PaidCost.ToString());
                         rowexpense.GestureRecognizers.Add(new TapGestureRecognizer
                         {
 
@@ -177,9 +176,9 @@ namespace PlanMy.Views
                         });
 
                         row.Children.Add(rowexpense);
-                        estimatedtotalamount = estimatedtotalamount + float.Parse(ec.budget_list_estimate_cost);
-                        actualtotalamount = actualtotalamount + float.Parse(ec.budget_list_actual_cost);
-                        paidtotalamount = paidtotalamount + float.Parse(ec.budget_list_paid_cost);
+                        estimatedtotalamount = estimatedtotalamount + ec.EstimatedCost;
+                        actualtotalamount = actualtotalamount + ec.ActualCost;
+                        paidtotalamount = paidtotalamount + ec.PaidCost;
                     }
                     budgetstack.Children.Add(row);
                     budgetstack.Children.Add(createseperatorbetweentables());

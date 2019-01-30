@@ -24,8 +24,8 @@ namespace PlanMy.Views
         private async void LoadPage(string q)
         {
             Connect con = new Connect();
-            var datas = await con.DownloadData("https://planmy.me/maizonpub-api/users.php", "action=getevents&q=" + q);
-            var events = Newtonsoft.Json.JsonConvert.DeserializeObject<List<EventObj>>(datas);
+            var datas = await con.DownloadData(Statics.apiLink+"Events", "q=" + q);
+            var events = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Events>>(datas);
             EventsListView.ItemsSource = events;
         }
         
@@ -37,7 +37,7 @@ namespace PlanMy.Views
 
         private void EventsListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var evento = (EventObj)e.SelectedItem; ;
+            var evento = (Events)e.SelectedItem; ;
             Navigation.PushModalAsync(new ImageViewer(evento));
         }
     }

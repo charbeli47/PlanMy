@@ -1,4 +1,5 @@
-﻿using PlanMy.Library;
+﻿using Newtonsoft.Json;
+using PlanMy.Library;
 using Plugin.ContactService.Shared;
 using Plugin.Permissions.Abstractions;
 using System;
@@ -18,7 +19,7 @@ namespace PlanMy.Views
 	public partial class newguest : ContentPage
 	{
         public event EventHandler<EventArgs> OperationCompleted;
-        public newguest (bool isedit,guest guestt)
+        public newguest (bool isedit,GuestList guestt)
 		{
 			InitializeComponent ();
 			backarrow.Clicked += async (object sender, EventArgs e) =>
@@ -29,21 +30,21 @@ namespace PlanMy.Views
 
 			{
 				deleteguestbut.IsVisible = true;
-				guestname.Text = guestt.guest_name;
+				guestname.Text = guestt.FullName;
 				guestphone.Text = guestt.Phone;
 				guestemail.Text = guestt.Email;
 				guestaddress.Text = guestt.Address;
 
-				List<string> rspstatus = new List<string>();
-				rspstatus.Add("Accepted");
-				rspstatus.Add("Declined");
-				rspstatus.Add("No Response");
-				rspstatus.Add("Not Invited");
+				List<GuestStatus> rspstatus = new List<GuestStatus>();
+				rspstatus.Add(GuestStatus.Accepted);
+				rspstatus.Add(GuestStatus.Declined);
+				rspstatus.Add(GuestStatus.No_Response);
+				rspstatus.Add(GuestStatus.Not_Invited);
 				int indexstatus = 0;
 				int i = 0;
-				foreach (string s in rspstatus)
+				foreach (GuestStatus s in rspstatus)
 				{
-					if (guestt.RSVP == s)
+					if (guestt.GuestStatus == s)
 					{
 						indexstatus = i;
 					}
@@ -51,29 +52,29 @@ namespace PlanMy.Views
 				}
 				RspPicker.SelectedIndex = indexstatus;
 
-				List<string> sides = new List<string>();
-				sides.Add("Bridesmaids");
-					sides.Add("Brides Friends");
-					sides.Add(" Brides Family");
-					sides.Add("Brides Family Friends");
-					sides.Add("  Brides Coworkers ");
-					sides.Add("	 Groomsmen ");
-					sides.Add("Grooms Friends ");
-					sides.Add("Grooms Family ");
-					sides.Add("Grooms Family Friends");
-					sides.Add("Grooms Coworkers");
-					sides.Add("Bride an Grooom Friends");
-					sides.Add(" Partner 1");
-					sides.Add("Partner 2");
-					sides.Add("Bridesmaids");
+				List<Side> sides = new List<Side>();
+				sides.Add(Side.Bridesmaids);
+					sides.Add(Side.Brides_Friends);
+					sides.Add(Side.Brides_Family);
+					sides.Add(Side.Brides_Family_Friends);
+					sides.Add(Side.Brides_Coworkers);
+					sides.Add(Side.Groomsmen);
+					sides.Add(Side.Grooms_Friends);
+					sides.Add(Side.Grooms_Family);
+					sides.Add(Side.Grooms_Family_Friends);
+					sides.Add(Side.Grooms_Coworkers);
+					sides.Add(Side.Bride_and_Groom_Friends);
+					sides.Add(Side.Partner_1);
+					sides.Add(Side.Partner_2);
+					sides.Add(Side.Bridesmaids);
 
 														  
 																				
  int indexstatus1 = 0;
 				int i1 = 0;
-				foreach (string s in sides)
+				foreach (Side s in sides)
 				{
-					if (guestt.side == s)
+					if (guestt.Side == s)
 					{
 						indexstatus1 = i1;
 					}
@@ -111,94 +112,42 @@ namespace PlanMy.Views
 		public async void addguest()
 		{
             var usr = await GetUser();
-            using (var cl = new HttpClient())
-			{
-				var formcontent = new FormUrlEncodedContent(new[]
-				{
-			new KeyValuePair<string,string>("guest_name",guestname.Text),
-			new KeyValuePair<string, string>("side",SidePicker.SelectedItem.ToString()),
-				new KeyValuePair<string,string>("Address",guestaddress.Text),
-			new KeyValuePair<string, string>("City",""),
-			new KeyValuePair<string,string>("Phone",guestphone.Text),
-			new KeyValuePair<string, string>("Email",guestemail.Text),
-			new KeyValuePair<string, string>("RSVP",RspPicker.SelectedItem.ToString()),
-			new KeyValuePair<string, string>("userid",usr.user.id.ToString())
-		});
 
-				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/guestlist.php?action=insert", formcontent);
-				request.EnsureSuccessStatusCode();
-				var response = await request.Content.ReadAsStringAsync();
-                OperationCompleted?.Invoke(this, EventArgs.Empty);
-                await Navigation.PopModalAsync();
-
-			}
+            GuestList guest = new GuestList { Address = guestaddress.Text, City = "", Email = guestemail.Text, Phone = guestphone.Text, FullName = guestname.Text, GuestStatus = (GuestStatus)RspPicker.SelectedIndex, Side = (Side)SidePicker.SelectedIndex, UserId = usr.Id };
+            string json = JsonConvert.SerializeObject(guest);
+            Connect con = new Connect();
+            con.PostToServer(Statics.apiLink + "GuestLists", json);
+            OperationCompleted?.Invoke(this, EventArgs.Empty);
+            await Navigation.PopModalAsync();
 		}
-        public async Task<UserCookie> GetUser()
+        public async Task<Users> GetUser()
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            UserCookie cookie = new UserCookie();
+            Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
             {
-                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
             }
             return cookie;
         }
         //function to edit task//
-        public async void editguest(guest guestt)
+        public async void editguest(GuestList guestt)
 		{
-			
-			using (var cl = new HttpClient())
-			{
-				var formcontent = new FormUrlEncodedContent(new[]
-				{
-					new KeyValuePair<string,string>("list_id",guestt.list_id),
-		new KeyValuePair<string,string>("guest_name",guestname.Text),
-			new KeyValuePair<string, string>("side",SidePicker.SelectedItem.ToString()),
-				new KeyValuePair<string,string>("Address",guestaddress.Text),
-			new KeyValuePair<string, string>("City",""),
-			new KeyValuePair<string,string>("Phone",guestphone.Text),
-			new KeyValuePair<string, string>("Email",guestemail.Text),
-			new KeyValuePair<string, string>("RSVP",RspPicker.SelectedItem.ToString())
-			
-
-		});
-
-
-				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/guestlist.php?action=update", formcontent);
-
-				request.EnsureSuccessStatusCode();
-
-				var response = await request.Content.ReadAsStringAsync();
-                OperationCompleted?.Invoke(this, EventArgs.Empty);
-                await Navigation.PopModalAsync();
-
-			}
+            Connect con = new Connect();
+            var json = JsonConvert.SerializeObject(guestt);
+            con.PutToServer(Statics.apiLink + "GuestLists/" + guestt.Id, json);
+            OperationCompleted?.Invoke(this, EventArgs.Empty);
+            await Navigation.PopModalAsync();
 		}
 
-		public async void deleteguest(guest guestt)
+		public async void deleteguest(GuestList guestt)
 		{
-
-			using (var cl = new HttpClient())
-			{
-				var formcontent = new FormUrlEncodedContent(new[]
-				{
-					new KeyValuePair<string,string>("list_id",guestt.list_id),
-	
-
-
-		});
-
-
-				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/guestlist.php?action=delete", formcontent);
-
-				request.EnsureSuccessStatusCode();
-
-				var response = await request.Content.ReadAsStringAsync();
+            Connect con = new Connect();
+            con.DeleteFromServer(Statics.apiLink + "GuestLists/" + guestt.Id);
+			
                 OperationCompleted?.Invoke(this, EventArgs.Empty);
                 await Navigation.PopModalAsync();
-
-			}
 		}
 
         private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)

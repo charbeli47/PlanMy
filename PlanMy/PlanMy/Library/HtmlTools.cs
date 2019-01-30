@@ -42,26 +42,18 @@ namespace PlanMy.Library
 
         public static string FeaturedImage(Blog post)
         {
-            /*commit from charbel if (post.Embedded.WpFeaturedmedia == null)
+            if (post.Image == null)
                 return string.Empty;
 
-            var images = new List<MediaItem>(post.Embedded.WpFeaturedmedia);
-            var img = images[0];
-            var imgSrc = img.SourceUrl;
+            
+            var imgSrc = Statics.MediaLink + post.Image;
 
             var sb = new StringBuilder();
             sb.Append("<img class=\"alignnone size-full\" ");
-            sb.Append($"src=\"{imgSrc}\" width=\"{img.MediaDetails.Width}\" height=\"{img.MediaDetails.Height}\" ");
-            sb.Append("srcset=\"");
+            sb.Append($"src=\"{imgSrc}\" ");
+            sb.Append(" />");
 
-            foreach (var size in img.MediaDetails.Sizes)
-                sb.Append($"{size.Value.SourceUrl} {size.Value.Width}w ");
-
-            sb.Append("\" ");
-            sb.Append($"sizes =\"(max-width: {img.MediaDetails.Width}px) 100vw, {img.MediaDetails.Width}px\" />");
-
-            return sb.ToString();*/
-            return "";
+            return sb.ToString();
         }
     }
 }

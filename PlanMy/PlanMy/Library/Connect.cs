@@ -79,25 +79,45 @@ namespace PlanMy.Library
         }
         public string PostToServer(string url, string json)
         {
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(url);
-            httpWebRequest.ContentType = "application/json";
-            httpWebRequest.Method = "POST";
-            string result = "";
-            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            using (var client = new HttpClient())
             {
+                client.BaseAddress = new Uri(url);
+                StringContent content = new StringContent(json);
+                //HTTP DELETE
+                var postTask = client.PostAsync(url, content);
+                postTask.Wait();
 
-
-                streamWriter.Write(json);
-                streamWriter.Flush();
-                streamWriter.Close();
+                var result = postTask.Result;
+                return result.Content.ToString();
             }
-
-            var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
-            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+        }
+        public string PutToServer(string url, string json)
+        {
+            using (var client = new HttpClient())
             {
-                result = streamReader.ReadToEnd();
+                client.BaseAddress = new Uri(url);
+                StringContent content = new StringContent(json);
+                //HTTP DELETE
+                var postTask = client.PutAsync(url, content);
+                postTask.Wait();
+
+                var result = postTask.Result;
+                return result.Content.ToString();
             }
-            return result;
+        }
+        public string DeleteFromServer(string url)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(url);
+
+                //HTTP DELETE
+                var deleteTask = client.DeleteAsync(url);
+                deleteTask.Wait();
+
+                var result = deleteTask.Result;
+                return result.Content.ToString();
+            }
         }
         public async void DeleteData(string key)
         {

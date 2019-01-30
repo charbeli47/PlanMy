@@ -79,7 +79,7 @@ namespace PlanMy.Views
         {
 
             var usr = await GetUser();
-            if (usr.user!=null)
+            if (usr!=null)
             {
                 checklistbut.IsVisible = true;
                 guestbut.IsVisible = true;
@@ -119,14 +119,14 @@ namespace PlanMy.Views
 
 
 
-        public async Task<UserCookie> GetUser()
+        public async Task<Users> GetUser()
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            UserCookie cookie = new UserCookie();
+            Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
             {
-                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
             }
             return cookie;
         }

@@ -1,4 +1,5 @@
-﻿using PlanMy.Library;
+﻿using Newtonsoft.Json;
+using PlanMy.Library;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace PlanMy.Views
 	public partial class newtable : ContentPage
 	{
         public event EventHandler<EventArgs> OperationCompleted;
-        public newtable(bool isedit, table tab)
+        public newtable(bool isedit, GuestListTables tab)
 		{
 			InitializeComponent();
 			backarrow.Clicked += async (object sender, EventArgs e) =>
@@ -26,8 +27,8 @@ namespace PlanMy.Views
 
 			{
 				deletebut.IsVisible = true;
-                tablename.Text = tab.tableName;
-                Pagetitle.Text = "Edit " + tab.tableName;
+                tablename.Text = tab.Title;
+                Pagetitle.Text = "Edit " + tab.Title;
 			}
 
 			Savechanges.Clicked += async (object sender, EventArgs e) =>
@@ -65,7 +66,7 @@ namespace PlanMy.Views
 				var formcontent = new FormUrlEncodedContent(new[]
 				{
 			new KeyValuePair<string,string>("tableName",tablename.Text),
-			new KeyValuePair<string, string>("userid",usr.user.id.ToString())
+			new KeyValuePair<string, string>("userid",usr.Id.ToString())
 				
 		});
 
@@ -77,65 +78,37 @@ namespace PlanMy.Views
 
             }
 		}
-        public async Task<UserCookie> GetUser()
+        public async Task<Users> GetUser()
         {
             Connect con = new Connect();
             var usr = await con.GetData("User");
-            UserCookie cookie = new UserCookie();
+            Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
             {
-                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<UserCookie>(usr);
+                cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
             }
             return cookie;
         }
         //function to edit task//
-        public async void edittable(table tab)
+        public async void edittable(GuestListTables tab)
 		{
-			using (var cl = new HttpClient())
-			{
-				var formcontent = new FormUrlEncodedContent(new[]
-				{
-			new KeyValuePair<string,string>("seating_id",tab.seating_id),
-			new KeyValuePair<string, string>("tableName",tablename.Text)
 				
-		});
+                Connect con = new Connect();
+                string json = JsonConvert.SerializeObject(tab);
+                con.PostToServer(Statics.apiLink + "GuestListTables/" + tab.Id, json);
 
-
-				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/tables.php?action=update", formcontent);
-
-				request.EnsureSuccessStatusCode();
-
-				var response = await request.Content.ReadAsStringAsync();
-
+				
                 OperationCompleted?.Invoke(this, EventArgs.Empty);
                 await Navigation.PopModalAsync();
-
-            }
 		}
 
-		public async void deletetable(table tab)
+		public void deletetable(GuestListTables tab)
 		{
 
-			using (var cl = new HttpClient())
-			{
-				var formcontent = new FormUrlEncodedContent(new[]
-				{
-					new KeyValuePair<string,string>("seating_id",tab.seating_id)
-
-
-		});
-
-
-				var request = await cl.PostAsync("https://planmy.me/maizonpub-api/tables.php?action=delete", formcontent);
-
-				request.EnsureSuccessStatusCode();
-
-				var response = await request.Content.ReadAsStringAsync();
-
+                Connect con = new Connect();
+                con.DeleteFromServer(Statics.apiLink + "GuestListTables/" + tab.Id);
                 OperationCompleted?.Invoke(this, EventArgs.Empty);
                 Navigation.PopModalAsync();
-
-            }
 		}
 	}
 
