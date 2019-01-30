@@ -41,7 +41,7 @@ namespace PlanMy.Library
             IFolder rootFolder = FileSystem.Current.LocalStorage;
 
             // create a folder, if one does not exist already
-            IFolder folder = await rootFolder.CreateFolderAsync("MySubFolder", CreationCollisionOption.OpenIfExists);
+            IFolder folder = await rootFolder.CreateFolderAsync("PlanMySubFolder", CreationCollisionOption.OpenIfExists);
 
             // create a file, overwriting any existing file
             IFile file = await folder.CreateFileAsync(key + ".txt", CreationCollisionOption.ReplaceExisting);
@@ -55,7 +55,7 @@ namespace PlanMy.Library
             IFolder rootFolder = FileSystem.Current.LocalStorage;
 
             // create a folder, if one does not exist already
-            IFolder folder = await rootFolder.CreateFolderAsync("MySubFolder", CreationCollisionOption.OpenIfExists);
+            IFolder folder = await rootFolder.CreateFolderAsync("PlanMySubFolder", CreationCollisionOption.OpenIfExists);
 
             // create a file, overwriting any existing file
             IFile file = await folder.CreateFileAsync(key + ".txt", CreationCollisionOption.ReplaceExisting);
@@ -68,7 +68,7 @@ namespace PlanMy.Library
             try
             {
                 IFolder rootFolder = FileSystem.Current.LocalStorage;
-                var folder = await rootFolder.GetFolderAsync("MySubFolder");
+                var folder = await rootFolder.GetFolderAsync("PlanMySubFolder");
                 IFile file = await folder.GetFileAsync(key + ".txt");
                 return await file.ReadAllTextAsync();
             }
@@ -124,7 +124,7 @@ namespace PlanMy.Library
             try
             {
                 IFolder rootFolder = FileSystem.Current.LocalStorage;
-                IFolder folder = await rootFolder.CreateFolderAsync("MySubFolder", CreationCollisionOption.OpenIfExists);
+                IFolder folder = await rootFolder.CreateFolderAsync("PlanMySubFolder", CreationCollisionOption.OpenIfExists);
                 IFile file = await folder.GetFileAsync(key + ".txt");
                 await file.DeleteAsync();
                 //await file.WriteAllTextAsync("");
