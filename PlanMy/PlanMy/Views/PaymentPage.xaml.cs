@@ -40,7 +40,7 @@ namespace PlanMy.Views
             }
             try
             {
-                Order o = new Order { BasketItems = items, Total = total, UserId = userId, OrderStatus = OrderStatus.Pending_Payment };
+                Order o = new Order { BasketItems = items, Total = total, UsersId = userId, OrderStatus = OrderStatus.Pending_Payment };
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(o);
                 string resp = con.PostToServer(Statics.apiLink + "Orders", json);
                 o = Newtonsoft.Json.JsonConvert.DeserializeObject<Order>(resp);

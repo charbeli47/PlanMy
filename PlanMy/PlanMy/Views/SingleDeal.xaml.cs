@@ -75,7 +75,7 @@ namespace PlanMy.Views
                     //OrderBilling billing = new OrderBilling { address_1 = user.user_weddingcity, address_2 = "", city = user.user_weddingcity, country = "LB", email = user.email, first_name = user.first_name, last_name = user.last_name, state = "", postcode = "", phone = "" };
                     try
                     {
-                        Order o = new Order { BasketItems = items, Total = (decimal)prod.Price, Users = cookie, OrderStatus = OrderStatus.Pending_Payment, UserId = cookie.Id };
+                        Order o = new Order { BasketItems = items, Total = (decimal)prod.Price, Users = cookie, OrderStatus = OrderStatus.Pending_Payment, UsersId = cookie.Id };
                         string json = Newtonsoft.Json.JsonConvert.SerializeObject(o);
                         con.PostToServer(Statics.apiLink + "Orders", json);
 

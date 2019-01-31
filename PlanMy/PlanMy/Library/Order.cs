@@ -8,7 +8,7 @@ namespace PlanMy.Library
     {
         public int Id { get; set; }
         public Users Users { get; set; }
-        public string UserId { get; set; }
+        public string UsersId { get; set; }
         public string Status { get; set; }
         public string ReferenceNumber { get; set; }
         public string TransactionUUID { get; set; }

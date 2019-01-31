@@ -32,58 +32,75 @@ namespace PlanMy.Views
             Connect con = new Connect();
             //string link = "http://weddexonline.com/maizonpub-api/users.php?action=register&username=" + NameEntry.Text + "&email=" + EmailEntry.Text + "&weddingdate=" + date + "&password=" + PasswordEntry.Text;
             var token = await con.GetData("FirebaseToken");
-            string link = Statics.apiLink + "Register?Username="+NameEntry.Text+"&Email="+EmailEntry.Text+"&Password="+PasswordEntry.Text+"&Token="+token;
-            WebClient client = new WebClient();
-            string resp = client.DownloadString(link);
-            var u = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(resp);
-            SendBirdClient.Connect(u.Id, (User user, SendBirdException ev) =>
+            string link = Statics.apiLink + "Register";
+            string resp = await con.DownloadData(link, "Username=" + NameEntry.Text + "&Email=" + EmailEntry.Text + "&Password=" + PasswordEntry.Text + "&Token=" + token + "&FirstName=" + FirstNameEntry.Text + "&LastName=" + LastNameEntry.Text);
+            try
             {
-                if (ev != null)
+                var u = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(resp);
+                if (!string.IsNullOrEmpty(u.Id))
                 {
-                    // Error
-                    return;
-                }
-                SendBirdClient.UpdateCurrentUserInfo(u.FirstName + " " + u.LastName, user.ProfileUrl, (SendBirdException e1) =>
-                {
-                    if (e1 != null)
+                    SendBirdClient.Connect(u.Id, (User user, SendBirdException ev) =>
                     {
+                        if (ev != null)
+                        {
                         // Error
                         return;
-                    }
-                });
-                if (SendBirdClient.GetPendingPushToken() == null) return;
+                        }
+                        SendBirdClient.UpdateCurrentUserInfo(u.FirstName + " " + u.LastName, user.ProfileUrl, (SendBirdException e1) =>
+                        {
+                            if (e1 != null)
+                            {
+                            // Error
+                            return;
+                            }
+                        });
+                        if (SendBirdClient.GetPendingPushToken() == null) return;
 
-                // For Android
-                SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) => {
-                    if (e1 != null)
-                    {
-                        // Error.
-                        return;
-                    }
+                    // For Android
+                    SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
+                        {
+                            if (e1 != null)
+                            {
+                            // Error.
+                            return;
+                            }
 
-                    if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
-                    {
-                        // Try registration after connection is established.
-                    }
-                });
+                            if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                            {
+                            // Try registration after connection is established.
+                        }
+                        });
 
-                // For iOS
-                SendBirdClient.RegisterAPNSPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) => {
-                    if (e1 != null)
-                    {
-                        // Error.
-                        return;
-                    }
+                    // For iOS
+                    SendBirdClient.RegisterAPNSPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
+                        {
+                            if (e1 != null)
+                            {
+                            // Error.
+                            return;
+                            }
 
-                    if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
-                    {
-                        // Try registration after connection is established.
-                    }
-                });
-            });
-            await con.SaveData("User", resp);
-            OperationCompleted?.Invoke(this, EventArgs.Empty);
-            await Navigation.PopModalAsync();
+                            if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                            {
+                            // Try registration after connection is established.
+                        }
+                        });
+                    });
+                    await con.SaveData("User", resp);
+                    OperationCompleted?.Invoke(this, EventArgs.Empty);
+                    await Navigation.PopModalAsync();
+                }
+                else
+                {
+                    var result = Newtonsoft.Json.JsonConvert.DeserializeObject<IdentityResult>(resp);
+                    DisplayAlert("Error", result.Errors.FirstOrDefault().Description, "OK");
+                }
+            }
+            catch
+            {
+                var result = Newtonsoft.Json.JsonConvert.DeserializeObject<IdentityResult>(resp);
+                DisplayAlert("Error", "An error occured, please try again later", "OK");
+            }
             
         }
     }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,14 +19,16 @@ namespace PlanMy.Library
             if (postData != "")
                 url += "?" + postData;
             HttpClient client = new HttpClient();
-			//StringContent queryString = new StringContent(postData);
+			StringContent queryString = new StringContent(postData);
 			try
 			{
-				string response = await client.GetStringAsync(new System.Uri(url));
-
-				//response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-				//response.EnsureSuccessStatusCode();
-				string responseBody = response;
+                var response = await client.GetAsync(url);                
+                //response.EnsureSuccessStatusCode();
+                string responseBody = "";
+                if (response.IsSuccessStatusCode)
+                {
+                    responseBody = await response.Content.ReadAsStringAsync();
+                }
 
 				return responseBody;
 			}

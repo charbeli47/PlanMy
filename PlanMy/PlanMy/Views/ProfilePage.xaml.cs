@@ -174,6 +174,7 @@ namespace PlanMy.Views
             var usr = await con.GetData("User");
             if (!string.IsNullOrEmpty(usr))
             {
+                user = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
                 var eventPage = new AddEvent(user);
                 eventPage.OperationCompleted += EventPage_OperationCompleted;
                 await Navigation.PushModalAsync(eventPage);
