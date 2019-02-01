@@ -4,6 +4,7 @@ using PlanMy.Models;
 using PlanMy.ViewModels;
 using SendBird;
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -38,61 +39,80 @@ namespace PlanMy.Views
                 string link = Statics.apiLink + "Register?Username=" + facebookProfile.FirstName + "&Email=" + facebookProfile.Email + "&Password=" + password + "&FBToken=" + facebookProfile.Id;
                 WebClient client = new WebClient();
                 string resp = client.DownloadString(link);
-                var u = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(resp);
-                SendBirdClient.Connect(u.Id, (User user, SendBirdException e) =>
+                try
                 {
-                    if (e != null)
+                    var u = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(resp);
+                    if (!string.IsNullOrEmpty(u.Id))
                     {
-                        // Error
-                        return;
+                        SendBirdClient.Connect(u.Id, (User user, SendBirdException ev) =>
+                        {
+                            if (ev != null)
+                            {
+                                // Error
+                                return;
+                            }
+                            SendBirdClient.UpdateCurrentUserInfo(u.FirstName + " " + u.LastName, user.ProfileUrl, (SendBirdException e1) =>
+                            {
+                                if (e1 != null)
+                                {
+                                    // Error
+                                    return;
+                                }
+                            });
+                            if (SendBirdClient.GetPendingPushToken() == null) return;
+
+                            // For Android
+                            SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
+                            {
+                                if (e1 != null)
+                                {
+                                    // Error.
+                                    return;
+                                }
+
+                                if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                                {
+                                    // Try registration after connection is established.
+                                }
+                            });
+
+                            // For iOS
+                            SendBirdClient.RegisterAPNSPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
+                            {
+                                if (e1 != null)
+                                {
+                                    // Error.
+                                    return;
+                                }
+
+                                if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                                {
+                                    // Try registration after connection is established.
+                                }
+                            });
+                        });
+                        await con.SaveData("User", resp);
+                        con.DeleteData("FaceBookProfile");
+                        OperationCompleted?.Invoke(this, EventArgs.Empty);
+                        await Navigation.PopModalAsync();
                     }
-                    SendBirdClient.UpdateCurrentUserInfo(u.FirstName + " " + u.LastName, user.ProfileUrl, (SendBirdException e1) =>
+                    else
                     {
-                        if (e1 != null)
-                        {
-                            // Error
-                            return;
-                        }
-                    });
-                    if (SendBirdClient.GetPendingPushToken() == null) return;
+                        var result = Newtonsoft.Json.JsonConvert.DeserializeObject<IdentityResult>(resp);
+                        DisplayAlert("Error", result.Errors.FirstOrDefault().Description, "OK");
+                    }
+                }
+                catch
+                {
+                    var result = Newtonsoft.Json.JsonConvert.DeserializeObject<IdentityResult>(resp);
+                    DisplayAlert("Error", "An error occured, please try again later", "OK");
+                }
 
-                    // For Android
-                    SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) => {
-                        if (e1 != null)
-                        {
-                            // Error.
-                            return;
-                        }
-
-                        if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
-                        {
-                            // Try registration after connection is established.
-                        }
-                    });
-
-                    // For iOS
-                    SendBirdClient.RegisterAPNSPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) => {
-                        if (e1 != null)
-                        {
-                            // Error.
-                            return;
-                        }
-
-                        if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
-                        {
-                            // Try registration after connection is established.
-                        }
-                    });
-                });
-                await con.SaveData("User", resp);
-                OperationCompleted?.Invoke(this, EventArgs.Empty);
-                await Navigation.PopModalAsync();
-                
                 //you can use this token to authenticate to the server here
                 //call your FacebookLoginService.LoginToServer(token)
                 //I'll just navigate to a screen that displays the token:
                 //await Navigation.PushAsync(new DiplayTokenPage(token));
-                
+
 
             };
         }
@@ -125,59 +145,77 @@ namespace PlanMy.Views
         private async void Button_Clicked(object sender, EventArgs e)
         {
             Connect con = new Connect();
-            string link = Statics.apiLink + "Login?Username=" + UsernameEntry.Text + "&Password=" + PasswordEntry.Text + "&RememberMe=false";
-            WebClient client = new WebClient();
-            string resp = client.DownloadString(link);
-            var u = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(resp);
-            SendBirdClient.Connect(u.Id, (User user, SendBirdException ev) =>
+            string link = Statics.apiLink + "Login";
+            string resp = await con.DownloadData(link, "Username=" + UsernameEntry.Text + "&Password=" + PasswordEntry.Text + "&RememberMe=false");
+            try
             {
-                if (ev != null)
+                var u = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(resp);
+                if (!string.IsNullOrEmpty(u.Id))
                 {
-                    // Error
-                    return;
+                    SendBirdClient.Connect(u.Id, (User user, SendBirdException ev) =>
+                    {
+                        if (ev != null)
+                        {
+                            // Error
+                            return;
+                        }
+                        SendBirdClient.UpdateCurrentUserInfo(u.FirstName + " " + u.LastName, user.ProfileUrl, (SendBirdException e1) =>
+                        {
+                            if (e1 != null)
+                            {
+                                // Error
+                                return;
+                            }
+                        });
+                        if (SendBirdClient.GetPendingPushToken() == null) return;
+
+                        // For Android
+                        SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
+                        {
+                            if (e1 != null)
+                            {
+                                // Error.
+                                return;
+                            }
+
+                            if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                            {
+                                // Try registration after connection is established.
+                            }
+                        });
+
+                        // For iOS
+                        SendBirdClient.RegisterAPNSPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
+                        {
+                            if (e1 != null)
+                            {
+                                // Error.
+                                return;
+                            }
+
+                            if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                            {
+                                // Try registration after connection is established.
+                            }
+                        });
+                    });
+                    await con.SaveData("User", resp);
+                    con.DeleteData("FaceBookProfile");
+                    OperationCompleted?.Invoke(this, EventArgs.Empty);
+                    await Navigation.PopModalAsync();
                 }
-                SendBirdClient.UpdateCurrentUserInfo(u.FirstName + " " + u.LastName, user.ProfileUrl, (SendBirdException e1) =>
+                else
                 {
-                    if (e1 != null)
-                    {
-                        // Error
-                        return;
-                    }
-                });
-                if (SendBirdClient.GetPendingPushToken() == null) return;
-
-                // For Android
-                SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) => {
-                    if (e1 != null)
-                    {
-                        // Error.
-                        return;
-                    }
-
-                    if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
-                    {
-                        // Try registration after connection is established.
-                    }
-                });
-
-                // For iOS
-                SendBirdClient.RegisterAPNSPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) => {
-                    if (e1 != null)
-                    {
-                        // Error.
-                        return;
-                    }
-
-                    if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
-                    {
-                        // Try registration after connection is established.
-                    }
-                });
-            });
-            await con.SaveData("User", resp);
-            con.DeleteData("FaceBookProfile");
-            OperationCompleted?.Invoke(this, EventArgs.Empty);
-            await Navigation.PopModalAsync();
+                    var result = Newtonsoft.Json.JsonConvert.DeserializeObject<IdentityResult>(resp);
+                    DisplayAlert("Error", result.Errors.FirstOrDefault().Description, "OK");
+                }
+            }
+            catch
+            {
+                var result = Newtonsoft.Json.JsonConvert.DeserializeObject<IdentityResult>(resp);
+                DisplayAlert("Error", "An error occured, please try again later", "OK");
+            }
+            
         }
 
         private async void fbBtn_Clicked(object sender, EventArgs e)

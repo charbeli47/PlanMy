@@ -74,7 +74,7 @@ namespace PlanMy.Views
             Users cookie = new Users();
             if (!string.IsNullOrEmpty(usr))
                 cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
-            Events events = new Events { Date = eventDate.Date, Title = eventname.Text, Description = eventlocation.Text, UserId = cookie.Id, IsPrivate = false };
+            EventsViewModel events = new EventsViewModel { Date = eventDate.Date, Title = eventname.Text, Description = eventlocation.Text, UserId = cookie.Id, IsPrivate = false };
             //string data = "userid=" + cookie.id+ "&eventname=" + eventname.Text+ "&eventdate=" + eventDate.Date.ToString("MM/dd/yyyy")+ "&eventlocation="+eventlocation.Text;
             string filename = Guid.NewGuid().ToString()+".jpg";
             bool uploaded = await Upload(stream, filename, events);
@@ -119,10 +119,34 @@ namespace PlanMy.Views
             var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
             return stream;
         }
-        public async Task<bool> Upload(Stream stream, string filename, Events data)
+        public async Task<bool> Upload(Stream stream, string filename, EventsViewModel data)
         {
             var jsonToSend = JsonConvert.SerializeObject(data, Formatting.None, new IsoDateTimeConverter());
-            var body = new StringContent(jsonToSend, Encoding.UTF8, "application/json");
+            var Title = new StringContent(data.Title);
+            Title.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "UTitle"
+            };
+            var Description = new StringContent(data.Description);
+            Description.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "UDescription"
+            };
+            var Date = new StringContent(data.Date.ToString());
+            Date.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "UDate"
+            };
+            var UserId = new StringContent(data.UserId);
+            UserId.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "UUserId"
+            };
+            var IsPrivate = new StringContent(data.IsPrivate.ToString());
+            IsPrivate.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "UIsPrivate"
+            };
             //byte[] bitmapData;
             //using (BinaryReader br = new BinaryReader(stream))
             //{
@@ -131,13 +155,17 @@ namespace PlanMy.Views
             //var fileContent = new ByteArrayContent(bitmapData);
             IsLoading = true;
             MultipartFormDataContent multipartContent = new MultipartFormDataContent();
-            multipartContent.Add(body);
+            multipartContent.Add(Title,"UTitle");
+            multipartContent.Add(Description, "UDescription");
+            multipartContent.Add(Date, "UDate");
+            multipartContent.Add(UserId, "UUserId");
+            multipartContent.Add(IsPrivate, "UIsPrivate");
             if (stream != null)
             {
                 var fileContent = new StreamContent(stream);
                 fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
                 {
-                    Name = "Image",
+                    Name = "UImage",
                     FileName = filename
                 };
                 multipartContent.Add(fileContent);
@@ -154,14 +182,18 @@ namespace PlanMy.Views
             IsLoading = false;
             if (response.IsSuccessStatusCode)
             {
+                string json = await response.Content.ReadAsStringAsync();
+                var events = Newtonsoft.Json.JsonConvert.DeserializeObject<Events>(json);
                 Connect con = new Connect();
                 var usr = await con.GetData("User");
                 Users cookie = new Users();
                 if (!string.IsNullOrEmpty(usr))
                     cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
+                cookie.Events = events;
                 if (stream != null)
-                    cookie.Events.Image = await DownLoadFile("http://test.planmy.me/Media/" + filename, filename);
-                
+                {
+                    cookie.Events.Image = await DownLoadFile(Statics.MediaLink + filename, filename);
+                }
                 
                 var resp = Newtonsoft.Json.JsonConvert.SerializeObject(cookie);
                 await con.SaveData("User", resp);

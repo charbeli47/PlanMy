@@ -30,7 +30,6 @@ namespace PlanMy.Views
         {
             string date = "";
             Connect con = new Connect();
-            //string link = "http://weddexonline.com/maizonpub-api/users.php?action=register&username=" + NameEntry.Text + "&email=" + EmailEntry.Text + "&weddingdate=" + date + "&password=" + PasswordEntry.Text;
             var token = await con.GetData("FirebaseToken");
             string link = Statics.apiLink + "Register";
             string resp = await con.DownloadData(link, "Username=" + NameEntry.Text + "&Email=" + EmailEntry.Text + "&Password=" + PasswordEntry.Text + "&Token=" + token + "&FirstName=" + FirstNameEntry.Text + "&LastName=" + LastNameEntry.Text);
