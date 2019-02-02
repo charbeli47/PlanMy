@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -45,9 +47,12 @@ namespace PlanMy.Views
                 if (source.File == "fav.png")
                 {
                     img.Source = "favselected.png";
+                    MultipartFormDataContent data = new MultipartFormDataContent();
                     WishList list = new WishList { UserId = usr.Id, VendorItemId = img.TabIndex };
                     string json = Newtonsoft.Json.JsonConvert.SerializeObject(list);
-                    con.PostToServer(Statics.apiLink + "WishLists", json);
+                    var wishList = new StringContent(json);
+                    data.Add(wishList, "wishList");
+                    await con.PostToServer(Statics.apiLink + "WishLists", json);
                 }
                 else
                 {
@@ -134,9 +139,13 @@ namespace PlanMy.Views
         {
             page++;
             Connect con = new Connect();
-            VendorItemSearch search = new VendorItemSearch { CategoryId = _catid, Values = types };
-            string json = Newtonsoft.Json.JsonConvert.SerializeObject(search);
-            string resp = con.PostToServer(Statics.apiLink + "VendorItems", json);
+            MultipartFormDataContent data = new MultipartFormDataContent();
+            var CategoryId = new StringContent(_catid.ToString());
+            string typesjson = Newtonsoft.Json.JsonConvert.SerializeObject(types);
+            var Values = new StringContent(typesjson);
+            data.Add(CategoryId, "CategoryId");
+            data.Add(Values, "Values");
+            string resp = await con.PostToServer(Statics.apiLink + "VendorItems", data);
             var specificvendors = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorItem>>(resp);
             //NumberOfSupplieres.Text = specificvendors.Count().ToString();
             var user = await GetUser();
@@ -184,9 +193,13 @@ namespace PlanMy.Views
             try
             {
                 Connect con = new Connect();
-                VendorItemSearch search = new VendorItemSearch { CategoryId = _catid, Values = types };
-                string json = Newtonsoft.Json.JsonConvert.SerializeObject(search);
-                string resp = con.PostToServer(Statics.apiLink + "VendorItems", json);
+                MultipartFormDataContent data = new MultipartFormDataContent();
+                var CategoryId = new StringContent(_catid.ToString());
+                string typesjson = Newtonsoft.Json.JsonConvert.SerializeObject(types);
+                var Values = new StringContent(typesjson);
+                data.Add(CategoryId, "CategoryId");
+                data.Add(Values, "Values");
+                string resp = await con.PostToServer(Statics.apiLink + "VendorItems/Search", data);
                 var specificvendors = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorItem>>(resp);
                 var user = await GetUser();
                 foreach (var post in specificvendors)

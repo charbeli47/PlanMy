@@ -74,22 +74,25 @@ namespace PlanMy
         }
         public async void LoadRecommendedSuppliers(CheckList task)
         {
-            int cat = task.VendorCategoryId;
-            Connect con = new Connect();
-            string fresp = await con.DownloadData(Statics.apiLink + "VendorItems/Featured/" + cat, "");
-            var featuredItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorItem>>(fresp);
-            for (int i = 0; i < featuredItems.Count; i++)
+            int? cat = task.VendorCategoryId;
+            if (cat != null)
             {
-                var item = featuredItems[i];
-                if (i == 0)
+                Connect con = new Connect();
+                string fresp = await con.DownloadData(Statics.apiLink + "VendorItems/Featured/" + cat, "");
+                var featuredItems = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorItem>>(fresp);
+                for (int i = 0; i < featuredItems.Count; i++)
                 {
-                    StackLayout firststack = createsupplierverticalstack(item, WebUtility.HtmlDecode(item.Title), Statics.MediaLink+item.Thumb);
-                    firststack.Margin = new Thickness(15, 0, 0, 0);
-                    Suppliersstack.Children.Add(firststack);
-                }
-                else
-                {
-                    Suppliersstack.Children.Add(createsupplierverticalstack(item, WebUtility.HtmlDecode(item.Title), Statics.MediaLink + item.Thumb));
+                    var item = featuredItems[i];
+                    if (i == 0)
+                    {
+                        StackLayout firststack = createsupplierverticalstack(item, WebUtility.HtmlDecode(item.Title), Statics.MediaLink + item.Thumb);
+                        firststack.Margin = new Thickness(15, 0, 0, 0);
+                        Suppliersstack.Children.Add(firststack);
+                    }
+                    else
+                    {
+                        Suppliersstack.Children.Add(createsupplierverticalstack(item, WebUtility.HtmlDecode(item.Title), Statics.MediaLink + item.Thumb));
+                    }
                 }
             }
         }

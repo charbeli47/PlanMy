@@ -116,7 +116,7 @@ namespace PlanMy.Views
             GuestList guest = new GuestList { Address = guestaddress.Text, City = "", Email = guestemail.Text, Phone = guestphone.Text, FullName = guestname.Text, GuestStatus = (GuestStatus)RspPicker.SelectedIndex, Side = (Side)SidePicker.SelectedIndex, UserId = usr.Id };
             string json = JsonConvert.SerializeObject(guest);
             Connect con = new Connect();
-            con.PostToServer(Statics.apiLink + "GuestLists", json);
+            await con.PostToServer(Statics.apiLink + "GuestLists", json);
             OperationCompleted?.Invoke(this, EventArgs.Empty);
             await Navigation.PopModalAsync();
 		}

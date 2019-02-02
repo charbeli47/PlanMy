@@ -37,19 +37,6 @@ namespace PlanMy
 	}
     public static class ViewModelLocator
     {
-        static MainChatViewModel chatVM;
-        public static MainChatViewModel MainChatViewModel
-        {
-            get
-            {
-                if (chatVM == null)
-                {
-                    chatVM = new MainChatViewModel(new Library.VendorItem());
-                }
-                return chatVM;
-
-            }
-        }
 
     }
 }

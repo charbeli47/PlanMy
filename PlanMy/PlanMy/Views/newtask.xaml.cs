@@ -108,7 +108,7 @@ namespace PlanMy
             Connect con = new Connect();
             CheckList list = new CheckList { Description = detailstask.Text, Status = CheckListStatus.ToDo, VendorCategoryId = catt.Id, Timing = Datepickertask.Date, Title = titleoftask.Text, User = usr };
             string json = Newtonsoft.Json.JsonConvert.SerializeObject(list);
-            con.PostToServer(Statics.apiLink + "CheckLists", json);
+            await con.PostToServer(Statics.apiLink + "CheckLists", json);
             OperationCompleted?.Invoke(this, EventArgs.Empty);
             Navigation.PopModalAsync();
         }

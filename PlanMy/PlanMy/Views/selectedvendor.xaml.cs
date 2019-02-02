@@ -181,7 +181,7 @@ namespace PlanMy
                     favImg.Source = "favselected.png";
                     WishList list = new WishList { UserId = usr.Id, VendorItemId = selectedpost.Id };
                     string json = Newtonsoft.Json.JsonConvert.SerializeObject(list);
-                    con.PostToServer(Statics.apiLink + "WishLists", json);
+                    await con.PostToServer(Statics.apiLink + "WishLists", json);
                 }
                 else
                 {

@@ -40,7 +40,8 @@ namespace PlanMy.Views
                     string link = Statics.apiLink + "GuestLists/" + guest.Id;
                     guest.GuestListTables = tab;
                     string json = Newtonsoft.Json.JsonConvert.SerializeObject(guest);
-                    con.PostToServer(link, json);
+
+                    await con.PutToServer(link, json);
                     OperationCompleted?.Invoke(this, EventArgs.Empty);
                     await DisplayAlert("SUCCESS", "Guest added to table " + tab.Title, "OK");
                     await Navigation.PopModalAsync();

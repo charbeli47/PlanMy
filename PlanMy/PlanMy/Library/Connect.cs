@@ -80,32 +80,42 @@ namespace PlanMy.Library
                 return "";
             }
         }
-        public string PostToServer(string url, string json)
+        public async Task<string> PostToServer(string url, MultipartFormDataContent data)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(url);
-                StringContent content = new StringContent(json);
                 //HTTP DELETE
-                var postTask = client.PostAsync(url, content);
-                postTask.Wait();
+                var postTask = await client.PostAsync(url, data);
 
-                var result = postTask.Result;
-                return result.Content.ToString();
+                var result = await postTask.Content.ReadAsStringAsync();
+                return result;
             }
         }
-        public string PutToServer(string url, string json)
+        public async Task<string> PostToServer(string url, string json)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(url);
+                StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                //HTTP DELETE
+                var postTask = await client.PostAsync(url, content);
+
+                var result = await postTask.Content.ReadAsStringAsync();
+                return result;
+            }
+        }
+        public async Task<string> PutToServer(string url, string json)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(url);
                 StringContent content = new StringContent(json);
                 //HTTP DELETE
-                var postTask = client.PutAsync(url, content);
-                postTask.Wait();
+                var postTask = await client.PutAsync(url, content);
 
-                var result = postTask.Result;
-                return result.Content.ToString();
+                var result = await postTask.Content.ReadAsStringAsync();
+                return result;
             }
         }
         public string DeleteFromServer(string url)

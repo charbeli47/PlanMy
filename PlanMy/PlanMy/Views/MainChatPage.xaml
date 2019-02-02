@@ -3,8 +3,7 @@
 		xmlns="http://xamarin.com/schemas/2014/forms" 
 		xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
 		x:Class="PlanMy.Views.MainChatPage"
-    xmlns:local="clr-namespace:PlanMy"
-		BindingContext="{x:Static local:ViewModelLocator.MainChatViewModel}">
+    xmlns:local="clr-namespace:PlanMy">
     <!--<ContentPage.ToolbarItems>
         <ToolbarItem Text="Location" Command="{Binding LocationCommand}"/>
 	</ContentPage.ToolbarItems>-->

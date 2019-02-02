@@ -95,7 +95,7 @@ namespace PlanMy.Views
 				
                 Connect con = new Connect();
                 string json = JsonConvert.SerializeObject(tab);
-                con.PostToServer(Statics.apiLink + "GuestListTables/" + tab.Id, json);
+                await con.PostToServer(Statics.apiLink + "GuestListTables/" + tab.Id, json);
 
 				
                 OperationCompleted?.Invoke(this, EventArgs.Empty);

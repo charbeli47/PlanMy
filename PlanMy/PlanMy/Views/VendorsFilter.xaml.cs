@@ -51,7 +51,7 @@ namespace PlanMy.Views
             {
                 IsLoading = true;
                 WebClient wc = new WebClient();
-                string resp = wc.DownloadString(Statics.apiLink + "VendorTypes?CategoryId"+catid);
+                string resp = wc.DownloadString(Statics.apiLink + "VendorTypes/ByCat/"+catid);
                 var vendortypes = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorType>>(resp);
                 foreach(var row in vendortypes)
                 {

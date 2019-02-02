@@ -77,7 +77,7 @@ namespace PlanMy.Views
                     {
                         Order o = new Order { BasketItems = items, Total = (decimal)prod.Price, Users = cookie, OrderStatus = OrderStatus.Pending_Payment, UsersId = cookie.Id };
                         string json = Newtonsoft.Json.JsonConvert.SerializeObject(o);
-                        con.PostToServer(Statics.apiLink + "Orders", json);
+                        await con.PostToServer(Statics.apiLink + "Orders", json);
 
                         await DisplayAlert("Success", "Thank you for selecting this offer.\r\n We sent you an email please check it.", "CLOSE");
                         await Navigation.PopModalAsync(true);

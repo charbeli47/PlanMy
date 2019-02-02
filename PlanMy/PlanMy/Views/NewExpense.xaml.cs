@@ -99,9 +99,12 @@ namespace PlanMy.Views
 			BudgetCategory expensecat = (BudgetCategory)catPicker.SelectedItem;
             var usr = await GetUser();
             Connect con = new Connect();
+            MultipartFormDataContent data = new MultipartFormDataContent();
             Budget budget = new Budget { BudgetCategoryId = expensecat.Id, ActualCost = float.Parse(expendactualcost.Text), Description = expenddescription.Text, EstimatedCost = float.Parse(expendestimatedcost.Text), PaidCost = float.Parse(expendpaidcost.Text), UserId = usr.Id };
             string json = JsonConvert.SerializeObject(budget);
-            con.PostToServer(Statics.apiLink + "Budgets", json);
+            var budgetj = new StringContent(json);
+            data.Add(budgetj, "budget");
+            await con.PostToServer(Statics.apiLink + "Budgets", data);
             OperationCompleted?.Invoke(this, EventArgs.Empty);
             await Navigation.PopModalAsync();
 		}
@@ -173,9 +176,12 @@ namespace PlanMy.Views
             //BudgetCategory expensecat = (BudgetCategory)catPicker.SelectedItem;
             var usr = await GetUser();
             Connect con = new Connect();
+            MultipartFormDataContent data = new MultipartFormDataContent();
             BudgetCategory cat = new BudgetCategory { Title = expendnewname.Text, UserId = usr.Id };
             string json = JsonConvert.SerializeObject(cat);
-            con.PostToServer(Statics.apiLink + "BudgetCategories", json);
+            var budgetCategory = new StringContent(json);
+            data.Add(budgetCategory, "wishList");
+            await con.PostToServer(Statics.apiLink + "BudgetCategories", data);
             OperationCompleted?.Invoke(this, EventArgs.Empty);
             await Navigation.PopModalAsync();
         }

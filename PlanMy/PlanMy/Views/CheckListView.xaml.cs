@@ -342,8 +342,11 @@ namespace PlanMy.Views
                     {
                         StackLayout doneroww;
                         string categoryo = "no category";
-                        int indexofequivalentcat = categories.FindIndex(a => a.Id == o.VendorCategoryId);
-                        categoryo = categories.ElementAt(indexofequivalentcat).Title;
+                        if (o.VendorCategoryId != null)
+                        {
+                            int indexofequivalentcat = categories.FindIndex(a => a.Id == o.VendorCategoryId);
+                            categoryo = categories.ElementAt(indexofequivalentcat).Title;
+                        }
                         if (o.Status == CheckListStatus.Done)
                         {
                             if (o.IsPriority)
@@ -386,8 +389,11 @@ namespace PlanMy.Views
                     {
                         StackLayout notdoneroww;
                         string categoryo = "no category";
-                        int indexofequivalentcat = categories.FindIndex(a => a.Id == o.VendorCategoryId);
-                        categoryo = categories.ElementAt(indexofequivalentcat).Title;
+                        if (o.VendorCategoryId != null)
+                        {
+                            int indexofequivalentcat = categories.FindIndex(a => a.Id == o.VendorCategoryId);
+                            categoryo = categories.ElementAt(indexofequivalentcat).Title;
+                        }
                         if (o.Status == CheckListStatus.ToDo)
                         {
                             if (o.IsPriority)
@@ -424,9 +430,11 @@ namespace PlanMy.Views
                         StackLayout row;
 
                         string categoryo = "no category";
-                        int indexofequivalentcat = categories.FindIndex(a => a.Id == o.VendorCategoryId);
-                        categoryo = categories.ElementAt(indexofequivalentcat).Title;
-
+                        if (o.VendorCategoryId != null)
+                        {
+                            int indexofequivalentcat = categories.FindIndex(a => a.Id == o.VendorCategoryId);
+                            categoryo = categories.ElementAt(indexofequivalentcat).Title;
+                        }
                         if (o.Status == CheckListStatus.Done)
                         {
                             if (o.IsPriority)

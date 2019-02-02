@@ -39,36 +39,7 @@ namespace PlanMy.ViewModels
             Messages = new ObservableRangeCollection<Message>();
             LoadChat(vendor);
 
-            SendCommand = new Command(async() =>
-            {
-
-                Connect con = new Connect();
-                var usr = await con.GetData("User");
-                Users cookie = new Users();
-                if (!string.IsNullOrEmpty(usr))
-                {
-                    cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
-                    
-                }
-
-                string msg = OutGoingText;
-                var message = new Message
-                {
-                    Text = OutGoingText,
-                    IsIncoming = false,
-                    MessageDateTime = DateTime.Now,
-                    SenderImg = Statics.MediaLink + cookie.Image
-                };
-
-
-                Messages.Add(message);
-
-                //twilioMessenger?.SendMessage(message.Text);
-
-                OutGoingText = string.Empty;
-                
-                
-            });
+            
 
 
             LocationCommand = new Command(async () =>
@@ -104,19 +75,68 @@ namespace PlanMy.ViewModels
             Connect con = new Connect();
             var usr = await con.GetData("User");
             Users cookie = new Users();
+            
             if (!string.IsNullOrEmpty(usr))
             {
                 cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
                 List<string> userIds = new List<string> { cookie.Id, vendor.UserId };
+                SendBirdClient.Connect(cookie.Id, (User user, SendBirdException ev) =>
+                {
+                    if (ev != null)
+                    {
+                        // Error
+                        return;
+                    }
+                    SendBirdClient.UpdateCurrentUserInfo(cookie.FirstName + " " + cookie.LastName, user.ProfileUrl, (SendBirdException e1) =>
+                    {
+                        if (e1 != null)
+                        {
+                            // Error
+                            return;
+                        }
+                    });
+                    if (SendBirdClient.GetPendingPushToken() == null) return;
+
+                    // For Android
+                    SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
+                    {
+                        if (e1 != null)
+                        {
+                            // Error.
+                            return;
+                        }
+
+                        if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                        {
+                            // Try registration after connection is established.
+                        }
+                    });
+
+                    // For iOS
+                    SendBirdClient.RegisterAPNSPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
+                    {
+                        if (e1 != null)
+                        {
+                            // Error.
+                            return;
+                        }
+
+                        if (status == SendBirdClient.PushTokenRegistrationStatus.PENDING)
+                        {
+                            // Try registration after connection is established.
+                        }
+                    });
+                });
                 SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler();
                 SendBirdClient.CreateUserListQuery(userIds);
-                GroupChannel.CreateChannelWithUserIds(userIds, true, (GroupChannel groupChannel, SendBirdException e) => {
+                
+                GroupChannel.CreateChannelWithUserIds(userIds, false, (GroupChannel groupChannel, SendBirdException e) => {
                     if (e != null)
                     {
                         // Error.
                         return;
                     }
-                    SendCommand = new Command(async () =>
+                    SendCommand = new Command(() =>
                     {
 
                         groupChannel.StartTyping();

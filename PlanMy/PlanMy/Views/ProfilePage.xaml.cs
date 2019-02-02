@@ -67,6 +67,7 @@ namespace PlanMy.Views
 
                     });
                 }
+                configBtn.IsVisible = true;
             }
         }
         public async void LoadFavVendors()

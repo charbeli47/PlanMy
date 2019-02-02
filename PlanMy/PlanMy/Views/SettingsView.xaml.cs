@@ -122,7 +122,7 @@ namespace PlanMy.Views
                 var events = cookie.Events;
                 events.IsPrivate = e.Value;
                 var json = JsonConvert.SerializeObject(events);
-                con.PostToServer(Statics.apiLink + "Events", json);
+                await con.PostToServer(Statics.apiLink + "Events", json);
             }
             _profile.user.Events.IsPrivate = e.Value;
         }
