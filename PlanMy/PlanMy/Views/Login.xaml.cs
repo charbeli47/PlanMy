@@ -92,7 +92,6 @@ namespace PlanMy.Views
                             });
                         });
                         await con.SaveData("User", resp);
-                        con.DeleteData("FaceBookProfile");
                         OperationCompleted?.Invoke(this, EventArgs.Empty);
                         await Navigation.PopModalAsync();
                     }

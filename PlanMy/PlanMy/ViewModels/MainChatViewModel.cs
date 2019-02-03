@@ -129,7 +129,6 @@ namespace PlanMy.ViewModels
                 });
                 SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler();
                 SendBirdClient.CreateUserListQuery(userIds);
-                
                 GroupChannel.CreateChannelWithUserIds(userIds, false, (GroupChannel groupChannel, SendBirdException e) => {
                     if (e != null)
                     {
