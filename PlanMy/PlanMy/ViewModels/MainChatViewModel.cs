@@ -170,7 +170,7 @@ namespace PlanMy.ViewModels
                                 if (sender.UserId != cookie.Id)
                                     Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + vendor.Thumb });
                                 else
-                                    Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + cookie.Image });
+                                    Messages.Add(new Message { Text = userMsg.Message, IsIncoming = false, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + cookie.Image });
                             }
 
                         });
