@@ -7,6 +7,7 @@ using SendBird;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -39,8 +40,59 @@ namespace PlanMy.ViewModels
             Messages = new ObservableRangeCollection<Message>();
             LoadChat(vendor);
 
-            
 
+            SendCommand = new Command(async() =>
+            {
+                Connect con = new Connect();
+                var usr = await con.GetData("User");
+                Users cookie = new Users();
+
+                if (!string.IsNullOrEmpty(usr))
+                {
+                    cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
+                    string resp = await con.DownloadData(Statics.apiLink + "ChatChannels", "UserId=" + cookie.Id + "&VendorId=" + vendor.UserId);
+                    var result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ChatChannel>>(resp);
+                    if (result.Count > 0)
+                    {
+                        var row = result.OrderByDescending(x => x.Id).FirstOrDefault();
+                        GroupChannel.GetChannel(row.ChannelUrl, (GroupChannel groupChannel, SendBirdException e) =>
+                        {
+                            if (e != null)
+                            {
+                                // Error.
+                                return;
+                            }
+                            groupChannel.InviteWithUserId(vendor.UserId, (SendBirdException sbe) => { });
+                            groupChannel.StartTyping();
+                            string msg = OutGoingText;
+                            var message = new Message
+                            {
+                                Text = OutGoingText,
+                                IsIncoming = false,
+                                MessageDateTime = DateTime.Now,
+                                SenderImg = Statics.MediaLink + cookie.Image
+                            };
+
+
+                            Messages.Add(message);
+
+                            //twilioMessenger?.SendMessage(message.Text);
+                            groupChannel.SendUserMessage(OutGoingText, (UserMessage userMessage, SendBirdException se) =>
+                            {
+                                if (se != null)
+                                {
+                                    // Error.
+                                    return;
+                                }
+                            });
+                            OutGoingText = string.Empty;
+                            groupChannel.EndTyping();
+
+                        });
+                    }
+                }
+
+            });
 
             LocationCommand = new Command(async () =>
             {
@@ -78,15 +130,60 @@ namespace PlanMy.ViewModels
             
             if (!string.IsNullOrEmpty(usr))
             {
+
                 cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
                 List<string> userIds = new List<string> { cookie.Id, vendor.UserId };
-                SendBirdClient.Connect(cookie.Id, (User user, SendBirdException ev) =>
+                
+                SendBirdClient.Connect(cookie.Id, async(User user, SendBirdException ev) =>
                 {
                     if (ev != null)
                     {
                         // Error
                         return;
                     }
+                    
+                    SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler();
+                    //UserListQuery list = SendBirdClient.CreateUserListQuery(userIds);
+                    
+                    GroupChannel.CreateChannelWithUserIds(userIds, true, async (GroupChannel groupChannel, SendBirdException e) => {
+                        if (e != null)
+                        {
+                            // Error.
+                            return;
+                        }
+                        groupChannel.InviteWithUserId(vendor.UserId, (SendBirdException sbe) => { });
+                        ChatChannel obj = new ChatChannel { ChannelUrl = groupChannel.Url, UserId = cookie.Id, VendorId = vendor.UserId };
+                        string json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+                        await con.PostToServer(Statics.apiLink + "ChatChannels", json);
+                        
+                        PreviousMessageListQuery mPrevMessageListQuery = groupChannel.CreatePreviousMessageListQuery();
+                        mPrevMessageListQuery.Load(30, true, (List<BaseMessage> messages, SendBirdException evx) => {
+                            if (evx != null)
+                            {
+                                // Error.
+                                return;
+                            }
+                            foreach (var message in messages)
+                            {
+                                UserMessage userMsg = (UserMessage)message;
+                                var sender = userMsg.Sender;
+                                if (sender.UserId != cookie.Id)
+                                    Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + vendor.Thumb });
+                                else
+                                    Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + cookie.Image });
+                            }
+
+                        });
+                    });
+
+                    ch.OnMessageReceived = (BaseChannel baseChannel, BaseMessage baseMessage) => {
+                        UserMessage userMsg = (UserMessage)baseMessage;
+                        Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + vendor.Thumb });
+                    };
+                    ch.OnChannelChanged = (BaseChannel BaseChannel) => {
+                        GroupChannel groupChannel = (GroupChannel)BaseChannel;
+                    };
+                    SendBirdClient.AddChannelHandler(Statics.ChannelHandler, ch);
                     SendBirdClient.UpdateCurrentUserInfo(cookie.FirstName + " " + cookie.LastName, user.ProfileUrl, (SendBirdException e1) =>
                     {
                         if (e1 != null)
@@ -126,68 +223,9 @@ namespace PlanMy.ViewModels
                             // Try registration after connection is established.
                         }
                     });
-                });
-                SendBirdClient.ChannelHandler ch = new SendBirdClient.ChannelHandler();
-                SendBirdClient.CreateUserListQuery(userIds);
-                GroupChannel.CreateChannelWithUserIds(userIds, false, (GroupChannel groupChannel, SendBirdException e) => {
-                    if (e != null)
-                    {
-                        // Error.
-                        return;
-                    }
-                    SendCommand = new Command(() =>
-                    {
-
-                        groupChannel.StartTyping();
-                        string msg = OutGoingText;
-                        var message = new Message
-                        {
-                            Text = OutGoingText,
-                            IsIncoming = false,
-                            MessageDateTime = DateTime.Now,
-                            SenderImg = Statics.MediaLink + cookie.Image
-                        };
-
-
-                        Messages.Add(message);
-
-                        //twilioMessenger?.SendMessage(message.Text);
-                        groupChannel.SendUserMessage(OutGoingText, "", (UserMessage userMessage, SendBirdException se) => {
-                            if (se != null)
-                            {
-                                // Error.
-                                return;
-                            }
-                        });
-                        OutGoingText = string.Empty;
-                        groupChannel.EndTyping();
-
-                    });
-                    PreviousMessageListQuery mPrevMessageListQuery = groupChannel.CreatePreviousMessageListQuery();
-                    mPrevMessageListQuery.Load(30, true, (List<BaseMessage> messages, SendBirdException ev) => {
-                        if (ev != null)
-                        {
-                            // Error.
-                            return;
-                        }
-                        foreach(var message in messages)
-                        {
-                            UserMessage userMsg = (UserMessage)message;
-                            var user = userMsg.Sender;
-                            if(user.UserId!=cookie.Id)
-                                Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + vendor.Thumb });
-                            else
-                                Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + cookie.Image });
-                        }
-                            
-                    });
+                    
                 });
                 
-                ch.OnMessageReceived = (BaseChannel baseChannel, BaseMessage baseMessage) => {
-                    UserMessage userMsg = (UserMessage)baseMessage;
-                    Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + vendor.Thumb });
-                };
-                SendBirdClient.AddChannelHandler(Statics.ChannelHandler, ch);
                 
             }
         }
