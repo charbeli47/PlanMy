@@ -192,7 +192,7 @@ namespace PlanMy.ViewModels
                             return;
                         }
                     });
-                    if (SendBirdClient.GetPendingPushToken() == null) return;
+                    //if (SendBirdClient.GetPendingPushToken() == null) return;
 
                     // For Android
                     SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
