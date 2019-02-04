@@ -16,20 +16,20 @@ namespace PlanMy.Views
 	public partial class MainChatPage : ContentPage
 	{
         MainChatViewModel vm;
-        public MainChatPage(VendorItem vendor)
+        public MainChatPage(string vendorId, string thumb)
         {
             InitializeComponent();
 			//Pagetitle.Text = "Chatting with " + vendor.User.FirstName;
 
 			
-			LoadPage(vendor); 
+			LoadPage(vendorId, thumb); 
             
 
         }
-        void LoadPage(VendorItem vendor)
+        void LoadPage(string vendor, string thumb)
         {
             Connect con = new Connect();
-            BindingContext = vm = new MainChatViewModel(vendor.UserId, Statics.MediaLink+vendor.Thumb);
+            BindingContext = vm = new MainChatViewModel(vendor, thumb);
 
 
             vm.Messages.CollectionChanged += (sender, e) =>

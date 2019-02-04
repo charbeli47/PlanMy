@@ -30,7 +30,7 @@ namespace PlanMy.iOS
         // You have 17 seconds to return from this method, or iOS will terminate your application.
         //
         public static readonly string[] PERMISSIONS = new[] { "publish_actions" };
-        protected int senderId = 0;
+        protected string senderId = "";
         protected App _app;
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
@@ -166,7 +166,7 @@ namespace PlanMy.iOS
             if (userInfo["key"] != null)
             {
                 string id = userInfo["key"] as NSString;
-                senderId = int.Parse(id);
+                senderId = id;
             }
             if (application.ApplicationState == UIApplicationState.Active)
             {
@@ -186,18 +186,18 @@ namespace PlanMy.iOS
                 {
                     Users cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(user);
                     string userId = cookie.Id;
-                    if (senderId == 1)
+                    if (senderId == "98d095b7-f698-4579-bb5b-7d2d936aeb62")
                     {
                         VendorItem vendorItem = new VendorItem { UserId = "98d095b7-f698-4579-bb5b-7d2d936aeb62", Thumb = "chatlogo.png", Title = "Plan My" };
-                        var mainPage = new MainChatPage(vendorItem);
+                        var mainPage = new MainChatPage(vendorItem.UserId, vendorItem.Thumb);
 
                         _app.MainPage = mainPage;
 
                     }
-                    else if (senderId != 0)
+                    else if (senderId != "")
                     {
                         VendorItem vendorItem = new VendorItem { UserId = senderId.ToString(), Thumb = "chatlogo.png", Title = "Plan My Supplier" };
-                        var mainPage = new MainChatPage(vendorItem);
+                        var mainPage = new MainChatPage(vendorItem.UserId, vendorItem.Thumb);
                         MainPage indexpage = (MainPage)_app.MainPage;
                         await indexpage.Navigation.PushModalAsync(mainPage);
                     }
@@ -258,17 +258,17 @@ namespace PlanMy.iOS
                 {
 
                     
-                    if (senderId == 1)
+                    if (senderId == "98d095b7-f698-4579-bb5b-7d2d936aeb62")
                     {
                         VendorItem vendorItem = new VendorItem { UserId = "98d095b7-f698-4579-bb5b-7d2d936aeb62", Thumb = "chatlogo.png", Title = "Plan My" };
-                        var mainPage = new MainChatPage(vendorItem);
+                        var mainPage = new MainChatPage(vendorItem.UserId, vendorItem.Thumb);
 
                         _app.MainPage = mainPage;
                     }
-                    else if (senderId != 0)
+                    else if (senderId != "")
                     {
                         VendorItem vendorItem = new VendorItem { UserId = senderId.ToString(), Thumb = "chatlogo.png", Title = "Plan My Supplier" };
-                        var mainPage = new MainChatPage(vendorItem);
+                        var mainPage = new MainChatPage(vendorItem.UserId, vendorItem.Thumb);
 
                         _app.MainPage = mainPage;
                     }

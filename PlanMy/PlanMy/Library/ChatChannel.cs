@@ -9,6 +9,7 @@ namespace PlanMy.Library
         public int Id { get; set; }
         public string UserId { get; set; }
         public string VendorId { get; set; }
+        public Users Vendor { get; set; }
         public string ChannelUrl { get; set; }
     }
 }

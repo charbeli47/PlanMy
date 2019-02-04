@@ -96,7 +96,7 @@ namespace PlanMy.Views
         private void TapGestureRecognizer_Tapped_1(object sender, EventArgs e)
         {
             VendorItem vendorItem = new VendorItem { UserId = "98d095b7-f698-4579-bb5b-7d2d936aeb62", Thumb = "chatlogo.png", Title = "Plan My" };
-            Navigation.PushModalAsync(new MainChatPage(vendorItem));
+            Navigation.PushModalAsync(new MainChatPage(vendorItem.UserId, vendorItem.Thumb));
         }
 
         

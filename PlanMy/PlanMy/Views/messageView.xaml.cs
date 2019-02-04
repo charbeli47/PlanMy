@@ -19,9 +19,7 @@ namespace PlanMy.Views
         public messageView ()
 		{
 			InitializeComponent ();
-            //LoadPage();
-
-
+            LoadPage();
         }
         async void LoadPage()
         {
@@ -31,19 +29,20 @@ namespace PlanMy.Views
             {
                 Users cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
                 string resp = await con.DownloadData(Statics.apiLink + "ChatChannels", "UserId=" + cookie.Id);
-                var datas = await con.DownloadData("https://planmy.me/maizonpub-api/chat.php", "action=getvendors&my_id=" + cookie.Id);
                 var result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ChatChannel>>(resp);
-                List<VendorItem> vendors = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorItem>>(datas);
-                foreach (var vendor in vendors)
-                    vendor.Title = WebUtility.HtmlDecode(vendor.Title);
-                MessagesListView.ItemsSource = vendors;
+                List<Users> users = new List<Users>();
+                foreach(var row in result)
+                {
+                    users.Add(row.Vendor);
+                }
+                MessagesListView.ItemsSource = users;
             }
         }
 
         private async void MessagesListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var vendor = (VendorItem)e.SelectedItem;
-            await Navigation.PushModalAsync(new MainChatPage(vendor));
+            var vendor = (ChatChannel)e.SelectedItem;
+            await Navigation.PushModalAsync(new MainChatPage(vendor.VendorId, Statics.MediaLink + vendor.Vendor.Image));
 
         }
     }

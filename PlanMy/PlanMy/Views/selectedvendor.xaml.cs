@@ -150,7 +150,7 @@ namespace PlanMy
                 item.Title = WebUtility.HtmlDecode(selectedpost.Title);
                 item.UserId = selectedpost.UserId;
 
-                await Navigation.PushModalAsync(new MainChatPage(item));
+                await Navigation.PushModalAsync(new MainChatPage(item.UserId, item.Thumb));
         }
             else
             {

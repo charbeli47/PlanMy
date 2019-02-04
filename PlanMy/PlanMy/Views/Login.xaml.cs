@@ -59,7 +59,7 @@ namespace PlanMy.Views
                                     return;
                                 }
                             });
-                            if (SendBirdClient.GetPendingPushToken() == null) return;
+                            
 
                             // For Android
                             SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
@@ -145,6 +145,7 @@ namespace PlanMy.Views
         {
             Connect con = new Connect();
             string link = Statics.apiLink + "Login";
+            var oldtoken = await con.GetData("FirebaseToken");
             string resp = await con.DownloadData(link, "Username=" + UsernameEntry.Text + "&Password=" + PasswordEntry.Text + "&RememberMe=false");
             try
             {
@@ -166,10 +167,10 @@ namespace PlanMy.Views
                                 return;
                             }
                         });
-                        if (SendBirdClient.GetPendingPushToken() == null) return;
+                        
 
                         // For Android
-                        SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
+                        SendBirdClient.RegisterFCMPushTokenForCurrentUser(oldtoken, (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
                         {
                             if (e1 != null)
                             {
@@ -184,7 +185,7 @@ namespace PlanMy.Views
                         });
 
                         // For iOS
-                        SendBirdClient.RegisterAPNSPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
+                        SendBirdClient.RegisterAPNSPushTokenForCurrentUser(oldtoken, (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
                         {
                             if (e1 != null)
                             {
@@ -197,6 +198,7 @@ namespace PlanMy.Views
                                 // Try registration after connection is established.
                             }
                         });
+
                     });
                     await con.SaveData("User", resp);
                     con.DeleteData("FaceBookProfile");

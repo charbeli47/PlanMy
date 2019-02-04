@@ -8,6 +8,7 @@ using Android.Graphics;
 using Java.Net;
 using PlanMy.ViewModels;
 using PlanMy.Views;
+using SendBird.SBJson;
 
 namespace PlanMy.Droid
 {
@@ -15,14 +16,48 @@ namespace PlanMy.Droid
 	[IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
 	public class FirebaseMessagingServiceImpl : FirebaseMessagingService
 	{
-		// application is in the foreground, this method will fire.
-		public override void OnMessageReceived(RemoteMessage message)
+        // application is in the foreground, this method will fire.
+        public const string URGENT_CHANNEL = "com.maizonpub.planmy.urgent";
+        public override void OnMessageReceived(RemoteMessage message)
 		{
-			System.Diagnostics.Debug.WriteLine(message.GetNotification().Body);
-			showNotification(message);
+            string chanName = "Chat Messages";
+            var importance = NotificationImportance.High;
+            NotificationChannel chan = new NotificationChannel(URGENT_CHANNEL, chanName, importance);
+            chan.EnableVibration(true);
+            chan.LockscreenVisibility = NotificationVisibility.Public;
+            try
+            {
+                JsonElement payload = JsonParser.Parse(message.Data["sendbird"]);
+                sendNotification(message, payload, chan);
+            }
+            catch
+            {
+                showNotification(message, chan);
+            }
+			
 		}
 
-		void showNotification(RemoteMessage message) 
+        private void sendNotification(RemoteMessage message, JsonElement payload, NotificationChannel chan)
+        {
+            var intent = new Intent(this, typeof(MainActivity));
+            intent.AddFlags(ActivityFlags.ClearTop);
+            var pendingIntent = PendingIntent.GetActivity(this, 0, intent, PendingIntentFlags.OneShot);
+            string id = payload["sender"]["id"];
+            string username = payload["sender"]["name"];
+            string body = payload["message"];
+            var notificationBuilder = new NotificationCompat.Builder(this)
+                                                                            .SetSmallIcon(Resource.Drawable.logoplanmy)
+                                                                            .SetContentTitle("New message from " + username)
+                                                                            .SetContentText(body)
+                                                                            .SetAutoCancel(true)
+                                                                            .SetContentIntent(pendingIntent)
+                                                                            .SetChannelId(URGENT_CHANNEL);
+            var notificationManager = NotificationManager.FromContext(this);
+            notificationManager.CreateNotificationChannel(chan);
+            notificationManager.Notify(1100, notificationBuilder.Build());
+        }
+
+        void showNotification(RemoteMessage message, NotificationChannel chan) 
 		{
 			var intent = new Intent(this, typeof(MainActivity));
 			intent.AddFlags(ActivityFlags.ClearTop);
@@ -68,7 +103,7 @@ namespace PlanMy.Droid
 
                 notificationManager.Notify(0, notificationBuilder.Build());*/
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(ApplicationContext);
-                showBigNotification(mBitmap, mBuilder, message.GetNotification().Title ?? "Plan My", pendingIntent, message.GetNotification().Body);
+                showBigNotification(mBitmap, mBuilder, message.GetNotification().Title ?? "Plan My", pendingIntent, message.GetNotification().Body, chan);
             }
             else
             {
@@ -77,15 +112,16 @@ namespace PlanMy.Droid
                                                                             .SetContentTitle(message.GetNotification().Title ?? "Plan My")
                                                                             .SetContentText(message.GetNotification().Body)
                                                                             .SetAutoCancel(true)
-                                                                            .SetContentIntent(pendingIntent);
+                                                                            .SetContentIntent(pendingIntent)
+                                                                            .SetChannelId(URGENT_CHANNEL);
                 var notificationManager = NotificationManager.FromContext(this);
-
-                notificationManager.Notify(0, notificationBuilder.Build());
+                notificationManager.CreateNotificationChannel(chan);
+                notificationManager.Notify(1100, notificationBuilder.Build());
             }
 
 			
 		}
-        private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, String title, PendingIntent resultPendingIntent, string body)
+        private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, String title, PendingIntent resultPendingIntent, string body, NotificationChannel chan)
         {
             NotificationCompat.BigPictureStyle bigPictureStyle = new NotificationCompat.BigPictureStyle();
             bigPictureStyle.SetBigContentTitle(title);
@@ -101,11 +137,12 @@ namespace PlanMy.Droid
                     .SetSmallIcon(Resource.Drawable.logoplanmy)
                     .SetLargeIcon(bitmap)
                     .SetContentText(body)
+                    .SetChannelId(URGENT_CHANNEL)
                     .Build();
 
             var notificationManager = NotificationManager.FromContext(this);
-
-            notificationManager.Notify(0, notification);
+            notificationManager.CreateNotificationChannel(chan);
+            notificationManager.Notify(1100, notification);
         }
 
     }

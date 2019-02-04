@@ -127,7 +127,7 @@ namespace PlanMy.ViewModels
             Connect con = new Connect();
             var usr = await con.GetData("User");
             Users cookie = new Users();
-            
+            var oldtoken = await con.GetData("FirebaseToken");
             if (!string.IsNullOrEmpty(usr))
             {
 
@@ -192,10 +192,10 @@ namespace PlanMy.ViewModels
                             return;
                         }
                     });
-                    //if (SendBirdClient.GetPendingPushToken() == null) return;
+                    
 
                     // For Android
-                    SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
+                    SendBirdClient.RegisterFCMPushTokenForCurrentUser(oldtoken, (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
                     {
                         if (e1 != null)
                         {
@@ -210,7 +210,7 @@ namespace PlanMy.ViewModels
                     });
 
                     // For iOS
-                    SendBirdClient.RegisterAPNSPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
+                    SendBirdClient.RegisterAPNSPushTokenForCurrentUser(oldtoken, (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
                     {
                         if (e1 != null)
                         {

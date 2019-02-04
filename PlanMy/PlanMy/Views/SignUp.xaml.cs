@@ -38,6 +38,7 @@ namespace PlanMy.Views
                 var u = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(resp);
                 if (!string.IsNullOrEmpty(u.Id))
                 {
+
                     SendBirdClient.Connect(u.Id, (User user, SendBirdException ev) =>
                     {
                         if (ev != null)
@@ -53,10 +54,10 @@ namespace PlanMy.Views
                             return;
                             }
                         });
-                        if (SendBirdClient.GetPendingPushToken() == null) return;
+                        
 
                     // For Android
-                    SendBirdClient.RegisterFCMPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
+                    SendBirdClient.RegisterFCMPushTokenForCurrentUser(token, (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
                         {
                             if (e1 != null)
                             {
@@ -71,7 +72,7 @@ namespace PlanMy.Views
                         });
 
                     // For iOS
-                    SendBirdClient.RegisterAPNSPushTokenForCurrentUser(SendBirdClient.GetPendingPushToken(), (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
+                    SendBirdClient.RegisterAPNSPushTokenForCurrentUser(token, (SendBirdClient.PushTokenRegistrationStatus status, SendBirdException e1) =>
                         {
                             if (e1 != null)
                             {
