@@ -33,12 +33,12 @@ namespace PlanMy.ViewModels
 
         public ICommand LocationCommand { get; set; }
 
-        public MainChatViewModel(VendorItem vendor)
+        public MainChatViewModel(string vendorId, string thumb)
         {
             // Initialize with default values
             //twilioMessenger = DependencyService.Get<ITwilioMessenger>();
             Messages = new ObservableRangeCollection<Message>();
-            LoadChat(vendor);
+            LoadChat(vendorId, thumb);
 
 
             SendCommand = new Command(async() =>
@@ -50,7 +50,7 @@ namespace PlanMy.ViewModels
                 if (!string.IsNullOrEmpty(usr))
                 {
                     cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
-                    string resp = await con.DownloadData(Statics.apiLink + "ChatChannels", "UserId=" + cookie.Id + "&VendorId=" + vendor.UserId);
+                    string resp = await con.DownloadData(Statics.apiLink + "ChatChannels", "UserId=" + cookie.Id + "&VendorId=" + vendorId);
                     var result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ChatChannel>>(resp);
                     if (result.Count > 0)
                     {
@@ -62,7 +62,7 @@ namespace PlanMy.ViewModels
                                 // Error.
                                 return;
                             }
-                            groupChannel.InviteWithUserId(vendor.UserId, (SendBirdException sbe) => { });
+                            groupChannel.InviteWithUserId(vendorId, (SendBirdException sbe) => { });
                             groupChannel.StartTyping();
                             string msg = OutGoingText;
                             var message = new Message
@@ -121,7 +121,7 @@ namespace PlanMy.ViewModels
 
 
         }
-        async void LoadChat(VendorItem vendor)
+        async void LoadChat(string vendorId, string thumb)
         {
             
             Connect con = new Connect();
@@ -132,7 +132,7 @@ namespace PlanMy.ViewModels
             {
 
                 cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
-                List<string> userIds = new List<string> { cookie.Id, vendor.UserId };
+                List<string> userIds = new List<string> { cookie.Id, vendorId };
                 
                 SendBirdClient.Connect(cookie.Id, async(User user, SendBirdException ev) =>
                 {
@@ -151,8 +151,8 @@ namespace PlanMy.ViewModels
                             // Error.
                             return;
                         }
-                        groupChannel.InviteWithUserId(vendor.UserId, (SendBirdException sbe) => { });
-                        ChatChannel obj = new ChatChannel { ChannelUrl = groupChannel.Url, UserId = cookie.Id, VendorId = vendor.UserId };
+                        groupChannel.InviteWithUserId(vendorId, (SendBirdException sbe) => { });
+                        ChatChannel obj = new ChatChannel { ChannelUrl = groupChannel.Url, UserId = cookie.Id, VendorId = vendorId };
                         string json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
                         await con.PostToServer(Statics.apiLink + "ChatChannels", json);
                         
@@ -168,7 +168,7 @@ namespace PlanMy.ViewModels
                                 UserMessage userMsg = (UserMessage)message;
                                 var sender = userMsg.Sender;
                                 if (sender.UserId != cookie.Id)
-                                    Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + vendor.Thumb });
+                                    Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = thumb });
                                 else
                                     Messages.Add(new Message { Text = userMsg.Message, IsIncoming = false, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + cookie.Image });
                             }
@@ -178,7 +178,7 @@ namespace PlanMy.ViewModels
 
                     ch.OnMessageReceived = (BaseChannel baseChannel, BaseMessage baseMessage) => {
                         UserMessage userMsg = (UserMessage)baseMessage;
-                        Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = Statics.MediaLink + vendor.Thumb });
+                        Messages.Add(new Message { Text = userMsg.Message, IsIncoming = true, MessageDateTime = ConvertToDate(userMsg.CreatedAt), SenderImg = thumb });
                     };
                     ch.OnChannelChanged = (BaseChannel BaseChannel) => {
                         GroupChannel groupChannel = (GroupChannel)BaseChannel;

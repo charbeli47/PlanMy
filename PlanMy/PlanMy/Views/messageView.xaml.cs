@@ -30,7 +30,9 @@ namespace PlanMy.Views
             if (!string.IsNullOrEmpty(usr))
             {
                 Users cookie = Newtonsoft.Json.JsonConvert.DeserializeObject<Users>(usr);
+                string resp = await con.DownloadData(Statics.apiLink + "ChatChannels", "UserId=" + cookie.Id);
                 var datas = await con.DownloadData("https://planmy.me/maizonpub-api/chat.php", "action=getvendors&my_id=" + cookie.Id);
+                var result = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ChatChannel>>(resp);
                 List<VendorItem> vendors = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorItem>>(datas);
                 foreach (var vendor in vendors)
                     vendor.Title = WebUtility.HtmlDecode(vendor.Title);

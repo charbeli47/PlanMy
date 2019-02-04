@@ -29,7 +29,7 @@ namespace PlanMy.Views
         void LoadPage(VendorItem vendor)
         {
             Connect con = new Connect();
-            BindingContext = vm = new MainChatViewModel(vendor);
+            BindingContext = vm = new MainChatViewModel(vendor.UserId, Statics.MediaLink+vendor.Thumb);
 
 
             vm.Messages.CollectionChanged += (sender, e) =>
