@@ -163,7 +163,7 @@ namespace PlanMy.ViewModels
                                 // Error.
                                 return;
                             }
-                            foreach (var message in messages)
+                            foreach (var message in messages.OrderBy(x=>x.MessageId))
                             {
                                 UserMessage userMsg = (UserMessage)message;
                                 var sender = userMsg.Sender;

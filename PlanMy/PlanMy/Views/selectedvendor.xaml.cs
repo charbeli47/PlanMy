@@ -95,7 +95,7 @@ namespace PlanMy
                     e.Cancel = true;
                 }
             };
-            reviewsWeb.Source = "https://planmy.me/maizonpub-api/comments.php?itemId=" + selectedpost.Id;
+            reviewsWeb.Source = "http://test.planmy.me/AppReviews?VendorItemId=" + selectedpost.Id;
             reviewsWeb.Navigated += ReviewsWeb_Navigated;
 
             Titlepost.Text = selectedpost.Title;

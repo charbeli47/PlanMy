@@ -212,7 +212,7 @@ namespace PlanMy.Views
             catch
             {
                 var result = Newtonsoft.Json.JsonConvert.DeserializeObject<IdentityResult>(resp);
-                DisplayAlert("Error", "An error occured, please try again later", "OK");
+                DisplayAlert("Error", "Username / Password are incorrect, please use valid ones.", "OK");
             }
             
         }
