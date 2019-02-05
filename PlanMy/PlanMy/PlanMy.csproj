@@ -38,6 +38,9 @@
     <Compile Update="Views\CheckListView.xaml.cs">
       <DependentUpon>CheckListView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\ForgotPassword.xaml.cs">
+      <DependentUpon>ForgotPassword.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\ProfilePage.xaml.cs">
       <DependentUpon>ProfilePage.xaml</DependentUpon>
     </Compile>
