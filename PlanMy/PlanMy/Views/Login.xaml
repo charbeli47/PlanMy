@@ -12,7 +12,7 @@
                 <Label Text="Password" Margin="20,0,20,0" TextColor="Black" FontSize="16" x:Name="PasswordLabel" />
                 <Entry IsPassword="True" TextColor="Black" Placeholder="Type your password"  WidthRequest="200" x:Name="PasswordEntry" Margin="20,0,20,0"/>
                 <StackLayout x:Name="BtnContainer" Margin="20,0,20,0">
-                    <Button HorizontalOptions="End" TextColor="Black" BackgroundColor="Transparent" Text="forgot your password?" FontSize="10" HeightRequest="30" ></Button>
+                    <Button HorizontalOptions="End" TextColor="Black" BackgroundColor="Transparent" Text="forgot your password?" FontSize="10" HeightRequest="30" Clicked="Button_Clicked_1" ></Button>
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1" />
                     </StackLayout.GestureRecognizers>
