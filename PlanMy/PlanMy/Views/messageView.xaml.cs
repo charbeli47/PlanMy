@@ -41,8 +41,8 @@ namespace PlanMy.Views
 
         private async void MessagesListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var vendor = (ChatChannel)e.SelectedItem;
-            await Navigation.PushModalAsync(new MainChatPage(vendor.VendorId, Statics.MediaLink + vendor.Vendor.Image));
+            var vendor = (Users)e.SelectedItem;
+            await Navigation.PushModalAsync(new MainChatPage(vendor.Id, Statics.MediaLink + vendor.Image));
 
         }
     }

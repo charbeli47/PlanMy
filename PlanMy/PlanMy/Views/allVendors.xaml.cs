@@ -23,7 +23,7 @@ namespace PlanMy.Views
         
         public string selectedcatname;
         protected int _catid;
-        protected int page;
+        protected int page = 1;
         protected bool again = true;
         public List<VendorTypeValue> types = new List<VendorTypeValue>();
 
@@ -97,7 +97,7 @@ namespace PlanMy.Views
 
 			Pagetitle.Text = catname;
 			selectedcatname = catname;
-            page = 0;
+            page = 1;
 
             LoadPage(catid, new List<VendorTypeValue>());	
 		}
@@ -142,10 +142,12 @@ namespace PlanMy.Views
             MultipartFormDataContent data = new MultipartFormDataContent();
             var CategoryId = new StringContent(_catid.ToString());
             string typesjson = Newtonsoft.Json.JsonConvert.SerializeObject(types);
+            var pageContent = new StringContent(page.ToString());
             var Values = new StringContent(typesjson);
             data.Add(CategoryId, "CategoryId");
             data.Add(Values, "Values");
-            string resp = await con.PostToServer(Statics.apiLink + "VendorItems", data);
+            data.Add(pageContent, "page");
+            string resp = await con.PostToServer(Statics.apiLink + "VendorItems/Search", data);
             var specificvendors = Newtonsoft.Json.JsonConvert.DeserializeObject<List<VendorItem>>(resp);
             //NumberOfSupplieres.Text = specificvendors.Count().ToString();
             var user = await GetUser();
@@ -286,7 +288,7 @@ namespace PlanMy.Views
         private void FilterPage_OperationCompleted(object sender, EventArgs e)
         {
             list.ItemsSource = new List<BindingItem>();
-            page = 0;
+            page = 1;
             LoadPage(_catid, types);
         }
     }
