@@ -226,7 +226,12 @@ namespace PlanMy.Views
 
         private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new ForgotPassword());
+           
         }
-    }
+
+		private void Button_Clicked_1(object sender, EventArgs e)
+		{
+			 Navigation.PushModalAsync(new ForgotPassword());
+		}
+	}
 }
