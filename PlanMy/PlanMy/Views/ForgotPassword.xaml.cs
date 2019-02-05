@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace PlanMy.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class forgetpassword : ContentPage
+	public partial class ForgotPassword : ContentPage
 	{
-		public forgetpassword()
+		public ForgotPassword()
 		{
 			InitializeComponent();
 		}
