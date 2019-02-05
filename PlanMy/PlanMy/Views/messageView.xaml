@@ -11,7 +11,7 @@
                     <DataTemplate>
                         <ViewCell>
                             <StackLayout Orientation="Horizontal" >
-                                <abstractions:CircleImage Source="{Binding featured_media}"
+                                <abstractions:CircleImage Source="{Binding Image}"
     HeightRequest="60"
     WidthRequest="60"
     HorizontalOptions="Start"
@@ -19,7 +19,7 @@
                                 <StackLayout Orientation="Horizontal">
 
                                     <StackLayout Orientation="Vertical" Margin="0,20,0,0">
-                                        <Label Text="{Binding post_title}" TextColor="black" VerticalOptions="Center" FontSize="16"  />
+                                        <Label Text="{Binding Username}" TextColor="black" VerticalOptions="Center" FontSize="16"  />
                                         <!--<StackLayout Orientation="Horizontal" Margin="0,0,0,0">
                                             <Label Text="Hello and thanks for ...." TextColor="Gray"  FontSize="16" FontAttributes="Italic"    />
                                             <Label Text="-23h" TextColor="Gray"  FontSize="16" Margin="30,0,0,30" FontAttributes="Italic"    />
